@@ -6,4 +6,7 @@ advent :: String -> String
 advent = id
 
 main :: IO ()
-main = runAdvent 2 advent
+main = runAdvent 2 advent [
+    ("a", "a"),
+    ("b", "b")
+    ]

@@ -29,14 +29,19 @@ downloadInput day session = do
         url :: Int -> String
         url day = "https://adventofcode.com/" <> show year <> "/day/" <> show day <> "/input"
 
-runAdvent :: Int -> (String -> String) -> IO ()
-runAdvent day advent = do
+runAdvent :: Int -> (String -> String) -> [(String, String)] -> IO ()
+runAdvent day advent examples = do
     exists <- doesFileExist inputFile
     input <- if exists then Prelude.readFile inputFile else do
         session <- BS.readFile ".session"
         i <- downloadInput day session
         Prelude.writeFile inputFile i
         return i
-    Prelude.putStrLn $ advent input 
+    Prelude.putStrLn $ if (testAdvent advent examples) then "OK\n" <> advent input 
+        else "Fail"
         where
             inputFile = show day <> "/input.txt"
+
+testAdvent :: (String -> String) -> [(String, String)] -> Bool
+testAdvent advent [] = True
+testAdvent advent ((i, o):ios) = advent i == o && testAdvent advent ios
