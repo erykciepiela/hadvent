@@ -12,7 +12,7 @@ import Control.Monad
 import System.Directory
 
 year :: Int
-year = 2018
+year = 2018 -- TODO: change to 2019
 
 httpsGet :: Manager -> BS.ByteString -> String -> IO String
 httpsGet manager session url = do
@@ -30,18 +30,18 @@ downloadInput day session = do
         url day = "https://adventofcode.com/" <> show year <> "/day/" <> show day <> "/input"
 
 runAdvent :: Int -> (String -> String) -> [(String, String)] -> IO ()
-runAdvent day advent examples = do
+runAdvent day solution examples = do
     exists <- doesFileExist inputFile
     input <- if exists then Prelude.readFile inputFile else do
         session <- BS.readFile ".session"
         i <- downloadInput day session
         Prelude.writeFile inputFile i
         return i
-    Prelude.putStrLn $ if (testAdvent advent examples) then "OK\n" <> advent input 
+    Prelude.putStrLn $ if (testAdvent solution examples) then "OK\n" <> solution input 
         else "Fail"
         where
             inputFile = show day <> "/input.txt"
 
 testAdvent :: (String -> String) -> [(String, String)] -> Bool
-testAdvent advent [] = True
-testAdvent advent ((i, o):ios) = advent i == o && testAdvent advent ios
+testAdvent solution [] = True
+testAdvent solution ((i, o):ios) = solution i == o && testAdvent solution ios

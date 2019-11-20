@@ -1,4 +1,4 @@
-name:                advent2019
+name:                hadvent2019
 version:             0.1.0.0
 github:              "githubuser/advent2019"
 license:             BSD3
@@ -43,7 +43,7 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - advent2019
+    - hadvent2019
   2:
     main:                Main.hs
     source-dirs:         "2"
@@ -52,7 +52,7 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - advent2019
+    - hadvent2019
 
 tests:
   advent2019-test:
