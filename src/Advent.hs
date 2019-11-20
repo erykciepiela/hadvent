@@ -37,11 +37,14 @@ runAdvent day solution examples = do
         i <- downloadInput day session
         Prelude.writeFile inputFile i
         return i
-    Prelude.putStrLn $ if (testAdvent solution examples) then "OK\n" <> solution input 
-        else "Fail"
+    Prelude.putStrLn $ case testAdvent solution examples of
+        Nothing -> "OK, your solution:\n" <> solution input 
+        Just fail -> "Fail\n" <> fail
         where
             inputFile = show day <> "/input.txt"
 
-testAdvent :: (String -> String) -> [(String, String)] -> Bool
-testAdvent solution [] = True
-testAdvent solution ((i, o):ios) = solution i == o && testAdvent solution ios
+testAdvent :: (String -> String) -> [(String, String)] -> Maybe String
+testAdvent solution [] = Nothing
+testAdvent solution ((i, o):ios) = let actual = solution i in if  actual /= o 
+    then Just ("for:\n" <> i <> "\nexpected:\n" <> o <> "\nactually:\n" <> actual) 
+    else testAdvent solution ios
