@@ -12,7 +12,7 @@ Utilities for [Advent of Code 2019](https://adventofcode.com/2019) puzzles for s
 
 ### Every advent day
 
-1. Log in to [Advent of Code 2019](https://adventofcode.com/2019)
+1. Log in to [Advent of Code 2019](https://adventofcode.com/2019/auth/login)
 1. Copy `session` HTTP cookie value to `.session` file in this project directory
 1. Go to `[day]/Main.hs` directory
 1. Add test cases to `testCases` list
