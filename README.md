@@ -1,6 +1,6 @@
 # Hadvent2019
 
-Utilities for [Advent of Code 2019](https://adventofcode.com/2019) puzzles for sulutions written in Haskell.
+Utilities for [Advent of Code 2019](https://adventofcode.com/2019) puzzles for solutions written in Haskell.
 
 ## Usage
 
