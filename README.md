@@ -8,7 +8,7 @@ Utilities for [Advent of Code 2019](https://adventofcode.com/2019) puzzles for s
 
 1. Install [Stack](https://docs.haskellstack.org/en/stable/README/)
 1. Fork and checkout this repository
-1. Run `stack build`
+1. Run `stack build` in this project directory
 
 ### Every advent day
 
