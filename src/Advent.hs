@@ -37,9 +37,11 @@ runAdvent day solution examples = do
         i <- downloadInput day session
         Prelude.writeFile inputFile i
         return i
-    Prelude.putStrLn $ case testAdvent solution examples of
-        Nothing -> "OK, your solution:\n" <> solution input 
-        Just fail -> "Fail\n" <> fail
+    case testAdvent solution examples of
+        Nothing -> do
+            let answer = solution input
+            Prelude.putStrLn $ "OK, your solution:\n" <> answer
+        Just fail -> Prelude.putStrLn $ "Fail\n" <> fail
         where
             inputFile = show day <> "/input.txt"
 

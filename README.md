@@ -18,5 +18,5 @@ Utilities for [Advent of Code 2019](https://adventofcode.com/2019) puzzles for s
 1. Add test cases to `testCases` list
 1. Implement `solution` function
 1. Run `stack run [day]` - it will print you if test cases pass
-    * if they pass it will print the solution for the puzzle for your specific puzzle input and (TODO) the solution will be submitted
+    * if they pass it will print the solution for the puzzle for your specific puzzle input
     * if any fails it will print the first test case that fails
