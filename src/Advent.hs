@@ -10,6 +10,7 @@ import Network.HTTP.Client.TLS
 import Network.HTTP.Simple
 import Control.Monad
 import System.Directory
+import Control.Exception
 
 year :: Int
 year = 2018 -- TODO: change to 2019
@@ -37,7 +38,8 @@ runAdvent day solution examples = do
         i <- downloadInput day session
         Prelude.writeFile inputFile i
         return i
-    case testAdvent solution examples of
+    testResult <- testAdvent solution examples
+    case testResult of
         Nothing -> do
             let answer = solution input
             Prelude.putStrLn $ "OK, your solution:\n" <> answer
@@ -45,8 +47,13 @@ runAdvent day solution examples = do
         where
             inputFile = show day <> "/input.txt"
 
-testAdvent :: (String -> String) -> [(String, String)] -> Maybe String
-testAdvent solution [] = Nothing
-testAdvent solution ((i, o):ios) = let actual = solution i in if  actual /= o 
-    then Just ("for:\n" <> i <> "\nexpected:\n" <> o <> "\nactually:\n" <> actual) 
-    else testAdvent solution ios
+testAdvent :: (String -> String) -> [(String, String)] -> IO (Maybe String)
+testAdvent solution [] = return Nothing
+testAdvent solution ((i, o):ios) = do
+    (eactual :: Either SomeException String)<- try $ evaluate $ solution i
+    case eactual of
+        Right actual -> if actual /= o
+            then return $ Just ("for:\n" <> i <> "\nexpected:\n" <> o <> "\nactually:\n" <> actual) 
+            else testAdvent solution ios
+        Left e -> return $ Just ("for:\n" <> i <> "\nexpected:\n" <> o <> "\nactually:\n" <> show e) 
+

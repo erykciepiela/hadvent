@@ -21,6 +21,7 @@ description:         Please see the README on GitHub at <https://github.com/gith
 
 default-extensions: 
 - OverloadedStrings
+- ScopedTypeVariables
 
 dependencies:
 - base >= 4.7 && < 5
@@ -30,6 +31,8 @@ dependencies:
 - http-client-tls -any
 - http-conduit -any
 - directory -any
+- split -any
+- text -any
 
 library:
   source-dirs: src
