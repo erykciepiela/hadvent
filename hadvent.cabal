@@ -4,16 +4,16 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7d08ef2d40c318d803769727438728ba43b0e1a4ef6ad37f13897db980bce555
+-- hash: 0608592ba5d95632d350d4e2106122ebbe398fd6f7da8c984f9cffc703e3d6c9
 
-name:           hadvent2019
+name:           hadvent
 version:        0.1.0.0
 description:    Please see the README on GitHub at <https://github.com/githubuser/advent2019#readme>
-homepage:       https://github.com/githubuser/advent2019#readme
-bug-reports:    https://github.com/githubuser/advent2019/issues
-author:         Author name here
-maintainer:     example@example.com
-copyright:      2019 Author name here
+homepage:       https://github.com/erykciepiela/advent#readme
+bug-reports:    https://github.com/erykciepiela/advent/issues
+author:         Eryk Ciepiela
+maintainer:     eryk.ciepiela.dev@gmail.com
+copyright:      2019 Eryk Ciepiela
 license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
@@ -23,14 +23,14 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/githubuser/advent2019
+  location: https://github.com/erykciepiela/advent
 
 library
   exposed-modules:
       Advent
       Lists
   other-modules:
-      Paths_hadvent2019
+      Paths_hadvent
   hs-source-dirs:
       src
   default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables
@@ -49,7 +49,7 @@ library
 executable 2018-1
   main-is: Main.hs
   other-modules:
-      Paths_hadvent2019
+      Paths_hadvent
   hs-source-dirs:
       2018/1
   default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables
@@ -59,7 +59,7 @@ executable 2018-1
     , base >=4.7 && <5
     , bytestring
     , directory
-    , hadvent2019
+    , hadvent
     , http-client
     , http-client-tls
     , http-conduit
@@ -70,7 +70,7 @@ executable 2018-1
 executable 2018-2
   main-is: Main.hs
   other-modules:
-      Paths_hadvent2019
+      Paths_hadvent
   hs-source-dirs:
       2018/2
   default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables
@@ -80,7 +80,7 @@ executable 2018-2
     , base >=4.7 && <5
     , bytestring
     , directory
-    , hadvent2019
+    , hadvent
     , http-client
     , http-client-tls
     , http-conduit
@@ -88,18 +88,18 @@ executable 2018-2
     , text
   default-language: Haskell2010
 
-test-suite advent2019-test
+test-suite advent-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      Paths_hadvent2019
+      Paths_hadvent
   hs-source-dirs:
       test
   default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP
-    , advent2019
+    , advent
     , base >=4.7 && <5
     , bytestring
     , directory
