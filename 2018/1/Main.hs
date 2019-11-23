@@ -39,4 +39,4 @@ solution2 input = let
                 in if nsum `elem` sums then nsum else firstRepeatedSum (nsum:sums) ns
 
 main :: IO ()
-main = runAdvent 1 solution1 testCases1
+main = runAdvent 2018 1 solution1 testCases1

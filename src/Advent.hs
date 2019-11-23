@@ -12,9 +12,6 @@ import Control.Monad
 import System.Directory
 import Control.Exception
 
-year :: Int
-year = 2018 -- TODO: change to 2019
-
 httpsGet :: Manager -> BS.ByteString -> String -> IO String
 httpsGet manager session url = do
     re <- setRequestHeader "cookie" ["session=" <> session] <$> parseRequest url
@@ -22,20 +19,20 @@ httpsGet manager session url = do
     response <- httpLBS request
     return $ C.unpack $ getResponseBody response
 
-downloadInput :: Int -> BS.ByteString -> IO String
-downloadInput day session = do
+downloadInput :: Int -> Int -> BS.ByteString -> IO String
+downloadInput year day session = do
     manager <- newManager tlsManagerSettings
     httpsGet manager session $ url day
     where
         url :: Int -> String
         url day = "https://adventofcode.com/" <> show year <> "/day/" <> show day <> "/input"
 
-runAdvent :: Int -> (String -> String) -> [(String, String)] -> IO ()
-runAdvent day solution examples = do
+runAdvent :: Int -> Int -> (String -> String) -> [(String, String)] -> IO ()
+runAdvent year day solution examples = do
     exists <- doesFileExist inputFile
     input <- if exists then Prelude.readFile inputFile else do
         session <- BS.readFile ".session"
-        i <- downloadInput day session
+        i <- downloadInput year day session
         Prelude.writeFile inputFile i
         return i
     testResult <- testAdvent solution examples
@@ -45,7 +42,7 @@ runAdvent day solution examples = do
             Prelude.putStrLn $ "OK, your solution:\n" <> answer
         Just fail -> Prelude.putStrLn $ "Fail\n" <> fail
         where
-            inputFile = show day <> "/input.txt"
+            inputFile = show year <> "/" <> show day <> "/input.txt"
 
 testAdvent :: (String -> String) -> [(String, String)] -> IO (Maybe String)
 testAdvent solution [] = return Nothing

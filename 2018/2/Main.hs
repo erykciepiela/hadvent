@@ -4,6 +4,7 @@ import Advent
 import Data.List
 import Lists
 
+testCases :: [(String, String)]
 testCases = [
     ("aa\naaa", "1"),
     ("aa\naa", "0"),
@@ -51,4 +52,4 @@ common as1 as2 = fst <$> filter (\(a1, a2) -> a1 == a2) (zip as1 as2)
 
 
 main :: IO ()
-main = runAdvent 2 solution2 testCases2 
+main = runAdvent 2018 2 solution2 testCases2 
