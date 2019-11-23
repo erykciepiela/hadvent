@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9de6f2a8d03a7e64ee2b2e98858a10b9c284c35b95f400479b43752ac4d679a8
+-- hash: 5dd55e0764ec1ec5e3945e327b42fd9e10151ddfb3f2e335cb65015ff54b7823
 
 name:           hadvent2019
 version:        0.1.0.0
@@ -33,7 +33,7 @@ library
       Paths_hadvent2019
   hs-source-dirs:
       src
-  default-extensions: OverloadedStrings ScopedTypeVariables
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables
   build-depends:
       HTTP
     , base >=4.7 && <5
@@ -52,7 +52,7 @@ executable 1
       Paths_hadvent2019
   hs-source-dirs:
       1
-  default-extensions: OverloadedStrings ScopedTypeVariables
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP
@@ -73,7 +73,7 @@ executable 2
       Paths_hadvent2019
   hs-source-dirs:
       2
-  default-extensions: OverloadedStrings ScopedTypeVariables
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP
@@ -95,7 +95,7 @@ test-suite advent2019-test
       Paths_hadvent2019
   hs-source-dirs:
       test
-  default-extensions: OverloadedStrings ScopedTypeVariables
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP

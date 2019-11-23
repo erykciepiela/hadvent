@@ -2,6 +2,7 @@ module Main where
 
 import Advent
 import Data.List
+import Lists
 
 testCases = [
     ("aa\naaa", "1"),
@@ -24,13 +25,9 @@ testCases = [
 solution :: String -> String
 solution input = let
     ls = lines input -- lines
-    x = length $ filter (elem 3) $ fmap fst . count <$> ls
-    y = length $ filter (elem 2) $ fmap fst . count <$> ls
+    x = length $ filter (elem 3) $ fmap fst . countMatching <$> ls
+    y = length $ filter (elem 2) $ fmap fst . countMatching <$> ls
     in show $ x * y
-
-
-count :: Eq a => [a] -> [(Int, a)]
-count as = (\a -> (length (filter (== a) as), a)) <$> nub as
 
 testCases2 = [
     ("abciiiiiiiiiiiiiiiiiiiiiii\nabdiiiiiiiiiiiiiiiiiiiiiii\nxxxiiiiiiiiiiiiiiiiiiiiiii\nyyyiiiiiiiiiiiiiiiiiiiiiii\n", "abiiiiiiiiiiiiiiiiiiiiiii"),
