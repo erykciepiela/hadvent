@@ -1,6 +1,6 @@
-# Hadvent2019
+# Hadvent
 
-Utilities for [Advent of Code 2019](https://adventofcode.com/2019) puzzles for solutions written in Haskell.
+Utilities for [Advent of Code](https://adventofcode.com/) puzzles for solutions written in Haskell.
 
 ## Usage
 
@@ -12,11 +12,11 @@ Utilities for [Advent of Code 2019](https://adventofcode.com/2019) puzzles for s
 
 ### Every advent day
 
-1. Log in to [Advent of Code 2019](https://adventofcode.com/2019/auth/login)
+1. Log in to [Advent of Code](https://adventofcode.com/2019/auth/login)
 1. Copy `session` HTTP cookie value to `.session` file in this project directory
-1. Go to `[day]/Main.hs` directory
+1. Go to `[year]/[day]/Main.hs` directory
 1. Add test cases to `testCases` list
 1. Implement `solution` function
-1. Run `stack run [day]` - it will print you if test cases pass
+1. Run `stack run [year]-[day]` - it will print you if test cases pass
     * if they pass it will print the solution for the puzzle for your specific puzzle input
     * if any fails it will print the first test case that fails
