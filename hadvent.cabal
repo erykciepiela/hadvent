@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 350dd892dc52d6580353e905c04c134d4116eea64d4f4d0c144e6a53ce727974
+-- hash: 2f82eb009c32f4334b67ca67393d98946064f77f7349a97b0abdb353853ae6d8
 
 name:           hadvent
 version:        0.1.0.0
@@ -29,6 +29,7 @@ library
   exposed-modules:
       Advent
       Lists
+      Texts
   other-modules:
       Paths_hadvent
   hs-source-dirs:

@@ -1,11 +1,7 @@
 module Main where
 
 import Advent
-import qualified Data.List.Split as S
-import qualified Data.Text as T
-import Control.Monad
-import Data.List
-import Lists
+import Data.Text as T
 
 testCases1 :: [(String, String)]
 testCases1 = []
