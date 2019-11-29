@@ -20,6 +20,5 @@ solution2 :: String -> String
 solution2 input = input
 
 main :: IO ()
--- main = runAdvent 2019 1 solution1 testCases1
-main = putStrLn "abcd"
+main = runAdvent 2019 1 solution1 testCases1
 
