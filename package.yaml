@@ -75,6 +75,15 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - hadvent
+  2019-3:
+    main:                Main.hs
+    source-dirs:         "2019/3"
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - hadvent
 
 tests:
   advent-test:
