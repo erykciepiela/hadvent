@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 598aab6a0594e87384c001abfb9dfe6be943c895bb8e5065cabd343862c8622e
+-- hash: c76d68e064fb4199cecff5d67c61243fc78e9a246720fc4fe3b642dfcc4bf592
 
 name:           hadvent
 version:        0.1.0.0
@@ -116,6 +116,27 @@ executable 2019-2
       Paths_hadvent
   hs-source-dirs:
       2019/2
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      HTTP
+    , base >=4.7 && <5
+    , bytestring
+    , directory
+    , hadvent
+    , http-client
+    , http-client-tls
+    , http-conduit
+    , split
+    , text
+  default-language: Haskell2010
+
+executable 2019-3
+  main-is: Main.hs
+  other-modules:
+      Paths_hadvent
+  hs-source-dirs:
+      2019/3
   default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
