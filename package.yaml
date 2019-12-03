@@ -34,6 +34,7 @@ dependencies:
 - directory -any
 - split -any
 - text -any
+- containers -any
 
 library:
   source-dirs: src

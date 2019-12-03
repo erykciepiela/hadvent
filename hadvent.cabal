@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: c76d68e064fb4199cecff5d67c61243fc78e9a246720fc4fe3b642dfcc4bf592
+-- hash: bc4a700abff99e1c1eda92acffb969fba2778b57d2939f4d4235e726e35249d4
 
 name:           hadvent
 version:        0.1.0.0
@@ -39,6 +39,7 @@ library
       HTTP
     , base >=4.7 && <5
     , bytestring
+    , containers
     , directory
     , http-client
     , http-client-tls
@@ -59,6 +60,7 @@ executable 2018-1
       HTTP
     , base >=4.7 && <5
     , bytestring
+    , containers
     , directory
     , hadvent
     , http-client
@@ -80,6 +82,7 @@ executable 2018-2
       HTTP
     , base >=4.7 && <5
     , bytestring
+    , containers
     , directory
     , hadvent
     , http-client
@@ -101,6 +104,7 @@ executable 2019-1
       HTTP
     , base >=4.7 && <5
     , bytestring
+    , containers
     , directory
     , hadvent
     , http-client
@@ -122,6 +126,7 @@ executable 2019-2
       HTTP
     , base >=4.7 && <5
     , bytestring
+    , containers
     , directory
     , hadvent
     , http-client
@@ -143,6 +148,7 @@ executable 2019-3
       HTTP
     , base >=4.7 && <5
     , bytestring
+    , containers
     , directory
     , hadvent
     , http-client
@@ -166,6 +172,7 @@ test-suite advent-test
     , advent
     , base >=4.7 && <5
     , bytestring
+    , containers
     , directory
     , http-client
     , http-client-tls
