@@ -110,7 +110,6 @@ solution2 i input = let
     in show $ L.last $ snd $ interp2 i 0 prog []
 
 main :: IO ()
--- main = runAdvent 2019 5 (solution1 1) []
 main = do
     test (solution2 8) "3,9,8,9,10,9,4,9,99,-1,8" "1"
     test (solution2 7) "3,9,8,9,10,9,4,9,99,-1,8" "0"
@@ -120,7 +119,7 @@ main = do
     test (solution2 9) "3,3,1108,-1,8,3,4,3,99" "0"
     test (solution2 7) "3,3,1107,-1,8,3,4,3,99" "1"
     test (solution2 8) "3,3,1107,-1,8,3,4,3,99" "0"
-    test (solution2 0) "3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9" "0"
+    test (solution2 0) "3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9" "1"
     test (solution2 9) "3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9" "1"
     runAdvent 2019 5 (solution2 5) []
 
