@@ -3,8 +3,7 @@ module Advent (
 ) where
 
 import Data.ByteString as BS
-import Data.ByteString.Lazy as BSL
-import Data.ByteString.Lazy.Char8 as C
+import Data.ByteString.Char8 as C
 import Network.HTTP.Client
 import Network.HTTP.Client.TLS
 import Network.HTTP.Simple
@@ -16,7 +15,7 @@ httpsGet :: Manager -> BS.ByteString -> String -> IO String
 httpsGet manager session url = do
     re <- setRequestHeader "cookie" ["session=" <> session] <$> parseRequest url
     let request = setRequestManager manager re
-    response <- httpLBS request
+    response <- httpBS request
     return $ C.unpack $ getResponseBody response
 
 downloadInput :: Int -> Int -> BS.ByteString -> IO String
@@ -30,7 +29,7 @@ downloadInput year day session = do
 runAdvent :: Int -> Int -> (String -> String) -> [(String, String)] -> IO ()
 runAdvent year day solution examples = do
     exists <- doesFileExist inputFile
-    input <- if exists then Prelude.readFile inputFile else do
+    input <- if exists then C.unpack <$> C.readFile inputFile else do
         session <- BS.readFile ".session"
         i <- downloadInput year day session
         Prelude.writeFile inputFile i
@@ -38,7 +37,7 @@ runAdvent year day solution examples = do
     testResult <- testAdvent solution examples
     case testResult of
         Nothing -> do
-            let answer = solution input
+            let answer = solution "!"
             Prelude.putStrLn $ "OK, your solution:\n" <> answer
         Just fail -> Prelude.putStrLn $ "Fail\n" <> fail
         where
