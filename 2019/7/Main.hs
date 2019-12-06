@@ -16,7 +16,7 @@ solution2 :: String -> String
 solution2 input = "abc"
 
 main :: IO ()
-main = advent 2019 6 solution1 $ do
+main = advent 2019 7 solution1 $ do
     check id 1 1
     check id 2 2
     peek $ id 3 
