@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ac2c8c881fd4d24c16d40b9a54a10032ed2d092bb5c410e37ad8e0a848f3bf0e
+-- hash: bf6554e408761b48751f1df35912989919de3be7d1aefeba9bd9801a55ef3da4
 
 name:           hadvent
 version:        0.1.0.0
@@ -44,6 +44,7 @@ library
     , http-client
     , http-client-tls
     , http-conduit
+    , mtl
     , split
     , text
   default-language: Haskell2010
@@ -66,6 +67,7 @@ executable 2018-1
     , http-client
     , http-client-tls
     , http-conduit
+    , mtl
     , split
     , text
   default-language: Haskell2010
@@ -88,6 +90,7 @@ executable 2018-2
     , http-client
     , http-client-tls
     , http-conduit
+    , mtl
     , split
     , text
   default-language: Haskell2010
@@ -110,6 +113,7 @@ executable 2019-1
     , http-client
     , http-client-tls
     , http-conduit
+    , mtl
     , split
     , text
   default-language: Haskell2010
@@ -132,6 +136,7 @@ executable 2019-2
     , http-client
     , http-client-tls
     , http-conduit
+    , mtl
     , split
     , text
   default-language: Haskell2010
@@ -154,6 +159,7 @@ executable 2019-3
     , http-client
     , http-client-tls
     , http-conduit
+    , mtl
     , split
     , text
   default-language: Haskell2010
@@ -176,6 +182,7 @@ executable 2019-4
     , http-client
     , http-client-tls
     , http-conduit
+    , mtl
     , split
     , text
   default-language: Haskell2010
@@ -198,6 +205,7 @@ executable 2019-5
     , http-client
     , http-client-tls
     , http-conduit
+    , mtl
     , split
     , text
   default-language: Haskell2010
@@ -220,6 +228,7 @@ executable 2019-6
     , http-client
     , http-client-tls
     , http-conduit
+    , mtl
     , split
     , text
   default-language: Haskell2010
@@ -242,6 +251,7 @@ executable 2019-7
     , http-client
     , http-client-tls
     , http-conduit
+    , mtl
     , split
     , text
   default-language: Haskell2010
@@ -265,6 +275,7 @@ test-suite advent-test
     , http-client
     , http-client-tls
     , http-conduit
+    , mtl
     , split
     , text
   default-language: Haskell2010

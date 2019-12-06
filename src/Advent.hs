@@ -1,5 +1,6 @@
 module Advent (
     runAdvent,
+    runAdvent',
     test
 ) where
 
@@ -62,4 +63,16 @@ test solution i o = do
             then Prelude.putStrLn $ "for:\n" <> show i <> "\nexpected:\n" <> show o <> "\nactually:\n" <> show actual
             else return ()
         Left e -> Prelude.putStrLn $ "for:\n" <> show i <> "\nexpected:\n" <> show o <> "\nactually:\n" <> show e
+        
+runAdvent' :: Int -> Int -> (String -> String) -> IO String
+runAdvent' year day solution = do
+    exists <- doesFileExist inputFile
+    input <- if exists then C.unpack <$> C.readFile inputFile else do
+        session <- BS.readFile ".session"
+        i <- downloadInput year day session
+        Prelude.writeFile inputFile i
+        return i
+    return $ solution input
+        where
+            inputFile = show year <> "/" <> show day <> "/input.txt"
         

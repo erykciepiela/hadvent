@@ -35,6 +35,7 @@ dependencies:
 - split -any
 - text -any
 - containers -any
+- mtl -any
 
 library:
   source-dirs: src
