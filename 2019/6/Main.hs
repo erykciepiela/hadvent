@@ -9,20 +9,6 @@ import Control.Applicative
 import Data.Map as P
 import Data.Maybe
 
-solution2 :: Text -> Text -> String -> String
-solution2 a z input = let
-    pairs = parsePair (pack input)
-    m0 = P.fromList pairs
-    m = ffix closure m0
-    (Just start) = P.lookup a m
-    (Just stop) = P.lookup z m
-    in show $ snd $ L.head $ L.sortOn snd $ toList $ P.intersectionWith (+) start stop
-
-solution1 :: String -> String
-solution1 input = let
-    pairs = parsePair (pack input)
-    in show $ sum $ P.size <$> ffix closure (P.fromList pairs)
-
 type Orb = Text
 
 parsePair :: Text -> [(Orb, P.Map Orb Int)]
@@ -33,6 +19,20 @@ closure m = (\ma -> ma <> mconcat ((\(a, d) -> (+ (d + 1)) <$> fromMaybe mempty 
 
 ffix :: Eq a => (a -> a) -> a -> a
 ffix f a = if f a == a then a else ffix f (f a)
+
+solution1 :: String -> String
+solution1 input = let
+    pairs = parsePair (pack input)
+    in show $ sum $ P.size <$> ffix closure (P.fromList pairs)
+
+solution2 :: Text -> Text -> String -> String
+solution2 a z input = let
+    pairs = parsePair (pack input)
+    m0 = P.fromList pairs
+    m = ffix closure m0
+    (Just start) = P.lookup a m
+    (Just stop) = P.lookup z m
+    in show $ snd $ L.head $ L.sortOn snd $ toList $ P.intersectionWith (+) start stop
 
 main :: IO ()
 main = do
