@@ -26,7 +26,7 @@ solution1 input = let
 type Orb = Text
 
 parsePair :: Text -> [(Orb, P.Map Orb Int)]
-parsePair t = (\os -> let [a, b] = splitOn ")" os in (b, (P.singleton a 0))) <$> T.lines t
+parsePair t = (\os -> let [a, b] = splitOn ")" os in (b, P.singleton a 0)) <$> T.lines t
 
 closure :: Ord a => P.Map a (P.Map a Int) -> P.Map a (P.Map a Int)
 closure m = (\ma -> ma <> mconcat ((\(a, d) -> (+ (d + 1)) <$> fromMaybe mempty (P.lookup a m)) <$> P.toList ma)) <$> m
