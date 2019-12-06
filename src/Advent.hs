@@ -1,7 +1,12 @@
 module Advent (
     runAdvent,
     runAdvent',
-    test
+    test,
+    peek,
+    check,
+    solution,
+    advent,
+    Advent
 ) where
 
 import Data.ByteString as BS
@@ -12,6 +17,7 @@ import Network.HTTP.Simple
 import Control.Monad
 import System.Directory
 import Control.Exception
+import Control.Monad.Cont
 
 httpsGet :: Manager -> BS.ByteString -> String -> IO String
 httpsGet manager session url = do
@@ -76,3 +82,37 @@ runAdvent' year day solution = do
         where
             inputFile = show year <> "/" <> show day <> "/input.txt"
         
+-- new API
+
+peek :: Show o => o -> Advent ()
+peek o = cont $ \k -> do
+    Prelude.putStrLn $ "Peek:\n" <> show o
+    k ()
+
+check :: (Show i, Show o, Eq o) => (i -> o) -> i -> o -> Advent ()
+check f i o = cont $ \k -> do
+    mFail <- test' f i o
+    case mFail of
+        Nothing -> k ()
+        Just fail -> Prelude.putStrLn $ "Failure: \n" <> fail
+        where
+            test' :: (Show i, Show o, Eq o) => (i -> o) -> i -> o -> IO (Maybe String)
+            test' solution i o = do
+                (eactual :: Either SomeException o) <- try $ evaluate $ solution i
+                return $ case eactual of
+                    Right actual -> if actual /= o
+                        then Just $ "for:\n" <> show i <> "\nexpected:\n" <> show o <> "\nactually:\n" <> show actual
+                        else Nothing
+                    Left e -> Just $ "for:\n" <> show i <> "\nexpected:\n" <> show o <> "\nactually:\n" <> show e
+
+solution :: Int -> Int -> (String -> String) -> Advent a
+solution year day s = cont $ \k -> do
+    answer <- runAdvent' year day s
+    Prelude.putStrLn $ "Answer:\n" <> answer
+
+type Advent a = Cont (IO ()) a
+
+advent :: Int -> Int -> (String -> String) -> Advent a -> IO ()
+advent year day s a = flip runCont id $ do
+    a
+    solution year day s 
