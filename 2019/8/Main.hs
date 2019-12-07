@@ -21,4 +21,4 @@ solution2 input = "?"
 main :: IO ()
 main = advent 2019 8 [solution1, solution2] $ do
     solution1 "" `shouldBe` "?"
-    solution1 "" `shouldBe` "?"
+    solution2 "" `shouldBe` "?"
