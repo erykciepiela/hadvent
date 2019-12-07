@@ -3,7 +3,7 @@ module Advent (
     runAdvent',
     test,
     peek,
-    check,
+    shouldBe,
     solution,
     advent,
     Advent
@@ -89,30 +89,33 @@ peek o = cont $ \k -> do
     Prelude.putStrLn $ "Peek:\n" <> show o
     k ()
 
-check :: (Show i, Show o, Eq o) => (i -> o) -> i -> o -> Advent ()
-check f i o = cont $ \k -> do
-    mFail <- test' f i o
+shouldBe :: (Show o, Eq o) => o -> o -> Advent ()
+infixl 9 `shouldBe`
+shouldBe exp act = cont $ \k -> do
+    mFail <- test' exp act
     case mFail of
         Nothing -> k ()
         Just fail -> Prelude.putStrLn $ "Failure: \n" <> fail
         where
-            test' :: (Show i, Show o, Eq o) => (i -> o) -> i -> o -> IO (Maybe String)
-            test' solution i o = do
-                (eactual :: Either SomeException o) <- try $ evaluate $ solution i
+            test' :: (Show o, Eq o) => o -> o -> IO (Maybe String)
+            test' exp act = do
+                (eactual :: Either SomeException o) <- try $ evaluate act
                 return $ case eactual of
-                    Right actual -> if actual /= o
-                        then Just $ "for:\n" <> show i <> "\nexpected:\n" <> show o <> "\nactually:\n" <> show actual
+                    Right actual -> if actual /= exp
+                        then Just $ "expected:\n" <> show exp <> "\nactually:\n" <> show actual
                         else Nothing
-                    Left e -> Just $ "for:\n" <> show i <> "\nexpected:\n" <> show o <> "\nactually:\n" <> show e
+                    Left e -> Just $ "expected:\n" <> show exp <> "\nactually:\n" <> show e
 
-solution :: Int -> Int -> (String -> String) -> Advent a
-solution year day s = cont $ \k -> do
+solution :: Int -> Int -> Int -> (String -> String) -> Advent ()
+solution year day n s = cont $ \k -> do
     answer <- runAdvent' year day s
-    Prelude.putStrLn $ "Answer:\n" <> answer
+    Prelude.putStrLn $ "Answer #" <> show n <> ":\n" <> answer
+    k ()
 
 type Advent a = Cont (IO ()) a
 
-advent :: Int -> Int -> (String -> String) -> Advent a -> IO ()
-advent year day s a = flip runCont id $ do
+advent :: Int -> Int -> [String -> String] -> Advent a -> IO ()
+advent year day solutions a = flip runCont id $ do
     a
-    solution year day s 
+    forM_ (Prelude.zip [1..] solutions) $ \(n, s) -> solution year day n s 
+    return (return ())
