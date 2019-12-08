@@ -54,5 +54,3 @@ main = advent 2019 8 [solution1 25 6, solution2 25 6] $ do
     composeLayers 1 1 "21" `shouldBe` "1\n"
     composeLayers 2 2 "22221111" `shouldBe` "11\n11\n"
     composeLayers 2 2 "22221010" `shouldBe` "10\n10\n"
-
--- answer two decoded: FKAHL
