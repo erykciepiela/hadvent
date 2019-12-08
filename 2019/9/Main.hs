@@ -23,5 +23,3 @@ main :: IO ()
 main = advent 2019 9 [solution1, solution2] $ do
     solution1 "abc" `shouldBe` "?"
     return ()
-
--- answer two decoded: FKAHL
