@@ -5,7 +5,7 @@ import qualified Data.List.Split as S
 import qualified Data.Text as T
 import Control.Monad
 import Data.List
-import Lists
+import Utils
 
 testCases1 :: [(String, String)]
 testCases1 = [

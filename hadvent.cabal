@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7694242c70fc03adcbc619a6bf2737da80136dfc7efe3d71741c786b291d5844
+-- hash: 18c258e9b058ba59c99e3cf42b4e28502b546ae37dcd2c8658cbfa63af8b0a5c
 
 name:           hadvent
 version:        0.1.0.0
@@ -36,6 +36,7 @@ library
   default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   build-depends:
       HTTP
+    , Hclip
     , base >=4.7 && <5
     , bytestring
     , containers
@@ -58,6 +59,7 @@ executable 2018-1
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP
+    , Hclip
     , base >=4.7 && <5
     , bytestring
     , containers
@@ -81,6 +83,7 @@ executable 2018-2
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP
+    , Hclip
     , base >=4.7 && <5
     , bytestring
     , containers
@@ -104,6 +107,7 @@ executable 2019-1
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP
+    , Hclip
     , base >=4.7 && <5
     , bytestring
     , containers
@@ -127,6 +131,7 @@ executable 2019-2
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP
+    , Hclip
     , base >=4.7 && <5
     , bytestring
     , containers
@@ -150,6 +155,7 @@ executable 2019-3
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP
+    , Hclip
     , base >=4.7 && <5
     , bytestring
     , containers
@@ -173,6 +179,7 @@ executable 2019-4
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP
+    , Hclip
     , base >=4.7 && <5
     , bytestring
     , containers
@@ -196,6 +203,7 @@ executable 2019-5
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP
+    , Hclip
     , base >=4.7 && <5
     , bytestring
     , containers
@@ -219,6 +227,7 @@ executable 2019-6
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP
+    , Hclip
     , base >=4.7 && <5
     , bytestring
     , containers
@@ -242,6 +251,7 @@ executable 2019-7
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP
+    , Hclip
     , base >=4.7 && <5
     , bytestring
     , containers
@@ -265,6 +275,7 @@ executable 2019-8
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP
+    , Hclip
     , base >=4.7 && <5
     , bytestring
     , containers
@@ -288,6 +299,7 @@ executable 2019-9
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP
+    , Hclip
     , base >=4.7 && <5
     , bytestring
     , containers
@@ -312,6 +324,7 @@ test-suite advent-test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP
+    , Hclip
     , advent
     , base >=4.7 && <5
     , bytestring

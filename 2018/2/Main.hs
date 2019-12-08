@@ -2,7 +2,7 @@ module Main where
 
 import Advent
 import Data.List
-import Lists
+import Utils
 
 testCases :: [(String, String)]
 testCases = [

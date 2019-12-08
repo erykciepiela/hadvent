@@ -37,6 +37,7 @@ dependencies:
 - text -any
 - containers -any
 - mtl -any
+- Hclip -any
 
 library:
   source-dirs: src

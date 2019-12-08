@@ -20,6 +20,7 @@ import Control.Exception
 import Control.Monad.Cont
 import qualified Data.Text as T
 import qualified Data.List as L
+import System.Hclip
 
 httpsGet :: Manager -> BS.ByteString -> String -> IO String
 httpsGet manager session url = do
@@ -113,6 +114,7 @@ solution year day n s = cont $ \k -> do
     manswer <- answer year day s
     case manswer of
         Just answer -> do
+            setClipboard answer
             Prelude.putStrLn $ "Answer #" <> show n <> ":\n" <> answer
             k ()
         Nothing -> Prelude.putStrLn $ "Challenge " <> show year <> "/" <> show day <> " still locked"
@@ -136,5 +138,7 @@ type Advent a = Cont (IO ()) a
 advent :: Int -> Int -> [String -> String] -> Advent a -> IO ()
 advent year day solutions a = flip runCont id $ do
     a
-    forM_ (Prelude.zip [1..] solutions) $ \(n, s) -> solution year day n s 
+    when (not $ L.null solutions) $ do
+        forM_ (Prelude.zip [1..] solutions) $ \(n, s) -> solution year day n s 
+        cont $ \_ -> Prelude.putStrLn "(in clipboard)"
     return (return ())
