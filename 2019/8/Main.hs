@@ -29,9 +29,8 @@ solution1 w h input = show $ snd $ L.head $ L.sortOn fst $ layerValues <$> LS.ch
 newtype Color = Color { color :: Int } deriving (Eq, Show) via Int
 
 instance Semigroup Color where
-    c1 <> c2 = case color c1 of
-        2 -> c2
-        _ -> c1
+    (Color 2) <> c = c
+    c <> _ = c
 
 composeLayers :: Int -> Int -> String -> String
 composeLayers w h input = L.unlines $ LS.chunksOf w $ mconcat $ fmap show $ slist $ L.foldl1 (<>) $ SList . fmap Color <$> LS.chunksOf (w * h) (parseDigits input)
