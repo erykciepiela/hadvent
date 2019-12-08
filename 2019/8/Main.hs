@@ -20,16 +20,18 @@ solution1 :: Int -> Int -> String -> String
 solution1 w h input = show $ snd $ L.head $ L.sortOn fst $ layerValues <$> LS.chunksOf (w * h) (parseDigits input)
     where
         layerValues :: [Int] -> (Int, Int)
-        layerValues layer = ((L.length . L.elemIndices 0) layer, (L.length . L.elemIndices 1) layer * (L.length . L.elemIndices 2) layer)
+        layerValues layer = (cnt 0, cnt 1 * cnt 2)
+            where
+                cnt :: Int -> Int
+                cnt i = (L.length . L.elemIndices i) layer
 
 newtype Color = Color { color :: Int } deriving (Eq, Show) via Int
 
 instance Semigroup Color where
     c1 <> c2 = case color c1 of
-        0 -> c1
-        1 -> c1
         2 -> c2
-    
+        _ -> c1
+
 newtype SList a = SList { slist :: [a] } 
 
 instance Semigroup a => Semigroup (SList a) where
@@ -42,7 +44,7 @@ main :: IO ()
 main = advent 2019 8 [solution1 25 6, solution2 25 6] $ do
     parseDigits "123" `shouldBe` [1,2,3]
     parseDigits "123\n" `shouldBe` [1,2,3]
-    LS.chunksOf 3 [1,2,3,4,5,6,7,8,9] `shouldBe` [[1,2,3], [4,5,6], [7,8,9]]
+    LS.chunksOf 2 [1,2,3,4,5,6] `shouldBe` [[1,2], [3,4], [5,6]]
     solution1 3 2 "012121" `shouldBe` "6"
     solution2 2 2 "0222112222120000" `shouldBe` "01\n10\n"
     solution2 1 1 "01" `shouldBe` "0\n"
@@ -51,10 +53,4 @@ main = advent 2019 8 [solution1 25 6, solution2 25 6] $ do
     solution2 2 2 "22221111" `shouldBe` "11\n11\n"
     solution2 2 2 "22221010" `shouldBe` "10\n10\n"
 
--- answer two pretty-printed
--- 1111 0 1001 0 0110 0 1001 0 10000
--- 1000 0 1010 0 1001 0 1001 0 10000
--- 1110 0 1100 0 1001 0 1111 0 10000
--- 1000 0 1010 0 1111 0 1001 0 10000
--- 1000 0 1010 0 1001 0 1001 0 10000
--- 1000 0 1001 0 1001 0 1001 0 11110
+-- answer two decoded: FKAHL
