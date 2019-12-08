@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 89fc31ca82698c02d96cb7cf08e6dd9d5ca3457b2091a54dea5ea2582344a765
+-- hash: 49ad7d736c5822ac65db3a2ea35f75f9d20f606197b08afef7b5dba7187147e8
 
 name:           hadvent
 version:        0.1.0.0
@@ -34,7 +34,7 @@ library
       Paths_hadvent
   hs-source-dirs:
       src
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   build-depends:
       HTTP
     , base >=4.7 && <5
@@ -55,7 +55,7 @@ executable 2018-1
       Paths_hadvent
   hs-source-dirs:
       2018/1
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP
@@ -78,7 +78,7 @@ executable 2018-2
       Paths_hadvent
   hs-source-dirs:
       2018/2
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP
@@ -101,7 +101,7 @@ executable 2019-1
       Paths_hadvent
   hs-source-dirs:
       2019/1
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP
@@ -124,7 +124,7 @@ executable 2019-2
       Paths_hadvent
   hs-source-dirs:
       2019/2
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP
@@ -147,7 +147,7 @@ executable 2019-3
       Paths_hadvent
   hs-source-dirs:
       2019/3
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP
@@ -170,7 +170,7 @@ executable 2019-4
       Paths_hadvent
   hs-source-dirs:
       2019/4
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP
@@ -193,7 +193,7 @@ executable 2019-5
       Paths_hadvent
   hs-source-dirs:
       2019/5
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP
@@ -216,7 +216,7 @@ executable 2019-6
       Paths_hadvent
   hs-source-dirs:
       2019/6
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP
@@ -239,7 +239,7 @@ executable 2019-7
       Paths_hadvent
   hs-source-dirs:
       2019/7
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP
@@ -262,7 +262,7 @@ executable 2019-8
       Paths_hadvent
   hs-source-dirs:
       2019/8
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP
@@ -286,7 +286,7 @@ test-suite advent-test
       Paths_hadvent
   hs-source-dirs:
       test
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTTP

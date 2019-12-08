@@ -91,7 +91,7 @@ peek o = cont $ \k -> do
 
 shouldBe :: (Show o, Eq o) => o -> o -> Advent ()
 infixl 9 `shouldBe`
-shouldBe exp act = cont $ \k -> do
+shouldBe act exp = cont $ \k -> do
     mFail <- test' exp act
     case mFail of
         Nothing -> k ()

@@ -23,6 +23,7 @@ default-extensions:
 - OverloadedStrings
 - OverloadedLists
 - ScopedTypeVariables
+- DerivingVia
 
 dependencies:
 - base >= 4.7 && < 5
