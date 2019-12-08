@@ -110,15 +110,15 @@ shouldBe act exp = cont $ \k -> do
 
 solution :: Int -> Int -> Int -> (String -> String) -> Advent ()
 solution year day n s = cont $ \k -> do
-    manswer <- runAdvent'' year day s
+    manswer <- answer year day s
     case manswer of
         Just answer -> do
             Prelude.putStrLn $ "Answer #" <> show n <> ":\n" <> answer
             k ()
         Nothing -> Prelude.putStrLn $ "Challenge " <> show year <> "/" <> show day <> " still locked"
         where
-            runAdvent'' :: Int -> Int -> (String -> String) -> IO (Maybe String)
-            runAdvent'' year day solution = do
+            answer :: Int -> Int -> (String -> String) -> IO (Maybe String)
+            answer year day solution = do
                 exists <- doesFileExist inputFile
                 minput <- if exists then Just . C.unpack <$> C.readFile inputFile else do
                     session <- BS.readFile ".session"
@@ -126,7 +126,7 @@ solution year day n s = cont $ \k -> do
                     if "Please" `L.isPrefixOf` i then return Nothing else do
                         Prelude.writeFile inputFile i
                         return (Just i)
-                return minput
+                return $ solution <$> minput
                     where
                         inputFile = show year <> "/" <> show day <> "/input.txt"
 
