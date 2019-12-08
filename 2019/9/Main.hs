@@ -1,6 +1,7 @@
 module Main where
 
 import Advent
+import Utils
 import Data.Text as T
 import Data.Text.Read as T
 import qualified Data.List as L

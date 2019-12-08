@@ -1,6 +1,7 @@
 module Main where
 
 import Advent
+import Utils
 import Data.Text as T
 import Data.Text.Read as T
 import qualified Data.List as L
@@ -23,7 +24,7 @@ solution1 w h input = show $ snd $ L.head $ L.sortOn fst $ layerValues <$> LS.ch
         layerValues layer = (cnt 0, cnt 1 * cnt 2)
             where
                 cnt :: Int -> Int
-                cnt i = (L.length . L.elemIndices i) layer
+                cnt = countOccurences layer
 
 newtype Color = Color { color :: Int } deriving (Eq, Show) via Int
 
@@ -31,11 +32,6 @@ instance Semigroup Color where
     c1 <> c2 = case color c1 of
         2 -> c2
         _ -> c1
-
-newtype SList a = SList { slist :: [a] } 
-
-instance Semigroup a => Semigroup (SList a) where
-    l1 <> l2 = SList $ L.foldl1 (<>) <$> L.transpose [slist l1, slist l2]
 
 composeLayers :: Int -> Int -> String -> String
 composeLayers w h input = L.unlines $ LS.chunksOf w $ mconcat $ fmap show $ slist $ L.foldl1 (<>) $ SList . fmap Color <$> LS.chunksOf (w * h) (parseDigits input)
