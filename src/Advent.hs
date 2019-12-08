@@ -18,6 +18,8 @@ import Control.Monad
 import System.Directory
 import Control.Exception
 import Control.Monad.Cont
+import qualified Data.Text as T
+import qualified Data.List as L
 
 httpsGet :: Manager -> BS.ByteString -> String -> IO String
 httpsGet manager session url = do
@@ -108,9 +110,26 @@ shouldBe act exp = cont $ \k -> do
 
 solution :: Int -> Int -> Int -> (String -> String) -> Advent ()
 solution year day n s = cont $ \k -> do
-    answer <- runAdvent' year day s
-    Prelude.putStrLn $ "Answer #" <> show n <> ":\n" <> answer
-    k ()
+    manswer <- runAdvent'' year day s
+    case manswer of
+        Just answer -> do
+            Prelude.putStrLn $ "Answer #" <> show n <> ":\n" <> answer
+            k ()
+        Nothing -> Prelude.putStrLn $ "Challenge " <> show year <> "/" <> show day <> " still locked"
+        where
+            runAdvent'' :: Int -> Int -> (String -> String) -> IO (Maybe String)
+            runAdvent'' year day solution = do
+                exists <- doesFileExist inputFile
+                minput <- if exists then Just . C.unpack <$> C.readFile inputFile else do
+                    session <- BS.readFile ".session"
+                    i <- downloadInput year day session
+                    if "Please" `L.isPrefixOf` i then return Nothing else do
+                        Prelude.writeFile inputFile i
+                        return (Just i)
+                return minput
+                    where
+                        inputFile = show year <> "/" <> show day <> "/input.txt"
+
 
 type Advent a = Cont (IO ()) a
 
