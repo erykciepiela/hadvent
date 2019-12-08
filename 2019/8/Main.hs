@@ -43,8 +43,8 @@ composeLayers w h input = L.unlines $ LS.chunksOf w $ mconcat $ fmap show $ slis
 solution2 :: Int -> Int -> String -> String
 solution2 w h input = render <$> composeLayers w h input
     where
-        render '0' = 'B'
-        render '1' = ' '
+        render '0' = ' '
+        render '1' = 'W'
         render c = c
 
 main :: IO ()
