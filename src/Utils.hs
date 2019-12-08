@@ -1,6 +1,7 @@
 module Utils where
 
 import Data.List as L
+import Data.Text as T
 
 stripLeft :: Eq a => [a] -> [a] -> [a]
 stripLeft toStrip stripped@(s:ss)
@@ -8,10 +9,13 @@ stripLeft toStrip stripped@(s:ss)
     | otherwise = stripped
     
 countMatching :: Eq a => [a] -> [(Int, a)]
-countMatching as = (\a -> (length (filter (== a) as), a)) <$> nub as
+countMatching as = (\a -> (L.length (L.filter (== a) as), a)) <$> nub as
 
 countOccurences :: [Int] -> Int -> Int
 countOccurences is i = L.length $ L.elemIndices i is
+
+strip :: String -> String
+strip = T.unpack . T.strip . T.pack
 
 newtype SList a = SList { slist :: [a] } 
 

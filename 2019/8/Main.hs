@@ -2,7 +2,7 @@ module Main where
 
 import Advent
 import Utils
-import Data.Text as T
+import qualified Data.Text as T
 import Data.Text.Read as T
 import qualified Data.List as L
 import qualified Data.Set as S
@@ -15,7 +15,7 @@ import Debug.Trace
 import Data.List.Split as LS
 
 parseDigits :: String -> [Int]
-parseDigits input = (\i -> read [i]) <$> (T.unpack . T.strip . T.pack) input
+parseDigits input = (\i -> read [i]) <$> strip input
 
 solution1 :: Int -> Int -> String -> String
 solution1 w h input = show $ snd $ L.head $ L.sortOn fst $ layerValues <$> LS.chunksOf (w * h) (parseDigits input)
