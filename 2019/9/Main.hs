@@ -23,12 +23,16 @@ interp i c rb l = case l !! c of
     99 -> (l, 0, rb, Nothing)
     -- 0 0 0 01
     1 ->   let nl = setElem l (l !! (c + 3)) (l !! (l !! (c +1)) + l !! (l !! (c+2))) in interp i (c + 4) rb nl
+    -- 2 2 2 01
+    22201 ->   let nl = setElem l (rb + l !! (c + 3)) (l !! (rb + l !! (c +1)) + l !! (rb + l !! (c+2))) in interp i (c + 4) rb nl
     -- 0 0 1 01
     101 -> let nl = setElem l (l !! (c + 3)) (l !! ((c + 1)) + l !! (l !! (c+2))) in interp i (c + 4) rb nl
     -- 0 1 0 01
     1001 -> let nl = setElem l (l !! (c + 3)) (l !! (l !! (c + 1)) + l !! ((c+2))) in interp i (c + 4) rb nl
     -- 0 1 0 01
     1201 -> let nl = setElem l (l !! (c + 3)) (l !! (rb + l !! (c + 1)) + l !! ((c+2))) in interp i (c + 4) rb nl
+    -- 2 1 0 01
+    21201 -> let nl = setElem l (rb + l !! (c + 3)) (l !! (rb + l !! (c + 1)) + l !! ((c+2))) in interp i (c + 4) rb nl
     -- 0 1 1 01
     1101 -> let nl = setElem l (l !! (c + 3)) (l !! ((c + 1)) + l !! ((c+2))) in interp i (c + 4) rb nl
     -- 2 1 1 01
@@ -45,6 +49,8 @@ interp i c rb l = case l !! c of
     1002 -> let nl = setElem l (l !! (c + 3)) (l !! (l !! (c +1)) * l !! ((c+2))) in interp i (c + 4) rb nl
     -- 0 1 2 02
     1202 -> let nl = setElem l (l !! (c + 3)) (l !! (rb + l !! (c +1)) * l !! ((c+2))) in interp i (c + 4) rb nl
+    -- 2 1 2 02
+    21202 -> let nl = setElem l (rb + l !! (c + 3)) (l !! (rb + l !! (c +1)) * l !! ((c+2))) in interp i (c + 4) rb nl
     -- 0 1 1 02
     1102 -> let nl = setElem l (l !! (c + 3)) (l !! ((c +1)) * l !! ((c+2))) in interp i (c + 4) rb nl
     -- 2 1 1 02
@@ -115,12 +121,8 @@ interp i c rb l = case l !! c of
     1108 -> if l !! ((c + 1)) == (l !!((c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i (c + 4) rb nl
     -- 2 1 1 08
     21108 -> if l !! ((c + 1)) == (l !!((c + 2))) then let nl = setElem l (rb + l !! (c + 3)) 1 in interp i (c + 4) rb nl else let nl = setElem l (rb + l !! (c + 3)) 0 in interp i (c + 4) rb nl
-    --
-    -- 9 ->  
-    -- 9 -> interp i (c + 2) (rb + (l !! (l !! (c+1)))) l
     9 -> interp i (c + 2) (rb + (l !! (l !! (c+1)))) l
     109 -> interp i (c + 2) (rb + (l !! (c+1))) l
-    -- 209 -> interp i (c + 2) (rb + (l !! (l !! (rb +c+1))) l -- ?
     209 -> interp i (c + 2) (rb + (l !! (rb + (l !! (c+1))))) l
     opcode -> error ("Opcode not found " <> show opcode)
 
@@ -146,7 +148,7 @@ solution2 :: String -> String
 solution2 input = "?" -- interp [] 0 0 (par input)
 
 main :: IO ()
-main = advent 2019 9 [solution1 [1]] $ do
+main = advent 2019 9 [solution1 [1], solution1 [2]] $ do
     solution1 [] "109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99" `shouldBe` "109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99"
     L.length (solution1 [] "1102,34915192,34915192,7,4,7,99,0") `shouldBe` 16
     solution1 [] "104,1125899906842624,99" `shouldBe` "1125899906842624"
