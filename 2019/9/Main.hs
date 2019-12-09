@@ -144,9 +144,6 @@ solution1 is input = let
     prog = par input <> L.repeat 0
     in rap $ interp' is 0 0 prog []
 
-solution2 :: String -> String
-solution2 input = "?" -- interp [] 0 0 (par input)
-
 main :: IO ()
 main = advent 2019 9 [solution1 [1], solution1 [2]] $ do
     solution1 [] "109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99" `shouldBe` "109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99"
