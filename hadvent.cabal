@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9a5f88e3f4d657d96e17adc5dd3d42bced085bf5e1513e2acf604fb73ef09b80
+-- hash: 741f8ab6b0a94a6fa2cbf667150afcf02a57ce7a98b55fc6292bd830eaeea6bb
 
 name:           hadvent
 version:        0.1.0.0
@@ -35,7 +35,8 @@ library
       src
   default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   build-depends:
-      HTTP
+      Data-Angle
+    , HTTP
     , Hclip
     , base >=4.7 && <5
     , bytestring
@@ -58,7 +59,8 @@ executable 2018-1
   default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      HTTP
+      Data-Angle
+    , HTTP
     , Hclip
     , base >=4.7 && <5
     , bytestring
@@ -82,7 +84,8 @@ executable 2018-2
   default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      HTTP
+      Data-Angle
+    , HTTP
     , Hclip
     , base >=4.7 && <5
     , bytestring
@@ -106,7 +109,8 @@ executable 2019-1
   default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      HTTP
+      Data-Angle
+    , HTTP
     , Hclip
     , base >=4.7 && <5
     , bytestring
@@ -130,7 +134,8 @@ executable 2019-10
   default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      HTTP
+      Data-Angle
+    , HTTP
     , Hclip
     , base >=4.7 && <5
     , bytestring
@@ -154,7 +159,8 @@ executable 2019-2
   default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      HTTP
+      Data-Angle
+    , HTTP
     , Hclip
     , base >=4.7 && <5
     , bytestring
@@ -178,7 +184,8 @@ executable 2019-3
   default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      HTTP
+      Data-Angle
+    , HTTP
     , Hclip
     , base >=4.7 && <5
     , bytestring
@@ -202,7 +209,8 @@ executable 2019-4
   default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      HTTP
+      Data-Angle
+    , HTTP
     , Hclip
     , base >=4.7 && <5
     , bytestring
@@ -226,7 +234,8 @@ executable 2019-5
   default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      HTTP
+      Data-Angle
+    , HTTP
     , Hclip
     , base >=4.7 && <5
     , bytestring
@@ -250,7 +259,8 @@ executable 2019-6
   default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      HTTP
+      Data-Angle
+    , HTTP
     , Hclip
     , base >=4.7 && <5
     , bytestring
@@ -274,7 +284,8 @@ executable 2019-7
   default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      HTTP
+      Data-Angle
+    , HTTP
     , Hclip
     , base >=4.7 && <5
     , bytestring
@@ -298,7 +309,8 @@ executable 2019-8
   default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      HTTP
+      Data-Angle
+    , HTTP
     , Hclip
     , base >=4.7 && <5
     , bytestring
@@ -322,7 +334,8 @@ executable 2019-9
   default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      HTTP
+      Data-Angle
+    , HTTP
     , Hclip
     , base >=4.7 && <5
     , bytestring
@@ -347,7 +360,8 @@ test-suite advent-test
   default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      HTTP
+      Data-Angle
+    , HTTP
     , Hclip
     , advent
     , base >=4.7 && <5

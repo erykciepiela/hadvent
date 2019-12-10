@@ -38,6 +38,7 @@ dependencies:
 - containers -any
 - mtl -any
 - Hclip -any
+- Data-Angle -any
 
 library:
   source-dirs: src
