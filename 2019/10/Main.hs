@@ -41,6 +41,10 @@ sight am (x, y) = f [(dx, dy) |
 rrr :: (Int, Int) -> (Int, Int)
 rrr (dx, dy) = fromMaybe undefined $ ggg ((\n -> if ((dx `div` n) * n == dx) && ((dy `div` n) * n == dy) then Just (dx `div` n, dy `div` n) else Nothing) <$> (L.reverse [1..(max (abs dx) (abs dy))]))
 
+g :: [(Int, Int)] -> [(Int, Int)]
+g dxy = (L.nub $ rrr <$> dxy)
+
+
 ggg :: [Maybe a] -> Maybe a
 ggg [] = Nothing
 ggg (Just a:mas) = Just a
@@ -63,11 +67,35 @@ solution2 :: Int -> String -> String
 solution2 i str = let 
     am = (par str)
     c = fst $ xxx am
-    (x, y) = s2 c am !! i 
+    (x, y) = s2 c am !! (i - 1) 
     in show $ 100*x + y
 
 s2 :: (Int, Int) -> [[Bool]] -> [(Int, Int)]
-s2 c am = (5, 5):s2 c am
+s2 c am = let
+    coords = coordsOrd c am 
+    am' = zero am coords
+    in coords <> undefined -- s2 c am'
+        where 
+            zero am coords = undefined
+
+coordsOrd :: (Int, Int) -> [[Bool]] -> [(Int, Int)]
+coordsOrd (x, y) am = let
+    -- am = par s
+    amw = L.length (L.head am)
+    amh = L.length am
+    coords = [(x1, y1) |
+        x1 <- [-x .. (amw-x-1)],
+        y1 <- [-y .. (amh-y-1)],
+        (x1, y1) /= (0, 0),
+        (am !! (y1 + y)) !! (x1 + x)
+        ]
+        -- L.nub $ rrr <$>
+    in (\(x1, y1) -> (x1 + x, y1 + y)) <$> L.sortOn ang (L.nub $ rrr <$> coords)
+        where
+        ang (x, y) = let 
+            a = angleValueRadians (atan2Angle (fromIntegral x) (fromIntegral (-y)))
+            in if a < 0 then a + 2*pi else a
+    
 
 main :: IO ()
 main = advent 2019 10 [solution2 200] $ do
@@ -80,12 +108,18 @@ main = advent 2019 10 [solution2 200] $ do
     peek $ par ".#..#\n.....\n#####\n....#\n...##" 
     (snd . xxx . par) ".#..#\n.....\n#####\n....#\n...##" `shouldBe` 8
     (snd . xxx . par) testInput `shouldBe` 210
+    angleValueRadians (atan2Angle 0 (1)) `shouldBe` 0
+    coordsOrd (1, 1) (par "###\n###\n###") `shouldBe` [(1, 0), (2, 0), (2, 1), (2, 2), (1, 2), (0, 2), (0, 1), (0, 0)]
+    coordsOrd (1, 1) (par "###\n###\n###\n # ") `shouldBe` [(1, 0), (2, 0), (2, 1), (2, 2), (1, 2), (0, 2), (0, 1), (0, 0)]
+    coordsOrd (1, 1) (par "#  \n###\n###") `shouldBe` [(2, 1), (2, 2), (1, 2), (0, 2), (0, 1), (0, 0)]
     solution1 testInput `shouldBe` "210"
     solution1' testInput `shouldBe` (11, 13)
     solution2 1 testInput `shouldBe` "1112"
-    -- solution2 2 testInput `shouldBe` "1201"
-    -- solution2 3 testInput `shouldBe` "1202"
-    -- solution2 10 testInput `shouldBe` "1208"
-    -- solution2 100 testInput `shouldBe` "1016"
-    -- solution2 200 testInput `shouldBe` "802"
+    solution2 2 testInput `shouldBe` "1201"
+    solution2 3 testInput `shouldBe` "1202"
+    solution2 10 testInput `shouldBe` "1208"
+    solution2 20 testInput `shouldBe` "1600"
+    solution2 50 testInput `shouldBe` "1609"
+    solution2 100 testInput `shouldBe` "1016"
+    solution2 200 testInput `shouldBe` "802"
     return ()
