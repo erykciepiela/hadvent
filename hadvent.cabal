@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 741f8ab6b0a94a6fa2cbf667150afcf02a57ce7a98b55fc6292bd830eaeea6bb
+-- hash: 73fc5b61b1712b7f43e4045ee037465f84cc0f5cada91fe52a41f08bcc29e20f
 
 name:           hadvent
 version:        0.1.0.0
@@ -33,18 +33,20 @@ library
       Paths_hadvent
   hs-source-dirs:
       src
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
   build-depends:
       Data-Angle
     , HTTP
     , Hclip
     , base >=4.7 && <5
     , bytestring
+    , comonad
     , containers
     , directory
     , http-client
     , http-client-tls
     , http-conduit
+    , listsafe
     , mtl
     , split
     , text
@@ -56,7 +58,7 @@ executable 2018-1
       Paths_hadvent
   hs-source-dirs:
       2018/1
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -64,12 +66,14 @@ executable 2018-1
     , Hclip
     , base >=4.7 && <5
     , bytestring
+    , comonad
     , containers
     , directory
     , hadvent
     , http-client
     , http-client-tls
     , http-conduit
+    , listsafe
     , mtl
     , split
     , text
@@ -81,7 +85,7 @@ executable 2018-2
       Paths_hadvent
   hs-source-dirs:
       2018/2
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -89,12 +93,14 @@ executable 2018-2
     , Hclip
     , base >=4.7 && <5
     , bytestring
+    , comonad
     , containers
     , directory
     , hadvent
     , http-client
     , http-client-tls
     , http-conduit
+    , listsafe
     , mtl
     , split
     , text
@@ -106,7 +112,7 @@ executable 2019-1
       Paths_hadvent
   hs-source-dirs:
       2019/1
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -114,12 +120,14 @@ executable 2019-1
     , Hclip
     , base >=4.7 && <5
     , bytestring
+    , comonad
     , containers
     , directory
     , hadvent
     , http-client
     , http-client-tls
     , http-conduit
+    , listsafe
     , mtl
     , split
     , text
@@ -131,7 +139,7 @@ executable 2019-10
       Paths_hadvent
   hs-source-dirs:
       2019/10
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -139,12 +147,14 @@ executable 2019-10
     , Hclip
     , base >=4.7 && <5
     , bytestring
+    , comonad
     , containers
     , directory
     , hadvent
     , http-client
     , http-client-tls
     , http-conduit
+    , listsafe
     , mtl
     , split
     , text
@@ -156,7 +166,7 @@ executable 2019-2
       Paths_hadvent
   hs-source-dirs:
       2019/2
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -164,12 +174,14 @@ executable 2019-2
     , Hclip
     , base >=4.7 && <5
     , bytestring
+    , comonad
     , containers
     , directory
     , hadvent
     , http-client
     , http-client-tls
     , http-conduit
+    , listsafe
     , mtl
     , split
     , text
@@ -181,7 +193,7 @@ executable 2019-3
       Paths_hadvent
   hs-source-dirs:
       2019/3
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -189,12 +201,14 @@ executable 2019-3
     , Hclip
     , base >=4.7 && <5
     , bytestring
+    , comonad
     , containers
     , directory
     , hadvent
     , http-client
     , http-client-tls
     , http-conduit
+    , listsafe
     , mtl
     , split
     , text
@@ -206,7 +220,7 @@ executable 2019-4
       Paths_hadvent
   hs-source-dirs:
       2019/4
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -214,12 +228,14 @@ executable 2019-4
     , Hclip
     , base >=4.7 && <5
     , bytestring
+    , comonad
     , containers
     , directory
     , hadvent
     , http-client
     , http-client-tls
     , http-conduit
+    , listsafe
     , mtl
     , split
     , text
@@ -231,7 +247,7 @@ executable 2019-5
       Paths_hadvent
   hs-source-dirs:
       2019/5
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -239,12 +255,14 @@ executable 2019-5
     , Hclip
     , base >=4.7 && <5
     , bytestring
+    , comonad
     , containers
     , directory
     , hadvent
     , http-client
     , http-client-tls
     , http-conduit
+    , listsafe
     , mtl
     , split
     , text
@@ -256,7 +274,7 @@ executable 2019-6
       Paths_hadvent
   hs-source-dirs:
       2019/6
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -264,12 +282,14 @@ executable 2019-6
     , Hclip
     , base >=4.7 && <5
     , bytestring
+    , comonad
     , containers
     , directory
     , hadvent
     , http-client
     , http-client-tls
     , http-conduit
+    , listsafe
     , mtl
     , split
     , text
@@ -281,7 +301,7 @@ executable 2019-7
       Paths_hadvent
   hs-source-dirs:
       2019/7
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -289,12 +309,14 @@ executable 2019-7
     , Hclip
     , base >=4.7 && <5
     , bytestring
+    , comonad
     , containers
     , directory
     , hadvent
     , http-client
     , http-client-tls
     , http-conduit
+    , listsafe
     , mtl
     , split
     , text
@@ -306,7 +328,7 @@ executable 2019-8
       Paths_hadvent
   hs-source-dirs:
       2019/8
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -314,12 +336,14 @@ executable 2019-8
     , Hclip
     , base >=4.7 && <5
     , bytestring
+    , comonad
     , containers
     , directory
     , hadvent
     , http-client
     , http-client-tls
     , http-conduit
+    , listsafe
     , mtl
     , split
     , text
@@ -331,7 +355,7 @@ executable 2019-9
       Paths_hadvent
   hs-source-dirs:
       2019/9
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -339,12 +363,14 @@ executable 2019-9
     , Hclip
     , base >=4.7 && <5
     , bytestring
+    , comonad
     , containers
     , directory
     , hadvent
     , http-client
     , http-client-tls
     , http-conduit
+    , listsafe
     , mtl
     , split
     , text
@@ -357,7 +383,7 @@ test-suite advent-test
       Paths_hadvent
   hs-source-dirs:
       test
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia
+  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -366,11 +392,13 @@ test-suite advent-test
     , advent
     , base >=4.7 && <5
     , bytestring
+    , comonad
     , containers
     , directory
     , http-client
     , http-client-tls
     , http-conduit
+    , listsafe
     , mtl
     , split
     , text

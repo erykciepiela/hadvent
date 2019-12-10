@@ -24,6 +24,7 @@ default-extensions:
 - OverloadedLists
 - ScopedTypeVariables
 - DerivingVia
+- StandaloneDeriving
 
 dependencies:
 - base >= 4.7 && < 5
@@ -39,6 +40,8 @@ dependencies:
 - mtl -any
 - Hclip -any
 - Data-Angle -any
+- comonad -any
+- listsafe -any
 
 library:
   source-dirs: src
