@@ -218,140 +218,128 @@ move (-1, 0) = moveLeft
 setElem :: [Int] -> Int -> Int -> [Int]
 setElem list pos val = L.take pos list <> [val] <> L.drop (pos + 1) list
 
+data Intcode = Intcode {
+    icCursor :: Int,
+    icReadBase :: Int,
+    icInstrs :: [Int]
+}
 
-interp :: [Int] -> Int -> Int -> [Int] -> ([Int], Int, Int, Maybe Int)
-interp _ c rb [] = ([], c, rb, Nothing)
-interp i c rb l = case l !! c of
-    99 -> (l, 0, rb, Nothing)
+interp :: [Int] -> Intcode -> (Intcode, Maybe Int)
+-- interp _ intcode = let (Intcode c rb l) = intcode in (Intcode 0 rb l, Nothing)
+interp i intcode = let (Intcode c rb l) = intcode in case l !! c of
+    99 -> (Intcode 0 rb l, Nothing)
     -- 0 0 0 01
-    1 ->   let nl = setElem l (l !! (c + 3)) (l !! (l !! (c +1)) + l !! (l !! (c+2))) in interp i (c + 4) rb nl
+    1 ->   let nl = setElem l (l !! (c + 3)) (l !! (l !! (c +1)) + l !! (l !! (c+2))) in interp i $ Intcode (c + 4) rb nl
     -- 2 2 2 01
-    22201 ->   let nl = setElem l (rb + l !! (c + 3)) (l !! (rb + l !! (c +1)) + l !! (rb + l !! (c+2))) in interp i (c + 4) rb nl
+    22201 ->   let nl = setElem l (rb + l !! (c + 3)) (l !! (rb + l !! (c +1)) + l !! (rb + l !! (c+2))) in interp i $ Intcode (c + 4) rb nl
     -- 0 0 1 01
-    101 -> let nl = setElem l (l !! (c + 3)) (l !! ((c + 1)) + l !! (l !! (c+2))) in interp i (c + 4) rb nl
+    101 -> let nl = setElem l (l !! (c + 3)) (l !! ((c + 1)) + l !! (l !! (c+2))) in interp i $ Intcode (c + 4) rb nl
     -- 2 2 1 01
-    22101 -> let nl = setElem l (rb + l !! (c + 3)) (l !! ((c + 1)) + l !! (rb + l !! (c+2))) in interp i (c + 4) rb nl
+    22101 -> let nl = setElem l (rb + l !! (c + 3)) (l !! ((c + 1)) + l !! (rb + l !! (c+2))) in interp i $ Intcode (c + 4) rb nl
     -- 0 1 0 01
-    1001 -> let nl = setElem l (l !! (c + 3)) (l !! (l !! (c + 1)) + l !! ((c+2))) in interp i (c + 4) rb nl
+    1001 -> let nl = setElem l (l !! (c + 3)) (l !! (l !! (c + 1)) + l !! ((c+2))) in interp i $ Intcode (c + 4) rb nl
     -- 0 1 0 01
-    1201 -> let nl = setElem l (l !! (c + 3)) (l !! (rb + l !! (c + 1)) + l !! ((c+2))) in interp i (c + 4) rb nl
+    1201 -> let nl = setElem l (l !! (c + 3)) (l !! (rb + l !! (c + 1)) + l !! ((c+2))) in interp i $ Intcode (c + 4) rb nl
     -- 2 1 0 01
-    21201 -> let nl = setElem l (rb + l !! (c + 3)) (l !! (rb + l !! (c + 1)) + l !! ((c+2))) in interp i (c + 4) rb nl
+    21201 -> let nl = setElem l (rb + l !! (c + 3)) (l !! (rb + l !! (c + 1)) + l !! ((c+2))) in interp i $ Intcode (c + 4) rb nl
     -- 0 1 1 01
-    1101 -> let nl = setElem l (l !! (c + 3)) (l !! ((c + 1)) + l !! ((c+2))) in interp i (c + 4) rb nl
+    1101 -> let nl = setElem l (l !! (c + 3)) (l !! ((c + 1)) + l !! ((c+2))) in interp i $ Intcode (c + 4) rb nl
     -- 2 1 1 01
-    21101 -> let nl = setElem l (rb + l !! (c + 3)) (l !! ((c + 1)) + l !! ((c+2))) in interp i (c + 4) rb nl
+    21101 -> let nl = setElem l (rb + l !! (c + 3)) (l !! ((c + 1)) + l !! ((c+2))) in interp i $ Intcode (c + 4) rb nl
     -- 2 1 1 01
-    2101 -> let nl = setElem l (l !! (c + 3)) (l !! ((c + 1)) + l !! (rb + l !! (c+2))) in interp i (c + 4) rb nl
+    2101 -> let nl = setElem l (l !! (c + 3)) (l !! ((c + 1)) + l !! (rb + l !! (c+2))) in interp i $ Intcode (c + 4) rb nl
     -- 0 0 0 02
-    2 -> let nl = setElem l (l !! (c + 3)) (l !! (l !! (c +1)) * l !! (l !! (c+2))) in interp i (c + 4) rb nl
+    2 -> let nl = setElem l (l !! (c + 3)) (l !! (l !! (c +1)) * l !! (l !! (c+2))) in interp i $ Intcode (c + 4) rb nl
     -- 2 2 2 02
-    22202 -> let nl = setElem l (rb + l !! (c + 3)) (l !! (rb + l !! (c +1)) * l !! (rb + l !! (c+2))) in interp i (c + 4) rb nl
+    22202 -> let nl = setElem l (rb + l !! (c + 3)) (l !! (rb + l !! (c +1)) * l !! (rb + l !! (c+2))) in interp i $ Intcode (c + 4) rb nl
     -- 0 0 1 02
-    102 -> let nl = setElem l (l !! (c + 3)) (l !! ((c +1)) * l !! (l !! (c+2))) in interp i (c + 4) rb nl
+    102 -> let nl = setElem l (l !! (c + 3)) (l !! ((c +1)) * l !! (l !! (c+2))) in interp i $ Intcode (c + 4) rb nl
     -- 2 2 1 02
-    22102 -> let nl = setElem l (rb + l !! (c + 3)) (l !! ((c +1)) * l !! (rb + l !! (c+2))) in interp i (c + 4) rb nl
+    22102 -> let nl = setElem l (rb + l !! (c + 3)) (l !! ((c +1)) * l !! (rb + l !! (c+2))) in interp i $ Intcode (c + 4) rb nl
     -- 0 2 1 02
-    2102 -> let nl = setElem l (l !! (c + 3)) (l !! ((c +1)) * l !! (rb + l !! (c+2))) in interp i (c + 4) rb nl
+    2102 -> let nl = setElem l (l !! (c + 3)) (l !! ((c +1)) * l !! (rb + l !! (c+2))) in interp i $ Intcode (c + 4) rb nl
     -- 0 1 0 02
-    1002 -> let nl = setElem l (l !! (c + 3)) (l !! (l !! (c +1)) * l !! ((c+2))) in interp i (c + 4) rb nl
+    1002 -> let nl = setElem l (l !! (c + 3)) (l !! (l !! (c +1)) * l !! ((c+2))) in interp i $ Intcode (c + 4) rb nl
     -- 0 1 2 02
-    1202 -> let nl = setElem l (l !! (c + 3)) (l !! (rb + l !! (c +1)) * l !! ((c+2))) in interp i (c + 4) rb nl
+    1202 -> let nl = setElem l (l !! (c + 3)) (l !! (rb + l !! (c +1)) * l !! ((c+2))) in interp i $ Intcode (c + 4) rb nl
     -- 2 1 2 02
-    21202 -> let nl = setElem l (rb + l !! (c + 3)) (l !! (rb + l !! (c +1)) * l !! ((c+2))) in interp i (c + 4) rb nl
+    21202 -> let nl = setElem l (rb + l !! (c + 3)) (l !! (rb + l !! (c +1)) * l !! ((c+2))) in interp i $ Intcode (c + 4) rb nl
     -- 0 1 1 02
-    1102 -> let nl = setElem l (l !! (c + 3)) (l !! ((c +1)) * l !! ((c+2))) in interp i (c + 4) rb nl
+    1102 -> let nl = setElem l (l !! (c + 3)) (l !! ((c +1)) * l !! ((c+2))) in interp i $ Intcode (c + 4) rb nl
     -- 2 1 1 02
-    21102 -> let nl = setElem l (rb + l !! (c + 3)) (l !! ((c +1)) * l !! ((c+2))) in interp i (c + 4) rb nl
+    21102 -> let nl = setElem l (rb + l !! (c + 3)) (l !! ((c +1)) * l !! ((c+2))) in interp i $ Intcode (c + 4) rb nl
     -- 0 0 0 03
     3 -> case i of
-        [] -> (l, c, rb, Nothing)
-        (fi:ri) -> let nl = setElem l (l !! (c + 1)) fi in interp ri (c + 2) rb nl
+        [] -> (Intcode c rb l, Nothing)
+        (fi:ri) -> let nl = setElem l (l !! (c + 1)) fi in interp ri $ Intcode (c + 2) rb nl
     -- 0 0 2 03
     203 -> case i of
-        [] -> (l, c, rb, Nothing)
-        (fi:ri) -> let nl = setElem l (rb + (l !! (c + 1))) fi in interp ri (c + 2) rb nl
+        [] -> (Intcode c rb l, Nothing)
+        (fi:ri) -> let nl = setElem l (rb + (l !! (c + 1))) fi in interp ri $ Intcode (c + 2) rb nl
     -- 0 0 0 04 
-    4 -> let o = (l !! (l !! (c + 1))) in (l, (c + 2), rb, Just o)
+    4 -> let o = (l !! (l !! (c + 1))) in (Intcode (c + 2) rb l, Just o)
     -- 0 0 2 04
-    204 -> let o = (l !! (rb + l !! (c + 1))) in (l, (c + 2), rb, Just o)
+    204 -> let o = (l !! (rb + l !! (c + 1))) in (Intcode (c + 2) rb l, Just o)
     -- 0 0 1 04
-    104 -> let o = (l !! (c + 1)) in (l, (c + 2), rb, Just o)
+    104 -> let o = (l !! (c + 1)) in (Intcode (c + 2) rb l, Just o)
     -- 0 0 0 05
-    5 -> if l !! (l !! (c + 1)) /= 0 then interp i (l !! (l !! (c + 2))) rb l else interp i (c + 3) rb l
+    5 -> if l !! (l !! (c + 1)) /= 0 then interp i $ Intcode (l !! (l !! (c + 2))) rb l else interp i $ Intcode (c + 3) rb l
     -- 0 0 1 05
-    105 -> if l !! ((c + 1)) /= 0 then interp i (l !! (l !! (c + 2))) rb l else interp i (c + 3) rb l
+    105 -> if l !! ((c + 1)) /= 0 then interp i $ Intcode (l !! (l !! (c + 2))) rb l else interp i $ Intcode (c + 3) rb l
     -- 0 2 1 05
-    2105 -> if l !! ((c + 1)) /= 0 then interp i (l !! (rb + l !! (c + 2))) rb l else interp i (c + 3) rb l
+    2105 -> if l !! ((c + 1)) /= 0 then interp i $ Intcode (l !! (rb + l !! (c + 2))) rb l else interp i $ Intcode (c + 3) rb l
     -- 0 1 0 05
-    1005 -> if l !! (l !! (c + 1)) /= 0 then interp i (l !! ((c + 2))) rb l else interp i (c + 3) rb l
+    1005 -> if l !! (l !! (c + 1)) /= 0 then interp i $ Intcode (l !! ((c + 2))) rb l else interp i $ Intcode (c + 3) rb l
     -- 0 1 2 05
-    1205 -> if l !! (rb + l !! (c + 1)) /= 0 then interp i (l !! ((c + 2))) rb l else interp i (c + 3) rb l
+    1205 -> if l !! (rb + l !! (c + 1)) /= 0 then interp i $ Intcode (l !! ((c + 2))) rb l else interp i $ Intcode (c + 3) rb l
     -- 1 1 0 05
-    1105 -> if l !! ((c + 1)) /= 0 then interp i (l !! ((c + 2))) rb l else interp i (c + 3) rb l
+    1105 -> if l !! ((c + 1)) /= 0 then interp i $ Intcode (l !! ((c + 2))) rb l else interp i $ Intcode (c + 3) rb l
     -- 0 0 0 06
-    6 -> if l !! (l !! (c + 1)) == 0 then interp i (l !! (l !! (c + 2))) rb l else interp i (c + 3) rb l
+    6 -> if l !! (l !! (c + 1)) == 0 then interp i $ Intcode (l !! (l !! (c + 2))) rb l else interp i $ Intcode (c + 3) rb l
     -- 0 0 1 06
-    106 -> if l !! ((c + 1)) == 0 then interp i (l !! (l !! (c + 2))) rb l else interp i (c + 3) rb l
+    106 -> if l !! ((c + 1)) == 0 then interp i $ Intcode (l !! (l !! (c + 2))) rb l else interp i $ Intcode (c + 3) rb l
     -- 0 2 1 06
-    2106 -> if l !! ((c + 1)) == 0 then interp i (l !! (rb + l !! (c + 2))) rb l else interp i (c + 3) rb l
+    2106 -> if l !! ((c + 1)) == 0 then interp i $ Intcode (l !! (rb + l !! (c + 2))) rb l else interp i $ Intcode (c + 3) rb l
     -- 0 1 0 06
-    1006 -> if l !! (l !! (c + 1)) == 0 then interp i (l !! ((c + 2))) rb l else interp i (c + 3) rb l
+    1006 -> if l !! (l !! (c + 1)) == 0 then interp i $ Intcode (l !! ((c + 2))) rb l else interp i $ Intcode (c + 3) rb l
     -- 0 1 2 06
-    1206 -> if l !! (rb + l !! (c + 1)) == 0 then interp i (l !! ((c + 2))) rb l else interp i (c + 3) rb l
+    1206 -> if l !! (rb + l !! (c + 1)) == 0 then interp i $ Intcode (l !! ((c + 2))) rb l else interp i $ Intcode (c + 3) rb l
     -- 1 1 0 06
-    1106 -> if l !! ((c + 1)) == 0 then interp i (l !! ((c + 2))) rb l else interp i (c + 3) rb l
+    1106 -> if l !! ((c + 1)) == 0 then interp i $ Intcode (l !! ((c + 2))) rb l else interp i $ Intcode (c + 3) rb l
     -- 0 0 0 07
-    7 -> if l !! (l !! (c + 1)) < (l !! (l !! (c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i (c + 4) rb nl
+    7 -> if l !! (l !! (c + 1)) < (l !! (l !! (c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i $ Intcode (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i $ Intcode (c + 4) rb nl
     -- 0 2 2 07
-    2207 -> if l !! (rb + l !! (c + 1)) < (l !! (rb + l !! (c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i (c + 4) rb nl
+    2207 -> if l !! (rb + l !! (c + 1)) < (l !! (rb + l !! (c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i $ Intcode (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i $ Intcode (c + 4) rb nl
     -- 0 0 1 07
-    107 -> if l !! ((c + 1)) < (l !! (l !! (c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i (c + 4) rb nl
+    107 -> if l !! ((c + 1)) < (l !! (l !! (c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i $ Intcode (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i $ Intcode (c + 4) rb nl
     -- 0 2 1 07
-    2107 -> if l !! ((c + 1)) < (l !! (rb + l !! (c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i (c + 4) rb nl
+    2107 -> if l !! ((c + 1)) < (l !! (rb + l !! (c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i $ Intcode (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i $ Intcode (c + 4) rb nl
     -- 0 1 0 07
-    1007 -> if l !! (l !! (c + 1)) < (l !! ((c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i (c + 4) rb nl
+    1007 -> if l !! (l !! (c + 1)) < (l !! ((c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i $ Intcode (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i $ Intcode (c + 4) rb nl
     -- 0 1 2 07
-    1207 -> if l !! (rb + l !! (c + 1)) < (l !! ((c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i (c + 4) rb nl
+    1207 -> if l !! (rb + l !! (c + 1)) < (l !! ((c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i $ Intcode (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i $ Intcode (c + 4) rb nl
     -- 0 1 1 07
-    1107 -> if l !! ((c + 1)) < (l !! ((c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i (c + 4) rb nl
+    1107 -> if l !! ((c + 1)) < (l !! ((c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i $ Intcode (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i $ Intcode (c + 4) rb nl
     -- 2 1 1 07
-    21107 -> if l !! ((c + 1)) < (l !! ((c + 2))) then let nl = setElem l (rb + l !! (c + 3)) 1 in interp i (c + 4) rb nl else let nl = setElem l (rb + l !! (c + 3)) 0 in interp i (c + 4) rb nl
+    21107 -> if l !! ((c + 1)) < (l !! ((c + 2))) then let nl = setElem l (rb + l !! (c + 3)) 1 in interp i $ Intcode (c + 4) rb nl else let nl = setElem l (rb + l !! (c + 3)) 0 in interp i $ Intcode (c + 4) rb nl
     -- 0 0 0 08
-    8 -> if l !! (l !! (c + 1)) == (l !! (l !! (c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i (c + 4) rb nl
+    8 -> if l !! (l !! (c + 1)) == (l !! (l !! (c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i $ Intcode (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i $ Intcode (c + 4) rb nl
     -- 0 0 1 08
-    108 -> if l !! ((c + 1)) == (l !! (l !! (c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i (c + 4) rb nl
+    108 -> if l !! ((c + 1)) == (l !! (l !! (c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i $ Intcode (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i $ Intcode (c + 4) rb nl
     -- 0 2 1 08
-    2108 -> if l !! ((c + 1)) == (l !! (rb + l !! (c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i (c + 4) rb nl
+    2108 -> if l !! ((c + 1)) == (l !! (rb + l !! (c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i $ Intcode (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i $ Intcode (c + 4) rb nl
     -- 0 1 0 08
-    1008 -> if l !! (l !! (c + 1)) == (l !! ((c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i (c + 4) rb nl
+    1008 -> if l !! (l !! (c + 1)) == (l !! ((c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i $ Intcode (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i $ Intcode (c + 4) rb nl
     -- 0 1 2 08
-    1208 -> if l !! (rb + l !! (c + 1)) == (l !! ((c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i (c + 4) rb nl
+    1208 -> if l !! (rb + l !! (c + 1)) == (l !! ((c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i $ Intcode (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i $ Intcode (c + 4) rb nl
     -- 0 1 1 08
-    1108 -> if l !! ((c + 1)) == (l !!((c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i (c + 4) rb nl
+    1108 -> if l !! ((c + 1)) == (l !!((c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i $ Intcode (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i $ Intcode (c + 4) rb nl
     -- 2 1 1 08
-    21108 -> if l !! ((c + 1)) == (l !!((c + 2))) then let nl = setElem l (rb + l !! (c + 3)) 1 in interp i (c + 4) rb nl else let nl = setElem l (rb + l !! (c + 3)) 0 in interp i (c + 4) rb nl
-    9 -> interp i (c + 2) (rb + (l !! (l !! (c+1)))) l
-    109 -> interp i (c + 2) (rb + (l !! (c+1))) l
-    209 -> interp i (c + 2) (rb + (l !! (rb + (l !! (c+1))))) l
+    21108 -> if l !! ((c + 1)) == (l !!((c + 2))) then let nl = setElem l (rb + l !! (c + 3)) 1 in interp i $ Intcode (c + 4) rb nl else let nl = setElem l (rb + l !! (c + 3)) 0 in interp i $ Intcode (c + 4) rb nl
+    9 -> interp i $ Intcode (c + 2) (rb + (l !! (l !! (c+1)))) l
+    109 -> interp i $ Intcode (c + 2) (rb + (l !! (c+1))) l
+    209 -> interp i $ Intcode (c + 2) (rb + (l !! (rb + (l !! (c+1))))) l
     opcode -> error ("Opcode not found " <> show opcode)
-
-interp' :: [Int] -> Int -> Int -> [Int] -> [Int] -> [Int]
-interp' ins c rb prog os = let 
-    (prog1, c1, rb1, mo) = interp ins c rb prog
-    in case mo of
-        Nothing -> os
-        Just o -> interp' ins c1 rb1 prog1 (os<>[o])
-
-changeDir:: (Int, Int) -> Int -> (Int, Int)
-changeDir (0, -1) 1 = (1, 0) 
-changeDir (0, -1) 0 = (-1, 0) 
-changeDir (0, 1) 1 = (-1, 0) 
-changeDir (0, 1) 0 = (1, 0) 
-changeDir (1, 0) 1 = (0, 1) 
-changeDir (1, 0) 0 = (0, -1) 
-changeDir (-1, 0) 1 = (0, -1) 
-changeDir (-1, 0) 0 = (0, 1) 
 
 par :: String -> [Int]
 par input = read . T.unpack <$> T.splitOn "," (T.strip (T.pack input))
@@ -359,32 +347,32 @@ par input = read . T.unpack <$> T.splitOn "," (T.strip (T.pack input))
 solution1 :: String -> String
 solution1 input = let
     prog = par input
-    in show $ fst $ foo (prog, 0, 0, 0, OGrid (pure (0, False)) U)
+    in show $ fst $ foo (Intcode 0 0 prog, 0, OGrid (pure (0, False)) U)
 
 solution2 :: String -> String
 solution2 input = let
     g = dropOG (1, False) (OGrid (pure (0, False)) U)
     prog = par input <> L.repeat 0
-    gf = (\x -> if x == 0 then ' ' else '#') . fst <$> ogrid (snd $ foo (prog, 0, 0, 0, g))
+    gf = (\x -> if x == 0 then ' ' else '#') . fst <$> (snd $ foo (Intcode 0 0 prog, 0, g))
     (Just back) = grid 100 10 >>= repeatM moveRight 50 >>= repeatM moveDown 5
-    in printG $ back *> gf
+    in printG $ back *> ogrid gf
 
-foo :: ([Int], Int, Int, Int, OGrid (Int, Bool)) -> (Int, OGrid (Int, Bool))
-foo (prog, c, rb, cnt, g) = let
-    (intcode, painted) = extract g
-    (prog', c', rb', mintcode') = interp [intcode] c rb prog 
+foo :: (Intcode, Int, OGrid (Int, Bool)) -> (Int, OGrid (Int, Bool))
+foo (intcode, cnt, g) = let
+    (i, painted) = extract g
+    (intcode', mintcode') = interp [i] intcode
     in case mintcode' of
         Nothing -> (cnt, g)
-        Just intcode' -> let
-            (prog'', c'', rb'', mdir') = interp [intcode] c' rb' prog'
-            in case mdir' of
+        Just color -> let
+            (intcode'', mlr) = interp [color] intcode'
+            in case mlr of
                 Nothing -> (cnt, g)
                 Just lr -> let
                     d = case lr of
                         0 -> L
                         1 -> R
-                    g' = (moveOG U . turnOG d . dropOG (intcode', True)) g
-                    in foo (prog'', c'', rb'', if painted then cnt else cnt + 1, g')
+                    g' = (moveOG U . turnOG d . dropOG (color, True)) g
+                    in foo (intcode'', if painted then cnt else cnt + 1, g')
 
 main :: IO ()
 main = advent 2019 11 [solution1, solution2] $ do
