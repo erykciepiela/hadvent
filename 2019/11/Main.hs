@@ -98,26 +98,33 @@ instance Semigroup Dir where
 instance Monoid Dir where
     mempty = U
 
-data OGrid a = OGrid {
+data OGrid b a = OGrid {
     ogrid :: Grid a,
-    ogridUp :: Dir
+    ogridUp :: Dir,
+    ogridb :: b
 }
 
-instance Functor OGrid where
-    fmap f (OGrid g d) = OGrid (fmap f g) d
+instance Functor (OGrid b) where
+    fmap f (OGrid g d b) = OGrid (fmap f g) d b
 
-instance Comonad OGrid where
+instance Comonad (OGrid b) where
     extract = extract . ogrid
-    duplicate (OGrid g d) = OGrid ((\g -> OGrid g d) <$> duplicate g) d
+    duplicate (OGrid g d b) = OGrid ((\g -> OGrid g d b) <$> duplicate g) d b
 
-moveOG :: Dir -> OGrid a -> OGrid a
-moveOG d' (OGrid g d) = OGrid (moveG (d' <> d) g) d
+moveOG :: Dir -> OGrid b a -> OGrid b a
+moveOG d' (OGrid g d b) = OGrid (moveG (d' <> d) g) d b
 
-turnOG :: Dir -> OGrid a -> OGrid a
-turnOG nd (OGrid g d) = OGrid g (nd <> d)
+turnOG :: Dir -> OGrid b a -> OGrid b a
+turnOG nd (OGrid g d b) = OGrid g (nd <> d) b
 
-dropOG :: a -> OGrid a -> OGrid a
-dropOG a (OGrid g d) = OGrid (dropG a g) d
+dropOG :: a -> OGrid b a -> OGrid b a
+dropOG a (OGrid g d b) = OGrid (dropG a g) d b
+
+modifyOG :: (b -> b) -> OGrid b a -> OGrid b a
+modifyOG f (OGrid g d b) = (OGrid g d (f b))
+
+readOG :: OGrid b a -> b
+readOG = ogridb
 
 data Grid a = Grid {
     gridLines :: Line (Line a)
@@ -347,32 +354,32 @@ par input = read . T.unpack <$> T.splitOn "," (T.strip (T.pack input))
 solution1 :: String -> String
 solution1 input = let
     prog = par input
-    in show $ fst $ foo (Intcode 0 0 prog, 0, OGrid (pure (0, False)) U)
+    in show $ readOG $ foo (Intcode 0 0 prog, OGrid (pure (0, False)) U 0)
 
 solution2 :: String -> String
 solution2 input = let
-    g = dropOG (1, False) (OGrid (pure (0, False)) U)
+    g = dropOG (1, False) (OGrid (pure (0, False)) U 0)
     prog = par input <> L.repeat 0
-    gf = (\x -> if x == 0 then ' ' else '#') . fst <$> (snd $ foo (Intcode 0 0 prog, 0, g))
+    gf = (\x -> if x == 0 then ' ' else '#') . fst <$> foo (Intcode 0 0 prog, g)
     (Just back) = grid 100 10 >>= repeatM moveRight 50 >>= repeatM moveDown 5
     in printG $ back *> ogrid gf
 
-foo :: (Intcode, Int, OGrid (Int, Bool)) -> (Int, OGrid (Int, Bool))
-foo (intcode, cnt, g) = let
+foo :: (Intcode, OGrid Int (Int, Bool)) -> OGrid Int (Int, Bool)
+foo (intcode, g) = let
     (i, painted) = extract g
     (intcode', mintcode') = interp [i] intcode
     in case mintcode' of
-        Nothing -> (cnt, g)
+        Nothing -> g
         Just color -> let
             (intcode'', mlr) = interp [color] intcode'
             in case mlr of
-                Nothing -> (cnt, g)
+                Nothing -> g
                 Just lr -> let
                     d = case lr of
                         0 -> L
                         1 -> R
-                    g' = (moveOG U . turnOG d . dropOG (color, True)) g
-                    in foo (intcode'', if painted then cnt else cnt + 1, g')
+                    g' = (modifyOG (if painted then id else (+ 1)) . moveOG U . turnOG d . dropOG (color, True)) g
+                    in foo (intcode'', g')
 
 main :: IO ()
 main = advent 2019 11 [solution1, solution2] $ do
