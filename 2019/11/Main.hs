@@ -11,7 +11,6 @@ import Control.Applicative
 import Data.Map as M
 import Data.Maybe
 import Control.Exception
-import Debug.Trace
 import Data.List.Split as LS
 import Data.Angle
 import Control.Comonad
