@@ -19,6 +19,7 @@ import qualified Data.List.Safe as LSF
 import Data.Semigroup
 import Data.Foldable as F
 import Debug.Trace
+import Data.Functor
 --
 data Line a = Line {
     lineLeft :: [a],
@@ -34,6 +35,9 @@ instance Semigroup a => Semigroup (Line a) where
 
 line :: [a] -> Maybe (Line a)
 line as = Line <$> pure [] <*> LSF.head as <*> LSF.tail as
+
+reverseL :: Line a -> Line a
+reverseL (Line l c r) = Line r c l
 
 moveBack :: Line a -> Maybe (Line a)
 moveBack (Line l c r) = Line <$> LSF.tail l <*> LSF.head l <*> pure (c:r)
@@ -74,6 +78,46 @@ instance Applicative Line where
 instance Comonad Line where
     extract = lineCursor
     duplicate l = Line (iterM moveBack l) l (iterM moveForward l)
+--
+
+data Dir = U | D | L | R
+
+instance Semigroup Dir where
+    U <> d = d
+    d <> U = d
+    L <> R = U
+    L <> D = R
+    L <> L = D
+    D <> L = R
+    D <> R = L
+    D <> D = U
+    R <> D = L
+    R <> R = D
+    R <> L = U
+
+instance Monoid Dir where
+    mempty = U
+
+data OGrid a = OGrid {
+    ogrid :: Grid a,
+    ogridUp :: Dir
+}
+
+instance Functor OGrid where
+    fmap f (OGrid g d) = OGrid (fmap f g) d
+
+instance Comonad OGrid where
+    extract = extract . ogrid
+    duplicate (OGrid g d) = OGrid ((\g -> OGrid g d) <$> duplicate g) d
+
+moveOG :: Dir -> OGrid a -> OGrid a
+moveOG d' (OGrid g d) = OGrid (moveG (d' <> d) g) d
+
+turnOG :: Dir -> OGrid a -> OGrid a
+turnOG nd (OGrid g d) = OGrid g (nd <> d)
+
+dropOG :: a -> OGrid a -> OGrid a
+dropOG a (OGrid g d) = OGrid (dropG a g) d
 
 data Grid a = Grid {
     gridLines :: Line (Line a)
@@ -88,17 +132,48 @@ grid w h = gridFromList [[(x, y) | x <- [0..(w-1)]] | y <- [0..(h-1)]]
 infinigrid :: Maybe (Grid (Int, Int))
 infinigrid = gridFromList [[(x, y) | x <- [0..]] | y <- [0..]]
 
+rotateRight :: Grid a -> Grid a
+rotateRight (Grid ll@(Line upls cl downls)) = Grid (Line upls' cl' downls')
+    where
+        upls' = reverseL . fmap extract <$> L.tail (L.iterate (fmap moveBack') ll)-- L.tail $ extract <$> (L.iterate (fmap moveForward') ll)
+        cl' = diagr ll
+        downls' = reverseL . fmap extract <$> L.tail (L.iterate (fmap moveForward') ll)
+
+diagr :: Line (Line a) -> Line a
+diagr (Line uls cl dls) = Line (extract <$> uls) (extract cl) (extract <$> dls)
+
+diagl :: Line (Line a) -> Line a
+diagl (Line uls cl dls) = Line (extract <$> dls) (extract cl) (extract <$> uls)
+
+moveG :: Dir -> Grid a -> Grid a
+moveG U = moveUp'
+moveG D = moveDown'
+moveG L = moveLeft'
+moveG R = moveRight'
+
 moveUp :: Grid a -> Maybe (Grid a)
 moveUp (Grid l) = Grid <$> moveBack l
+
+moveUp' :: Grid a -> (Grid a)
+moveUp' (Grid l) = Grid $ moveBack' l
 
 moveDown :: Grid a -> Maybe (Grid a)
 moveDown (Grid l) = Grid <$> moveForward l
 
+moveDown' :: Grid a -> Grid a
+moveDown' (Grid l) = Grid $ moveForward' l
+
 moveLeft :: Grid a -> Maybe (Grid a)
 moveLeft (Grid l) = Just $ Grid (moveBack' <$> l)
 
+moveLeft' :: Grid a -> Grid a
+moveLeft' (Grid l) = Grid (moveBack' <$> l)
+
 moveRight :: Grid a -> Maybe (Grid a)
 moveRight (Grid l) = Just $ Grid (moveForward' <$> l)
+
+moveRight' :: Grid a -> Grid a
+moveRight' (Grid l) = Grid (moveForward' <$> l)
 
 translate :: (Int, Int) -> (Int, Int) -> (Int, Int)
 translate (dx, dy) (x, y) = (x-dx, y-dy)
@@ -268,9 +343,6 @@ interp' ins c rb prog os = let
         Nothing -> os
         Just o -> interp' ins c1 rb1 prog1 (os<>[o])
 
--- interp :: Int -> [Int]
--- interp i = [0, 1] -- 1 - turn right, 0 - turn left
-
 changeDir:: (Int, Int) -> Int -> (Int, Int)
 changeDir (0, -1) 1 = (1, 0) 
 changeDir (0, -1) 0 = (-1, 0) 
@@ -284,28 +356,21 @@ changeDir (-1, 0) 0 = (0, 1)
 par :: String -> [Int]
 par input = read . T.unpack <$> T.splitOn "," (T.strip (T.pack input))
 
-rap :: [Int] -> String
-rap is = L.intercalate "," $ show <$> is
-
 solution1 :: String -> String
 solution1 input = let
-    g = pure (0, False) -- pure black grid unpainted
-    dir = (0, -1)
-    prog = par input <> L.repeat 0
-    in show $ fst $ foo (prog, 0, 0, dir, 0, g, (0, 0))
+    prog = par input
+    in show $ fst $ foo (prog, 0, 0, 0, OGrid (pure (0, False)) U)
 
 solution2 :: String -> String
 solution2 input = let
-    ig = pure (0, False) -- pure black grid unpainted
-    g = dropG (1, False) ig
-    dir = (0, -1)
+    g = dropOG (1, False) (OGrid (pure (0, False)) U)
     prog = par input <> L.repeat 0
-    gf = (\x -> if x == 0 then ' ' else '#') . fst <$> (snd $ foo (prog, 0, 0, dir, 0, g, (0,0)))
+    gf = (\x -> if x == 0 then ' ' else '#') . fst <$> ogrid (snd $ foo (prog, 0, 0, 0, g))
     (Just back) = grid 100 10 >>= repeatM moveRight 50 >>= repeatM moveDown 5
     in printG $ back *> gf
 
-foo :: ([Int], Int, Int, (Int, Int), Int, Grid (Int, Bool), (Int, Int)) -> (Int, Grid (Int, Bool))
-foo (prog, c, rb, dir, cnt, g, p) = let
+foo :: ([Int], Int, Int, Int, OGrid (Int, Bool)) -> (Int, OGrid (Int, Bool))
+foo (prog, c, rb, cnt, g) = let
     (intcode, painted) = extract g
     (prog', c', rb', mintcode') = interp [intcode] c rb prog 
     in case mintcode' of
@@ -315,18 +380,18 @@ foo (prog, c, rb, dir, cnt, g, p) = let
             in case mdir' of
                 Nothing -> (cnt, g)
                 Just lr -> let
-                    g' = dropG (intcode', True) g
-                    dir' = changeDir dir lr
-                    (Just g'') = move dir' g'
-                    in foo (prog'', c'', rb'', dir', if painted then cnt else cnt + 1, g'', (\(px, py) (dx, dy) -> (px + dx, py + dy)) p dir')
+                    d = case lr of
+                        0 -> L
+                        1 -> R
+                    g' = (moveOG U . turnOG d . dropOG (intcode', True)) g
+                    in foo (prog'', c'', rb'', if painted then cnt else cnt + 1, g')
 
 main :: IO ()
 main = advent 2019 11 [solution1, solution2] $ do
-    -- peek $ dropL 9 <$> (line [0,1,2] >>= moveForward)
-    -- peek $ dropG 9 <$> (gridFromList [[0,1,2], [0,1,2], [0,1,2]] >>= moveRight >>= moveDown)
-    peek $ extract $ (pure True :: Grid Bool)
-    peek $ extract <$> (moveDown $ pure True)
-    peek $ extract <$> (moveUp $ pure True)
-    peek $ extract <$> (moveLeft $ pure True)
-    peek $ extract <$> (moveRight $ pure True)
+    peek $ extract <$> (gridFromList [['1','2','3'],['4','5','6'],['7','8','9']] >>= moveRight >>= moveDown >>= Just . rotateRight >>= moveUp >>= moveLeft)
+    peek $ extract <$> (gridFromList [['1','2','3'],['4','5','6'],['7','8','9']] >>= moveRight >>= moveDown >>= Just . rotateRight >>= moveUp)
+    peek $ extract <$> (gridFromList [['1','2','3'],['4','5','6'],['7','8','9']] >>= moveRight >>= moveDown >>= Just . rotateRight >>= moveUp >>= moveRight)
+    peek $ extract <$> (gridFromList [['1','2','3'],['4','5','6'],['7','8','9']] >>= moveRight >>= moveDown >>= Just . rotateRight >>= moveDown >>= moveLeft)
+    peek $ extract <$> (gridFromList [['1','2','3'],['4','5','6'],['7','8','9']] >>= moveRight >>= moveDown >>= Just . rotateRight >>= moveDown)
+    peek $ extract <$> (gridFromList [['1','2','3'],['4','5','6'],['7','8','9']] >>= moveRight >>= moveDown >>= Just . rotateRight >>= moveDown >>= moveRight)
     return ()
