@@ -319,6 +319,7 @@ interp i intcode = let (Intcode c rb l) = intcode in case l !! c of
     109 -> interp i $ Intcode (c + 2) (rb + (l !! (c+1))) l
     -- 0 0 2 09
     209 -> interp i $ Intcode (c + 2) (rb + (l !! (rb + (l !! (c+1))))) l
+    -- otherwise
     opcode -> error ("Opcode not found " <> show opcode)
 
 walk :: (Intcode, OGrid Int (Int, Bool)) -> OGrid Int (Int, Bool)
