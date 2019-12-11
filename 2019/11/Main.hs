@@ -203,9 +203,9 @@ data Intcode = Intcode {
     icInstrs :: [Int]
 }
 
-interp :: [Int] -> Intcode -> (Intcode, Maybe Int)
+interp :: [Int] -> Intcode -> Maybe (Intcode, Int)
 interp i intcode = let (Intcode c rb l) = intcode in case l !! c of
-    99 -> (Intcode 0 rb l, Nothing)
+    99 -> Nothing
     -- 0 0 0 01
     1 ->   let nl = setElem l (l !! (c + 3)) (l !! (l !! (c +1)) + l !! (l !! (c+2))) in interp i $ Intcode (c + 4) rb nl
     -- 2 2 2 01
@@ -248,18 +248,18 @@ interp i intcode = let (Intcode c rb l) = intcode in case l !! c of
     21102 -> let nl = setElem l (rb + l !! (c + 3)) (l !! ((c +1)) * l !! ((c+2))) in interp i $ Intcode (c + 4) rb nl
     -- 0 0 0 03
     3 -> case i of
-        [] -> (Intcode c rb l, Nothing)
+        [] -> Nothing
         (fi:ri) -> let nl = setElem l (l !! (c + 1)) fi in interp ri $ Intcode (c + 2) rb nl
     -- 0 0 2 03
     203 -> case i of
-        [] -> (Intcode c rb l, Nothing)
+        [] -> Nothing
         (fi:ri) -> let nl = setElem l (rb + (l !! (c + 1))) fi in interp ri $ Intcode (c + 2) rb nl
     -- 0 0 0 04 
-    4 -> let o = (l !! (l !! (c + 1))) in (Intcode (c + 2) rb l, Just o)
+    4 -> let o = (l !! (l !! (c + 1))) in Just (Intcode (c + 2) rb l, o)
     -- 0 0 2 04
-    204 -> let o = (l !! (rb + l !! (c + 1))) in (Intcode (c + 2) rb l, Just o)
+    204 -> let o = (l !! (rb + l !! (c + 1))) in Just (Intcode (c + 2) rb l, o)
     -- 0 0 1 04
-    104 -> let o = (l !! (c + 1)) in (Intcode (c + 2) rb l, Just o)
+    104 -> let o = (l !! (c + 1)) in Just (Intcode (c + 2) rb l, o)
     -- 0 0 0 05
     5 -> if l !! (l !! (c + 1)) /= 0 then interp i $ Intcode (l !! (l !! (c + 2))) rb l else interp i $ Intcode (c + 3) rb l
     -- 0 0 1 05
@@ -314,25 +314,25 @@ interp i intcode = let (Intcode c rb l) = intcode in case l !! c of
     1108 -> if l !! ((c + 1)) == (l !!((c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i $ Intcode (c + 4) rb nl else let nl = setElem l (l !! (c + 3)) 0 in interp i $ Intcode (c + 4) rb nl
     -- 2 1 1 08
     21108 -> if l !! ((c + 1)) == (l !!((c + 2))) then let nl = setElem l (rb + l !! (c + 3)) 1 in interp i $ Intcode (c + 4) rb nl else let nl = setElem l (rb + l !! (c + 3)) 0 in interp i $ Intcode (c + 4) rb nl
+    -- 0 0 0 09
     9 -> interp i $ Intcode (c + 2) (rb + (l !! (l !! (c+1)))) l
+    -- 0 0 1 09
     109 -> interp i $ Intcode (c + 2) (rb + (l !! (c+1))) l
+    -- 0 0 2 09
     209 -> interp i $ Intcode (c + 2) (rb + (l !! (rb + (l !! (c+1))))) l
     opcode -> error ("Opcode not found " <> show opcode)
 
 walk :: (Intcode, OGrid Int (Int, Bool)) -> OGrid Int (Int, Bool)
 walk (intcode, g) = let
     (i, painted) = extract g
-    (intcode', mcolor) = interp [i] intcode
-    in case mcolor of
+    in case interp [i] intcode of
         Nothing -> g
-        Just color -> let
-            (intcode'', mlr) = interp [color] intcode'
-            in case mlr of
-                Nothing -> g
-                Just lr -> let
-                    d = case lr of 0 -> L; 1 -> R
-                    g' = (modifyOG (if painted then id else (+ 1)) . moveOG U . turnOG d . dropOG (color, True)) g
-                    in walk (intcode'', g')
+        Just (intcode', color) -> case interp [color] intcode' of
+            Nothing -> g
+            Just (intcode'', lr) -> let
+                d = case lr of 0 -> L; 1 -> R
+                g' = (modifyOG (if painted then id else (+ 1)) . moveOG U . turnOG d . dropOG (color, True)) g
+                in walk (intcode'', g')
     
 parseInput :: String -> [Int]
 parseInput input = read . T.unpack <$> T.splitOn "," (T.strip (T.pack input))
