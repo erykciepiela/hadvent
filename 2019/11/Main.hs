@@ -348,38 +348,36 @@ interp i intcode = let (Intcode c rb l) = intcode in case l !! c of
     209 -> interp i $ Intcode (c + 2) (rb + (l !! (rb + (l !! (c+1))))) l
     opcode -> error ("Opcode not found " <> show opcode)
 
-par :: String -> [Int]
-par input = read . T.unpack <$> T.splitOn "," (T.strip (T.pack input))
-
-solution1 :: String -> String
-solution1 input = let
-    prog = par input
-    in show $ readOG $ foo (Intcode 0 0 prog, OGrid (pure (0, False)) U 0)
-
-solution2 :: String -> String
-solution2 input = let
-    g = dropOG (1, False) (OGrid (pure (0, False)) U 0)
-    prog = par input <> L.repeat 0
-    gf = (\x -> if x == 0 then ' ' else '#') . fst <$> foo (Intcode 0 0 prog, g)
-    (Just back) = grid 100 10 >>= repeatM moveRight 50 >>= repeatM moveDown 5
-    in printG $ back *> ogrid gf
-
-foo :: (Intcode, OGrid Int (Int, Bool)) -> OGrid Int (Int, Bool)
-foo (intcode, g) = let
+walk :: (Intcode, OGrid Int (Int, Bool)) -> OGrid Int (Int, Bool)
+walk (intcode, g) = let
     (i, painted) = extract g
-    (intcode', mintcode') = interp [i] intcode
-    in case mintcode' of
+    (intcode', mcolor) = interp [i] intcode
+    in case mcolor of
         Nothing -> g
         Just color -> let
             (intcode'', mlr) = interp [color] intcode'
             in case mlr of
                 Nothing -> g
                 Just lr -> let
-                    d = case lr of
-                        0 -> L
-                        1 -> R
+                    d = case lr of 0 -> L; 1 -> R
                     g' = (modifyOG (if painted then id else (+ 1)) . moveOG U . turnOG d . dropOG (color, True)) g
-                    in foo (intcode'', g')
+                    in walk (intcode'', g')
+    
+parseInput :: String -> [Int]
+parseInput input = read . T.unpack <$> T.splitOn "," (T.strip (T.pack input))
+
+solution1 :: String -> String
+solution1 input = let
+    prog = parseInput input
+    in show $ readOG $ walk (Intcode 0 0 prog, OGrid (pure (0, False)) U 0)
+
+solution2 :: String -> String
+solution2 input = let
+    prog = parseInput input <> L.repeat 0
+    g = dropOG (1, False) (OGrid (pure (0, False)) U 0)
+    g' = (\x -> if x == 0 then ' ' else '#') . fst <$> walk (Intcode 0 0 prog, g)
+    (Just back) = grid 100 10 >>= repeatM moveRight 50 >>= repeatM moveDown 5
+    in printG $ back *> ogrid g'
 
 main :: IO ()
 main = advent 2019 11 [solution1, solution2] $ do
