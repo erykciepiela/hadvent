@@ -130,7 +130,7 @@ writeOG b (OGrid g d _) = (OGrid g d b)
 readOG :: OGrid b a -> b
 readOG = ogridb
 
-data Grid a = Grid {
+newtype Grid a = Grid {
     gridLines :: Line (Line a)
 }
 
@@ -204,7 +204,6 @@ data Intcode = Intcode {
 }
 
 interp :: [Int] -> Intcode -> (Intcode, Maybe Int)
--- interp _ intcode = let (Intcode c rb l) = intcode in (Intcode 0 rb l, Nothing)
 interp i intcode = let (Intcode c rb l) = intcode in case l !! c of
     99 -> (Intcode 0 rb l, Nothing)
     -- 0 0 0 01
