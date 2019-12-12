@@ -25,6 +25,7 @@ default-extensions:
 - ScopedTypeVariables
 - DerivingVia
 - StandaloneDeriving
+- TupleSections
 
 dependencies:
 - base >= 4.7 && < 5
@@ -43,6 +44,7 @@ dependencies:
 - comonad -any
 - listsafe -any
 - cryptohash-sha256 -any
+- parsec -any
 
 library:
   source-dirs: src

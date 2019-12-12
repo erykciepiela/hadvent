@@ -19,6 +19,11 @@ import Data.Semigroup
 import Data.Foldable as F
 import Debug.Trace
 import Data.Functor
+-- import Data.Attoparsec.ByteString as A
+-- import Data.ByteString.Char8 as C8
+import Text.Parsec
+import Text.Parsec.Char 
+import Text.Parsec.Combinator as P
 
 type Star = ((Int, Int, Int), (Int, Int, Int))
 
@@ -73,14 +78,33 @@ avelocity' = fmap av'
 av' :: (Int, Int) -> (Int, Int)
 av' (p, v) = (p + v, v)
 
+parseInt :: Parsec String () Int
+parseInt = do
+    mminus <- P.option "" (string "-")
+    digits <- many1 digit
+    return (read (mminus <> digits))
+
+parseInput :: Parsec String () [(Int, Int, Int)]
+parseInput = endBy1 (do
+    string "<x="
+    x <- parseInt
+    string ", y="
+    y <- parseInt
+    string ", z="
+    z <- parseInt
+    string ">"
+    return (x, y, z)) (string "\n")
+
 solution1 :: Int -> String -> String
 solution1 steps input = let
-    i = read input
+    (Right i') = parse parseInput "" input
+    i = (, (0,0,0)) <$> i'
     in show $ energy $ (L.iterate stepf i) !! steps
         
 solution2 :: String -> String
 solution2 input = let
-    i = read input
+    (Right i') = parse parseInput "" input
+    i = (, (0,0,0)) <$> i'
     ix = (\((p, _, _), (v, _, _)) -> (p,v)) <$> i
     iy = (\((_, p, _), (_, v, _)) -> (p,v)) <$> i
     iz = (\((_, _, p), (_, _, v)) -> (p,v)) <$> i
