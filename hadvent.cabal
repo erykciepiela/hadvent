@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 068e9905005b8a2fd843eb32c937f4fda4752727578ac76b2bad89d1162a1ce1
+-- hash: 9643fe4599ab7fc3b2b8617d3df0aa512ecd4380dfb8b4b2bd5557b7239077e9
 
 name:           hadvent
 version:        0.1.0.0
@@ -33,7 +33,7 @@ library
       Paths_hadvent
   hs-source-dirs:
       src
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving
   build-depends:
       Data-Angle
     , HTTP
@@ -42,6 +42,7 @@ library
     , bytestring
     , comonad
     , containers
+    , cryptohash-sha256
     , directory
     , http-client
     , http-client-tls
@@ -58,7 +59,7 @@ executable 2018-1
       Paths_hadvent
   hs-source-dirs:
       2018/1
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -68,6 +69,7 @@ executable 2018-1
     , bytestring
     , comonad
     , containers
+    , cryptohash-sha256
     , directory
     , hadvent
     , http-client
@@ -85,7 +87,7 @@ executable 2018-2
       Paths_hadvent
   hs-source-dirs:
       2018/2
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -95,6 +97,7 @@ executable 2018-2
     , bytestring
     , comonad
     , containers
+    , cryptohash-sha256
     , directory
     , hadvent
     , http-client
@@ -112,7 +115,7 @@ executable 2019-1
       Paths_hadvent
   hs-source-dirs:
       2019/1
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -122,6 +125,7 @@ executable 2019-1
     , bytestring
     , comonad
     , containers
+    , cryptohash-sha256
     , directory
     , hadvent
     , http-client
@@ -139,7 +143,7 @@ executable 2019-10
       Paths_hadvent
   hs-source-dirs:
       2019/10
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -149,6 +153,7 @@ executable 2019-10
     , bytestring
     , comonad
     , containers
+    , cryptohash-sha256
     , directory
     , hadvent
     , http-client
@@ -166,7 +171,7 @@ executable 2019-11
       Paths_hadvent
   hs-source-dirs:
       2019/11
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -176,6 +181,7 @@ executable 2019-11
     , bytestring
     , comonad
     , containers
+    , cryptohash-sha256
     , directory
     , hadvent
     , http-client
@@ -193,7 +199,7 @@ executable 2019-12
       Paths_hadvent
   hs-source-dirs:
       2019/12
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -203,6 +209,7 @@ executable 2019-12
     , bytestring
     , comonad
     , containers
+    , cryptohash-sha256
     , directory
     , hadvent
     , http-client
@@ -220,7 +227,7 @@ executable 2019-2
       Paths_hadvent
   hs-source-dirs:
       2019/2
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -230,6 +237,7 @@ executable 2019-2
     , bytestring
     , comonad
     , containers
+    , cryptohash-sha256
     , directory
     , hadvent
     , http-client
@@ -247,7 +255,7 @@ executable 2019-3
       Paths_hadvent
   hs-source-dirs:
       2019/3
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -257,6 +265,7 @@ executable 2019-3
     , bytestring
     , comonad
     , containers
+    , cryptohash-sha256
     , directory
     , hadvent
     , http-client
@@ -274,7 +283,7 @@ executable 2019-4
       Paths_hadvent
   hs-source-dirs:
       2019/4
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -284,6 +293,7 @@ executable 2019-4
     , bytestring
     , comonad
     , containers
+    , cryptohash-sha256
     , directory
     , hadvent
     , http-client
@@ -301,7 +311,7 @@ executable 2019-5
       Paths_hadvent
   hs-source-dirs:
       2019/5
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -311,6 +321,7 @@ executable 2019-5
     , bytestring
     , comonad
     , containers
+    , cryptohash-sha256
     , directory
     , hadvent
     , http-client
@@ -328,7 +339,7 @@ executable 2019-6
       Paths_hadvent
   hs-source-dirs:
       2019/6
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -338,6 +349,7 @@ executable 2019-6
     , bytestring
     , comonad
     , containers
+    , cryptohash-sha256
     , directory
     , hadvent
     , http-client
@@ -355,7 +367,7 @@ executable 2019-7
       Paths_hadvent
   hs-source-dirs:
       2019/7
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -365,6 +377,7 @@ executable 2019-7
     , bytestring
     , comonad
     , containers
+    , cryptohash-sha256
     , directory
     , hadvent
     , http-client
@@ -382,7 +395,7 @@ executable 2019-8
       Paths_hadvent
   hs-source-dirs:
       2019/8
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -392,6 +405,7 @@ executable 2019-8
     , bytestring
     , comonad
     , containers
+    , cryptohash-sha256
     , directory
     , hadvent
     , http-client
@@ -409,7 +423,7 @@ executable 2019-9
       Paths_hadvent
   hs-source-dirs:
       2019/9
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -419,6 +433,7 @@ executable 2019-9
     , bytestring
     , comonad
     , containers
+    , cryptohash-sha256
     , directory
     , hadvent
     , http-client
@@ -437,7 +452,7 @@ test-suite advent-test
       Paths_hadvent
   hs-source-dirs:
       test
-  default-extensions: OverloadedStrings OverloadedLists ScopedTypeVariables DerivingVia StandaloneDeriving
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -448,6 +463,7 @@ test-suite advent-test
     , bytestring
     , comonad
     , containers
+    , cryptohash-sha256
     , directory
     , http-client
     , http-client-tls
