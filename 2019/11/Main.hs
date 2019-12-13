@@ -339,6 +339,7 @@ parseInput input = read . T.unpack <$> T.splitOn "," (T.strip (T.pack input))
 solution1 :: String -> String
 solution1 input = let
     prog = parseInput input
+    
     in show $ readOG $ walk (Intcode 0 0 prog, OGrid (pure (0, False)) U 0)
 
 solution2 :: String -> String
