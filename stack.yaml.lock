@@ -18,6 +18,13 @@ packages:
       sha256: ee5bfc64973ad9a44f731319efdc02436b90a6a278d3e77b501cb541499019f5
   original:
     hackage: Data-Angle-0.9@sha256:051889e0f75c1cfe5c97a7f4ce64df66a9ef0f5d27d5f9112c82769d8260f0cc,877
+- completed:
+    hackage: pomaps-0.0.2.1@sha256:65100d17267e83d006a538f071fc7c8707806c5ee62270dfcf2799de5a193a6c,3189
+    pantry-tree:
+      size: 1107
+      sha256: 6bade3c11a14cf52b94f9368bbca080a573810bc2ed298f526d906788a53adec
+  original:
+    hackage: pomaps-0.0.2.1@sha256:65100d17267e83d006a538f071fc7c8707806c5ee62270dfcf2799de5a193a6c,3189
 snapshots:
 - completed:
     size: 525662
