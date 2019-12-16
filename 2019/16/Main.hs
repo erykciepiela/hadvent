@@ -39,8 +39,24 @@ sol1 input phn = let
 solution1 :: String -> String
 solution1 input = L.take 8 $ sol1 input 100
 
+fft' :: [Int] -> Int -> [Int]
+fft' is 0 = is
+fft' is phn = let
+    rss = L.scanr1 (\a b -> (a+b) `mod` 10) is
+    in fft rss (phn - 1)
+
 solution2 :: String -> String
-solution2 input = L.take 8 $ sol1 (mconcat (L.replicate 10000 input)) 100
+solution2 input = let
+    ints = read . (\c -> [c]) <$> input
+    -- in show $ L.length input
+    -- 5975589 
+    -- 6500000
+    -- in show $ (fft (mconcat (L.replicate 10000 ints)) 100) !! 5975589
+    -- in show $ (fft (mconcat (L.replicate 10000 ints)) 100) !! 5975590
+    -- in show $ L.length $ fft (mconcat (L.replicate 10000 ints)) 100
+    -- in show $ (fft (mconcat (L.replicate 10000 ints)) 100) !! 5975589
+    in mconcat $ (show . (`mod` 10)) <$> (L.take 8 $ L.drop 5975589 $ fft' (mconcat (L.replicate 10000 ints)) 100)
+    -- in show $ foo (mconcat (L.replicate 1 ints)) 100 0 
     
 main :: IO ()
 main = advent 2019 16 [solution1, solution2] $ do
