@@ -48,7 +48,7 @@ fft' is phn = let
 solution2 :: String -> String
 solution2 input = let
     ints = read . (\c -> [c]) <$> input
-    in mconcat $ show  <$> (L.take 8 $ L.drop 5975589 $ fft' (mconcat (L.replicate 10000 ints)) 100)
+    in mconcat $ (show . (`mod` 10)) <$> (L.take 8 $ L.drop 5975589 $ fft' (mconcat (L.replicate 10000 ints)) 100)
     
 main :: IO ()
 main = advent 2019 16 [solution1, solution2] $ do
