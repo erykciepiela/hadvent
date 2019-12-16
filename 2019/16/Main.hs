@@ -42,13 +42,13 @@ solution1 input = L.take 8 $ sol1 input 100
 fft' :: [Int] -> Int -> [Int]
 fft' is 0 = is
 fft' is phn = let
-    rss = L.scanr1 (\a b -> a `seq` b `seq` (a+b)) is
-    in fft rss (phn - 1)
+    rss = L.scanr1 (\a b -> a + b `mod` 10) is
+    in fft' rss (phn - 1)
 
 solution2 :: String -> String
 solution2 input = let
     ints = read . (\c -> [c]) <$> input
-    in mconcat $ (show . (`mod` 10)) <$> (L.take 8 $ L.drop 5975589 $ fft' (mconcat (L.replicate 10000 ints)) 100)
+    in mconcat $ show  <$> (L.take 8 $ L.drop 5975589 $ fft' (mconcat (L.replicate 10000 ints)) 100)
     
 main :: IO ()
 main = advent 2019 16 [solution1, solution2] $ do
