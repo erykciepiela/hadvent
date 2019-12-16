@@ -25,15 +25,16 @@ import Text.Parsec.Char
 import Text.Parsec.Combinator as P
 
 fft :: [Int] -> Int -> [Int]
+fft is 0 = is
 fft is phn = let
     phs = (\n -> L.take (L.length is) $ L.tail $ L.cycle (L.replicate n 0 <> L.replicate n 1 <> L.replicate n 0 <> L.replicate n (-1))) <$> [1..(L.length is)]
-    rs = L.iterate (\is -> (\p -> (`mod` 10) $ abs $ L.sum $ L.zipWith (*) is p) <$> phs) is 
-    in (L.take 8 $ rs !! phn)
+    rs = (\p -> (`mod` 10) $ abs $ L.sum $ L.zipWith (*) is p) <$> phs
+    in (fft rs (phn - 1))
 
 sol1 :: String -> Int -> String
 sol1 input phn = let
     ints = read . (\c -> [c]) <$> input
-    in mconcat $ show <$> fft ints phn
+    in L.take 8 $ mconcat $ show <$> fft ints phn
 
 solution1 :: String -> String
 solution1 input = L.take 8 $ sol1 input 100
