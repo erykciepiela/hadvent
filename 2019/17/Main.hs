@@ -357,11 +357,6 @@ dropG a g = let (Line up l down) = gridLines g in Grid $ Line up (dropL a l) dow
 
 --
 
--- toChar :: Int -> Char
--- toChar 35 = '#'
--- toChar 46 = '.'
--- toChar 46 = '.'
-
 solution1 :: String -> String
 solution1 input = let
     inp = (parseInput input) <> repeat 0
