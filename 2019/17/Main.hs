@@ -40,7 +40,7 @@ data Intcode = Intcode {
 } deriving Show
 
 interp :: [Int] -> (Intcode, [Int]) -> (Maybe Intcode, [Int])
-interp i (intcode, os) = let (Intcode c rb l) = intcode in case l !! c of
+interp i (intcode, os) = let (Intcode c rb l) = intcode in case (l !! c) of
     99 -> (Nothing, os)
     -- 0 0 0 01
     1 ->   let nl = setElem l (l !! (c + 3)) (l !! (l !! (c +1)) + l !! (l !! (c+2))) in interp i (Intcode (c + 4) rb nl, os)
@@ -181,6 +181,13 @@ interp i (intcode, os) = let (Intcode c rb l) = intcode in case l !! c of
 parseInput :: String -> [Int]
 parseInput input = read . T.unpack <$> T.splitOn "," (T.strip (T.pack input))
 
+sepBy :: Eq a => a -> [a] -> [[a]]
+sepBy x [] = []
+sepBy x xs = let
+    y1 = L.takeWhile (/=x) xs
+    y2 = L.dropWhile (==x) . L.dropWhile (/=x) $ xs
+  in
+    y1:(Main.sepBy x y2)
 --
 
 --
@@ -371,6 +378,9 @@ repeatN f n a = a:(repeatN f (n - 1) (f a))
 gtoList :: Int -> Int -> Grid a -> [[a]]
 gtoList w h g = (\g -> extract <$> repeatN (moveG R) w g) <$> repeatN (moveG D) h g 
 
+printll :: [[Char]] -> String
+printll = L.intercalate "\n"
+
 dropL :: a -> Line a -> Line a
 dropL a (Line l c r) = Line l a r
 
@@ -383,37 +393,34 @@ solution1 :: String -> String
 solution1 input = let
     inp = (parseInput input) <> repeat 0
     (Nothing, o) = interp [] (Intcode 0 0 inp, [])
-    lines = trace (show $ L.take 3 o) L.drop 2 $ LS.splitOn [10] o
-    lines' = fmap chr <$> lines
+    o' = L.reverse o
+    in trace (chr <$> o') $ xxx (chr <$> o')
+
+xxx :: [Char] -> String
+xxx o = let
+    lines' = L.filter (/= "") $ L.lines o
     grid = gridFromList lines'
-    g = (,) <$> grid <*> infinigrid
-    g' = moveG R $ moveG D $ extend comp g
-    in show $ sum $ sum <$> gtoList (L.length (lines' !! 0) - 2) (L.length lines' - 2) g'
+    w = (L.length (lines' !! 0) - 2)
+    h = (L.length lines' - 2)
+    g = (\c (x, y) -> (c, (x, y))) <$> grid <*> infinigrid
+    g' = extend comp g
+    x = gtoList w h (moveG D $ moveG R $ g')
+    in show $ sum $ sum <$> x
 
 comp :: Grid (Char, (Int, Int)) -> Int
-comp g = let (ch, (x, y)) = extract g in case ch of
-    '#' -> case fst (extract (moveG U g)) == '#' && fst (extract (moveG D g)) == '#' && fst (extract (moveG L g)) == '#' && fst (extract (moveG R g)) == '#' of
-        True -> (x*(y +2))
-        False -> 0
-    _ -> 0
-
-comp1 :: Grid Char -> Int
-comp1 g = let (ch) = extract g in case ch of
-    '#' -> 1
-    _ -> 0
+comp g = let (ch, (x, y)) = extract g in if isScaffold ch 
+    && isScaffold (fst (extract (moveG U g))) 
+    && isScaffold (fst (extract (moveG D g))) 
+    && isScaffold (fst (extract (moveG L g))) 
+    && isScaffold (fst (extract (moveG R g))) then x*y else 0
+    where
+        isScaffold :: Char -> Bool
+        isScaffold c = c `L.elem` ("#^<>v" :: String)
 
 solution2 :: String -> String
 solution2 input = "?"
     
 main :: IO ()
 main = advent 2019 17 [solution1] $ do
-    let g = gridFromList [['a'..'c'], ['d'..'f'], ['g'..'i']]
-    peek $ printG $ g
-    -- peek $ printG $ extend (\c -> Data.Char.toUpper (extract c)) g
-    peek $ extract $ moveG D $ extend (\c -> Data.Char.toUpper (extract c)) g
-    peek $ show $ gtoList 3 3 $ extend (\c -> Data.Char.toUpper (extract c)) g
-    -- peek $ printG $ duplicate g
-    -- peek $ extract g
-    -- peek $ printG $ moveG U g
-    -- peek $ extract $ extract $ duplicate g
+    xxx "..#..........\n..#..........\n#######...###\n#.#...#...#.#\n#############\n..#...#...#..\n..#####...^.." `shouldBe` "76"
     return ()
