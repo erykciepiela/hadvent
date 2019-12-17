@@ -325,6 +325,12 @@ moveG D (Grid l) = Grid $ moveForward' l
 moveG L (Grid l) = Grid (moveBack' <$> l)
 moveG R (Grid l) = Grid (moveForward' <$> l)
 
+moveGm :: Dir -> Grid a -> Maybe (Grid a)
+moveGm U (Grid l) = Grid <$> moveBack l
+moveGm D (Grid l) = Grid <$> moveForward l
+moveGm L (Grid l) = Grid <$> sequenceA (moveBack <$> l)
+moveGm R (Grid l) = Grid <$> sequenceA (moveForward <$> l)
+
 
 -- translate :: (Int, Int) -> (Int, Int) -> (Int, Int)
 -- translate (dx, dy) (x, y) = (x-dx, y-dy)
@@ -341,7 +347,9 @@ instance Applicative Grid where
 
 instance Comonad Grid where
     extract = extract . extract . gridLines
-    duplicate g = Grid $ duplicate (Grid <$> duplicate (gridLines g))
+    -- duplicate g = Grid $ duplicate (Grid <$> duplicate (gridLines g))
+    -- duplicate g = Grid $ (fmap Grid <$> (duplicate $ duplicate <$> (gridLines g)))
+    duplicate g = Grid $ fmap (Grid . duplicate) <$> duplicate (gridLines g)
 
 instance Semigroup a => Semigroup (Grid a) where
     g1 <> g2 = Grid $ gridLines g1 <> gridLines g2
@@ -365,12 +373,22 @@ solution1 input = let
     lines = L.drop 2 $ LS.splitOn [10] o
     lines' = fmap chr <$> lines
     g = gridFromList lines'
-    in printG g
+    g' = extend (comp) g
+    in printG g'
     -- in (show $ L.length lines) <> " " <> show (L.length <$> lines)
+
+comp :: Grid Char -> Char
+comp g = case extract g of
+        '#' -> '1'
+        _ -> '0'
+    -- moveGm U g
 
 solution2 :: String -> String
 solution2 input = "?"
     
 main :: IO ()
 main = advent 2019 17 [solution1] $ do
+    let g = intToDigit <$> gridFromList [[1..3], [4..6], [7..9]]
+    peek $ printG $ g
+    peek $ printG $ extract <$> duplicate g
     return ()
