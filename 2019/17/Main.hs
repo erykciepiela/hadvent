@@ -48,6 +48,8 @@ interp i (intcode, os) = let (Intcode c rb l) = intcode in case (l !! c) of
     20001 ->   let nl = setElem l (rb + l !! (c + 3)) (l !! (l !! (c +1)) + l !! (l !! (c+2))) in interp i (Intcode (c + 4) rb nl, os)
     -- 0 0 2 01 !!!
     201 ->  let nl = setElem l (l !! (c + 3)) (l !! (rb + l !! (c +1)) + l !! (l !! (c+2))) in interp i (Intcode (c + 4) rb nl, os)
+    -- 0 2 2 01 !!!
+    2201 ->  let nl = setElem l (l !! (c + 3)) (l !! (rb + l !! (c +1)) + l !! (rb + l !! (c+2))) in interp i (Intcode (c + 4) rb nl, os)
     -- 2 1 0 01 !!!
     21001 ->   let nl = setElem l (rb + l !! (c + 3)) (l !! (l !! (c +1)) + l !! ((c+2))) in interp i (Intcode (c + 4) rb nl, os)
     -- 2 2 2 01
@@ -142,12 +144,16 @@ interp i (intcode, os) = let (Intcode c rb l) = intcode in case (l !! c) of
     2207 -> if l !! (rb + l !! (c + 1)) < (l !! (rb + l !! (c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i (Intcode (c + 4) rb nl, os) else let nl = setElem l (l !! (c + 3)) 0 in interp i (Intcode (c + 4) rb nl, os)
     -- 0 0 1 07
     107 -> if l !! ((c + 1)) < (l !! (l !! (c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i (Intcode (c + 4) rb nl, os) else let nl = setElem l (l !! (c + 3)) 0 in interp i (Intcode (c + 4) rb nl, os)
+    -- 2 2 1 07
+    22107 -> if l !! ((c + 1)) < (l !! (rb + l !! (c + 2))) then let nl = setElem l (rb + l !! (c + 3)) 1 in interp i (Intcode (c + 4) rb nl, os) else let nl = setElem l (rb + l !! (c + 3)) 0 in interp i (Intcode (c + 4) rb nl, os)
     -- 0 2 1 07
     2107 -> if l !! ((c + 1)) < (l !! (rb + l !! (c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i (Intcode (c + 4) rb nl, os) else let nl = setElem l (l !! (c + 3)) 0 in interp i (Intcode (c + 4) rb nl, os)
     -- 0 1 0 07
     1007 -> if l !! (l !! (c + 1)) < (l !! ((c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i (Intcode (c + 4) rb nl, os) else let nl = setElem l (l !! (c + 3)) 0 in interp i (Intcode (c + 4) rb nl, os)
     -- 0 1 2 07
     1207 -> if l !! (rb + l !! (c + 1)) < (l !! ((c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i (Intcode (c + 4) rb nl, os) else let nl = setElem l (l !! (c + 3)) 0 in interp i (Intcode (c + 4) rb nl, os)
+    -- 2 1 2 07
+    21207 -> if l !! (rb + l !! (c + 1)) < (l !! ((c + 2))) then let nl = setElem l (rb + l !! (c + 3)) 1 in interp i (Intcode (c + 4) rb nl, os) else let nl = setElem l (rb + l !! (c + 3)) 0 in interp i (Intcode (c + 4) rb nl, os)
     -- 0 1 1 07
     1107 -> if l !! ((c + 1)) < (l !! ((c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i (Intcode (c + 4) rb nl, os) else let nl = setElem l (l !! (c + 3)) 0 in interp i (Intcode (c + 4) rb nl, os)
     -- 2 1 1 07
@@ -156,8 +162,12 @@ interp i (intcode, os) = let (Intcode c rb l) = intcode in case (l !! c) of
     8 -> if l !! (l !! (c + 1)) == (l !! (l !! (c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i (Intcode (c + 4) rb nl, os) else let nl = setElem l (l !! (c + 3)) 0 in interp i (Intcode (c + 4) rb nl, os)
     -- 0 0 2 08
     208 -> if l !! (rb + l !! (c + 1)) == (l !! (l !! (c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i (Intcode (c + 4) rb nl, os) else let nl = setElem l (l !! (c + 3)) 0 in interp i (Intcode (c + 4) rb nl, os)
+    -- 0 2 2 08
+    2208 -> if l !! (rb + l !! (c + 1)) == (l !! (rb + l !! (c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i (Intcode (c + 4) rb nl, os) else let nl = setElem l (l !! (c + 3)) 0 in interp i (Intcode (c + 4) rb nl, os)
     -- 2 0 2 08
     20208 -> if l !! (rb + l !! (c + 1)) == (l !! (l !! (c + 2))) then let nl = setElem l (rb + l !! (c + 3)) 1 in interp i (Intcode (c + 4) rb nl, os) else let nl = setElem l (rb + l !! (c + 3)) 0 in interp i (Intcode (c + 4) rb nl, os)
+    -- 2 1 2 08
+    21208 -> if l !! (rb + l !! (c + 1)) == (l !! ((c + 2))) then let nl = setElem l (rb + l !! (c + 3)) 1 in interp i (Intcode (c + 4) rb nl, os) else let nl = setElem l (rb + l !! (c + 3)) 0 in interp i (Intcode (c + 4) rb nl, os)
     -- 0 0 1 08
     108 -> if l !! ((c + 1)) == (l !! (l !! (c + 2))) then let nl = setElem l (l !! (c + 3)) 1 in interp i (Intcode (c + 4) rb nl, os) else let nl = setElem l (l !! (c + 3)) 0 in interp i (Intcode (c + 4) rb nl, os)
     -- 0 2 1 08
@@ -418,9 +428,20 @@ comp g = let (ch, (x, y)) = extract g in if isScaffold ch
         isScaffold c = c `L.elem` ("#^<>v" :: String)
 
 solution2 :: String -> String
-solution2 input = "?"
+solution2 input = let
+    inp' = (parseInput input) <> repeat 0
+    inp = 2:L.tail inp'
+    (Just i2, _) = interp [] (Intcode 0 0 inp, [])
+    (Just i3, _) = interp (asc <$> "A,B,A,C,B,C,A,C,B,C\n") (i2, [])
+    (Just i4, _) = interp (asc <$> "L,8,R,10,L,10\n") (i3, [])
+    (Just i5, _) = interp (asc <$> "R,10,L,8,L,8,L,10\n") (i4, [])
+    (Just i6, _) = interp (asc <$> "L,4,L,6,L,8,L,8\n") (i5, [])
+    (Nothing, o) = interp (asc <$> "n\n") (i6, [])
+    in show $ L.head o
+        where
+            asc = ord
     
 main :: IO ()
-main = advent 2019 17 [solution1] $ do
+main = advent 2019 17 [solution2] $ do
     xxx "..#..........\n..#..........\n#######...###\n#.#...#...#.#\n#############\n..#...#...#..\n..#####...^.." `shouldBe` "76"
     return ()
