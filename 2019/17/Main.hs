@@ -220,6 +220,7 @@ repeatM :: (a -> a) -> Int -> a -> a
 repeatM f 0 a = a
 repeatM f n a = repeatM f (n - 1) (f a)
 
+
 moveForward :: Line a -> Maybe (Line a)
 moveForward (Line l c r) = Line <$> pure (c:l) <*> LSF.head r <*> LSF.tail r
 
@@ -347,13 +348,28 @@ instance Applicative Grid where
 
 instance Comonad Grid where
     extract = extract . extract . gridLines
-    duplicate g = Grid $ fmap (Grid . duplicate) <$> duplicate (gridLines g) -- TODO
+    duplicate g@(Grid ls) = Grid $ Line (up g) (c g) (down g)
+        where 
+            c :: Grid a -> Line (Grid a)
+            c g = Line (L.tail (L.iterate (moveG L) g)) g (L.tail (L.iterate (moveG R) g))
+            up :: Grid a -> [Line (Grid a)]
+            up g = (\g -> Line (L.tail (L.iterate (moveG L) g)) g (L.tail (L.iterate (moveG R) g))) <$> (L.tail (L.iterate (moveG U) g))
+            down :: Grid a -> [Line (Grid a)]
+            down g = (\g -> Line (L.tail (L.iterate (moveG L) g)) g (L.tail (L.iterate (moveG R) g))) <$> (L.tail (L.iterate (moveG D) g))
 
 instance Semigroup a => Semigroup (Grid a) where
     g1 <> g2 = Grid $ gridLines g1 <> gridLines g2
 
 printG :: Grid Char -> String
 printG g = F.foldr (\l b -> b <> "\n" <> F.foldr (\a s -> s <> [a]) "" l) "" (gridLines g)
+
+repeatN :: (a -> a) -> Int -> a -> [a]
+repeatN f 0 a = []
+repeatN f n a = a:(repeatN f (n - 1) (f a))
+
+
+gtoList :: Int -> Int -> Grid a -> [[a]]
+gtoList w h g = (\g -> extract <$> repeatN (moveG R) w g) <$> repeatN (moveG D) h g 
 
 dropL :: a -> Line a -> Line a
 dropL a (Line l c r) = Line l a r
@@ -369,21 +385,32 @@ solution1 input = let
     (Nothing, o) = interp [] (Intcode 0 0 inp, [])
     lines = L.drop 2 $ LS.splitOn [10] o
     lines' = fmap chr <$> lines
-    g = (,) <$> gridFromList lines' <*> infinigrid
-    g' = extend comp g
+    grid = gridFromList lines'
+    -- g = (,) <$> gridFromList lines' <*> infinigrid
+    g' = extend comp1 grid
     in printG $ intToDigit <$> g'
 
 comp :: Grid (Char, (Int, Int)) -> Int
 comp g = let (ch, (x, y)) = extract g in case ch of
         '#' -> (x+y)
         _ -> 0
+comp1 :: Grid Char -> Int
+comp1 g = let (ch) = extract g in case ch of
+        '#' -> 1
+        _ -> 0
 
 solution2 :: String -> String
 solution2 input = "?"
     
 main :: IO ()
-main = advent 2019 17 [solution1] $ do
-    let g = intToDigit <$> gridFromList [[1..3], [4..6], [7..9]]
+main = advent 2019 17 [] $ do
+    let g = gridFromList [['a'..'c'], ['d'..'f'], ['g'..'i']]
     peek $ printG $ g
-    peek $ printG $ extract <$> duplicate g
+    -- peek $ printG $ extend (\c -> Data.Char.toUpper (extract c)) g
+    peek $ extract $ moveG D $ extend (\c -> Data.Char.toUpper (extract c)) g
+    peek $ show $ gtoList 3 3 $ extend (\c -> Data.Char.toUpper (extract c)) g
+    -- peek $ printG $ duplicate g
+    -- peek $ extract g
+    -- peek $ printG $ moveG U g
+    -- peek $ extract $ extract $ duplicate g
     return ()
