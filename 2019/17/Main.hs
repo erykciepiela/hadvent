@@ -383,7 +383,7 @@ solution1 :: String -> String
 solution1 input = let
     inp = (parseInput input) <> repeat 0
     (Nothing, o) = interp [] (Intcode 0 0 inp, [])
-    lines = L.drop 2 $ LS.splitOn [10] o
+    lines = trace (show $ L.take 3 o) L.drop 2 $ LS.splitOn [10] o
     lines' = fmap chr <$> lines
     grid = gridFromList lines'
     g = (,) <$> grid <*> infinigrid
@@ -393,7 +393,7 @@ solution1 input = let
 comp :: Grid (Char, (Int, Int)) -> Int
 comp g = let (ch, (x, y)) = extract g in case ch of
     '#' -> case fst (extract (moveG U g)) == '#' && fst (extract (moveG D g)) == '#' && fst (extract (moveG L g)) == '#' && fst (extract (moveG R g)) == '#' of
-        True -> (x*y)
+        True -> (x*(y +2))
         False -> 0
     _ -> 0
 
