@@ -386,24 +386,27 @@ solution1 input = let
     lines = L.drop 2 $ LS.splitOn [10] o
     lines' = fmap chr <$> lines
     grid = gridFromList lines'
-    -- g = (,) <$> gridFromList lines' <*> infinigrid
-    g' = extend comp1 grid
-    in printG $ intToDigit <$> g'
+    g = (,) <$> grid <*> infinigrid
+    g' = moveG R $ moveG D $ extend comp g
+    in show $ sum $ sum <$> gtoList (L.length (lines' !! 0) - 2) (L.length lines' - 2) g'
 
 comp :: Grid (Char, (Int, Int)) -> Int
 comp g = let (ch, (x, y)) = extract g in case ch of
-        '#' -> (x+y)
-        _ -> 0
+    '#' -> case fst (extract (moveG U g)) == '#' && fst (extract (moveG D g)) == '#' && fst (extract (moveG L g)) == '#' && fst (extract (moveG R g)) == '#' of
+        True -> (x*y)
+        False -> 0
+    _ -> 0
+
 comp1 :: Grid Char -> Int
 comp1 g = let (ch) = extract g in case ch of
-        '#' -> 1
-        _ -> 0
+    '#' -> 1
+    _ -> 0
 
 solution2 :: String -> String
 solution2 input = "?"
     
 main :: IO ()
-main = advent 2019 17 [] $ do
+main = advent 2019 17 [solution1] $ do
     let g = gridFromList [['a'..'c'], ['d'..'f'], ['g'..'i']]
     peek $ printG $ g
     -- peek $ printG $ extend (\c -> Data.Char.toUpper (extract c)) g
