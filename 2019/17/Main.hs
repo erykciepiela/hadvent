@@ -347,9 +347,7 @@ instance Applicative Grid where
 
 instance Comonad Grid where
     extract = extract . extract . gridLines
-    -- duplicate g = Grid $ duplicate (Grid <$> duplicate (gridLines g))
-    -- duplicate g = Grid $ (fmap Grid <$> (duplicate $ duplicate <$> (gridLines g)))
-    duplicate g = Grid $ fmap (Grid . duplicate) <$> duplicate (gridLines g)
+    duplicate g = Grid $ fmap (Grid . duplicate) <$> duplicate (gridLines g) -- TODO
 
 instance Semigroup a => Semigroup (Grid a) where
     g1 <> g2 = Grid $ gridLines g1 <> gridLines g2
@@ -368,20 +366,17 @@ dropG a g = let (Line up l down) = gridLines g in Grid $ Line up (dropL a l) dow
 solution1 :: String -> String
 solution1 input = let
     inp = (parseInput input) <> repeat 0
-    -- in show inp
     (Nothing, o) = interp [] (Intcode 0 0 inp, [])
     lines = L.drop 2 $ LS.splitOn [10] o
     lines' = fmap chr <$> lines
-    g = gridFromList lines'
-    g' = extend (comp) g
-    in printG g'
-    -- in (show $ L.length lines) <> " " <> show (L.length <$> lines)
+    g = (,) <$> gridFromList lines' <*> infinigrid
+    g' = extend comp g
+    in printG $ intToDigit <$> g'
 
-comp :: Grid Char -> Char
-comp g = case extract g of
-        '#' -> '1'
-        _ -> '0'
-    -- moveGm U g
+comp :: Grid (Char, (Int, Int)) -> Int
+comp g = let (ch, (x, y)) = extract g in case ch of
+        '#' -> (x+y)
+        _ -> 0
 
 solution2 :: String -> String
 solution2 input = "?"
