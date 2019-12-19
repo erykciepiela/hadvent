@@ -208,7 +208,7 @@ isDoor :: Char -> Bool
 isDoor ch = ch `L.elem` ['A'..'Z']
 
 walksToNextKey :: Walk -> [Walk]
-walksToNextKey (Walk path@(cursor:_) keys l) = let
+walksToNextKey (Walk path@(cursor:_) keys l) = if L.length keys == 26 then trace (show l) [] else let
     foo = (\dir -> let 
         cursor' = moveG dir cursor 
         in if (fst (extract cursor')) `L.elem` (fst. extract <$> path) then [] else case snd (extract cursor') of
