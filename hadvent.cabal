@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9a6726ffbf4c6772e8ecf6dd4f0c4cb50aab79504826948ea0be56b8ad434b7e
+-- hash: 06366c7cfd64c5a89c679dfbab7c895b163e5f8aff212cfad655c2a2408b0ff2
 
 name:           hadvent
 version:        0.1.0.0
@@ -682,6 +682,37 @@ executable 2020-1
       Paths_hadvent
   hs-source-dirs:
       2020/1
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      Data-Angle
+    , HTTP
+    , Hclip
+    , base >=4.7 && <5
+    , bytestring
+    , comonad
+    , containers
+    , cryptohash-sha256
+    , directory
+    , hadvent
+    , http-client
+    , http-client-tls
+    , http-conduit
+    , lattices
+    , listsafe
+    , mtl
+    , parsec
+    , pomaps
+    , split
+    , text
+  default-language: Haskell2010
+
+executable 2020-2
+  main-is: Main.hs
+  other-modules:
+      Paths_hadvent
+  hs-source-dirs:
+      2020/2
   default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
