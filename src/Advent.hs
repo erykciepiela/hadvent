@@ -60,9 +60,9 @@ testAdvent solution ((i, o):ios) = do
     (eactual :: Either SomeException o) <- try $ evaluate $ solution i
     case eactual of
         Right actual -> if actual /= o
-            then return $ Just ("for:\n" <> show i <> "\nexpected:\n" <> show o <> "\nactually:\n" <> show actual) 
+            then return $ Just ("for:\n" <> show i <> "\nexpected:\n" <> show o <> "\nactually:\n" <> show actual)
             else testAdvent solution ios
-        Left e -> return $ Just ("for:\n" <> show i <> "\nexpected:\n" <> show o <> "\nactually:\n" <> show e) 
+        Left e -> return $ Just ("for:\n" <> show i <> "\nexpected:\n" <> show o <> "\nactually:\n" <> show e)
 
 test :: (Show i, Show o, Eq o) => (i -> o) -> i -> o -> IO ()
 test solution i o = do
@@ -72,7 +72,7 @@ test solution i o = do
             then Prelude.putStrLn $ "for:\n" <> show i <> "\nexpected:\n" <> show o <> "\nactually:\n" <> show actual
             else return ()
         Left e -> Prelude.putStrLn $ "for:\n" <> show i <> "\nexpected:\n" <> show o <> "\nactually:\n" <> show e
-        
+
 runAdvent' :: Int -> Int -> (String -> String) -> IO String
 runAdvent' year day solution = do
     exists <- doesFileExist inputFile
@@ -84,7 +84,7 @@ runAdvent' year day solution = do
     return $ solution input
         where
             inputFile = show year <> "/" <> show day <> "/input.txt"
-        
+
 -- new API
 
 peek :: Show o => o -> Advent ()
@@ -109,7 +109,7 @@ shouldBe act exp = cont $ \k -> do
                         else Nothing
                     Left e -> Just $ "expected:\n" <> show exp <> "\nactually:\n" <> show e
 
-solution :: Int -> Int -> Int -> (String -> String) -> Advent ()
+solution :: Show s => Int -> Int -> Int -> (String -> s) -> Advent ()
 solution year day n s = cont $ \k -> do
     manswer <- answer year day s
     case manswer of
@@ -119,7 +119,7 @@ solution year day n s = cont $ \k -> do
             k ()
         Nothing -> Prelude.putStrLn $ "Challenge " <> show year <> "/" <> show day <> " still locked"
         where
-            answer :: Int -> Int -> (String -> String) -> IO (Maybe String)
+            answer :: Show s => Int -> Int -> (String -> s) -> IO (Maybe String)
             answer year day solution = do
                 exists <- doesFileExist inputFile
                 minput <- if exists then Just . C.unpack <$> C.readFile inputFile else do
@@ -128,17 +128,17 @@ solution year day n s = cont $ \k -> do
                     if "Please" `L.isPrefixOf` i then return Nothing else do
                         Prelude.writeFile inputFile i
                         return (Just i)
-                return $ solution <$> minput
+                return $ show . solution <$> minput
                     where
                         inputFile = show year <> "/" <> show day <> "/input.txt"
 
 
 type Advent a = Cont (IO ()) a
 
-advent :: Int -> Int -> [String -> String] -> Advent a -> IO ()
+advent :: Show s => Int -> Int -> [String -> s] -> Advent a -> IO ()
 advent year day solutions a = flip runCont id $ do
     a
     when (not $ L.null solutions) $ do
-        forM_ (Prelude.zip [1..] solutions) $ \(n, s) -> solution year day n s 
+        forM_ (Prelude.zip [1..] solutions) $ \(n, s) -> solution year day n s
         cont $ \_ -> Prelude.putStrLn "(in clipboard)"
     return (return ())
