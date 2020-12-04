@@ -48,6 +48,7 @@ dependencies:
 - parsec -any
 - lattices -any
 - pomaps -any
+- either -any
 
 library:
   source-dirs: src
@@ -254,6 +255,15 @@ executables:
   2020-3:
     main:                Main.hs
     source-dirs:         "2020/3"
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - hadvent
+  2020-4:
+    main:                Main.hs
+    source-dirs:         "2020/4"
     ghc-options:
     - -threaded
     - -rtsopts

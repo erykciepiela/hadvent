@@ -25,10 +25,10 @@ isEmpty = undefined '.'
 containsAsteroid = undefined '#'
 
 par :: String -> [[Bool]]
-par s = fmap (== '#') <$> (L.lines s) 
+par s = fmap (== '#') <$> (L.lines s)
 
 sight :: [[Bool]] -> (Int, Int) -> Int
-sight am (x, y) = f [(dx, dy) | 
+sight am (x, y) = f [(dx, dy) |
     dx <- [(- (L.length am)) .. (L.length am)],
     dy <- [(- (L.length (L.head am))) .. (L.length (L.head am))],
     (dx, dy) /= (0, 0),
@@ -55,11 +55,11 @@ ggg (Just a:mas) = Just a
 ggg (Nothing:mas) = ggg mas
 
 xxx :: [[Bool]] -> ((Int, Int), Int)
-xxx am = L.head $ L.reverse $ L.sortOn snd $ (\c -> (c, sight am c)) <$> [(x, y) | 
+xxx am = L.head $ L.reverse $ L.sortOn snd $ (\c -> (c, sight am c)) <$> [(x, y) |
     x <- [0 .. (L.length am - 1)],
     y <- [0 .. (L.length (L.head am) - 1)],
     (am !! y) !! x
-    ] 
+    ]
 
 solution1 :: String -> String
 solution1 input = show $ snd $ xxx $ par input
@@ -68,18 +68,18 @@ solution1' :: String -> (Int, Int)
 solution1' input = fst $ xxx $ par input
 
 solution2 :: Int -> String -> String
-solution2 i str = let 
+solution2 i str = let
     am = (par str)
     c = fst $ xxx am
-    (x, y) = s2 c am !! (i - 1) 
+    (x, y) = s2 c am !! (i - 1)
     in show $ 100*x + y
 
 s2 :: (Int, Int) -> [[Bool]] -> [(Int, Int)]
 s2 c am = let
-    coords = coordsOrd c am 
+    coords = coordsOrd c am
     am' = zero am coords
     in coords <> undefined -- s2 c am'
-        where 
+        where
             zero am coords = undefined
 
 coordsOrd :: (Int, Int) -> [[Bool]] -> [(Int, Int)]
@@ -96,10 +96,10 @@ coordsOrd (x, y) am = let
         -- L.nub $ rrr <$>
     in (\(x1, y1) -> (x1 + x, y1 + y)) <$> L.sortOn ang (L.nub $ rrr <$> coords)
         where
-        ang (x, y) = let 
+        ang (x, y) = let
             a = angleValueRadians (atan2Angle (fromIntegral x) (fromIntegral (-y)))
             in if a < 0 then a + 2*pi else a
-    
+
 data Line a = Line {
     lineLeft :: [a],
     lineCursor :: a,
@@ -185,7 +185,7 @@ instance Functor Grid where
 
 instance Applicative Grid where
     pure a = Grid $ Line (L.repeat (pure a)) (pure a) (L.repeat (pure a))
-    g1 <*> g2 = Grid $ (<*>) <$> gridLines g1 <*> gridLines g2 
+    g1 <*> g2 = Grid $ (<*>) <$> gridLines g1 <*> gridLines g2
 
 instance Comonad Grid where
     extract = extract . extract . gridLines
@@ -198,7 +198,7 @@ deriving instance (Show a) => Show (Grid a)
 deriving instance (Eq a) => Eq (Grid a)
 
 index :: Grid a -> Grid (Int, Int)
-index g = Grid $ undefined 
+index g = Grid $ undefined
 
 (Just i) = infinigrid
 eee g = case extract g of
@@ -208,7 +208,7 @@ eee g = case extract g of
     -- _ -> L.length $ L.nub $ rrr <$> L.filter (/= (0, 0)) (fst <$> (L.filter snd $ F.toList $ (,) <$> i <*> g))
 
 main :: IO ()
-main = advent 2019 10 [] $ do
+main = advent 2019 10 [solution1] $ do
     let (Just g1) = grid 2 2
     let (Just g2) = grid 2 2
     -- peek $ (,) <$> g1 <*> pure 6
@@ -231,7 +231,7 @@ main = advent 2019 10 [] $ do
     -- rrr (-12, -24) `shouldBe` (-1, -2)
     -- rrr (1, 3) `shouldBe` (1, 3)
     -- rrr (2, 6) `shouldBe` (1, 3)
-    -- peek $ par ".#..#\n.....\n#####\n....#\n...##" 
+    -- peek $ par ".#..#\n.....\n#####\n....#\n...##"
     -- (snd . xxx . par) ".#..#\n.....\n#####\n....#\n...##" `shouldBe` 8
     -- (snd . xxx . par) testInput `shouldBe` 210
     -- angleValueRadians (atan2Angle 0 (1)) `shouldBe` 0

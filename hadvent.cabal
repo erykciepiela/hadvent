@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 5ed7b74beba12d835b1acd2a8d842a975110af5071512153599e1c78e53a49f1
+-- hash: 91494d0f50a697e5de6ccd19bda3e5565f70992ef7630dbda26dc1971b1b73c2
 
 name:           hadvent
 version:        0.1.0.0
@@ -44,6 +44,7 @@ library
     , containers
     , cryptohash-sha256
     , directory
+    , either
     , http-client
     , http-client-tls
     , http-conduit
@@ -74,6 +75,7 @@ executable 2018-1
     , containers
     , cryptohash-sha256
     , directory
+    , either
     , hadvent
     , http-client
     , http-client-tls
@@ -105,6 +107,7 @@ executable 2018-2
     , containers
     , cryptohash-sha256
     , directory
+    , either
     , hadvent
     , http-client
     , http-client-tls
@@ -136,6 +139,7 @@ executable 2019-1
     , containers
     , cryptohash-sha256
     , directory
+    , either
     , hadvent
     , http-client
     , http-client-tls
@@ -167,6 +171,7 @@ executable 2019-10
     , containers
     , cryptohash-sha256
     , directory
+    , either
     , hadvent
     , http-client
     , http-client-tls
@@ -198,6 +203,7 @@ executable 2019-11
     , containers
     , cryptohash-sha256
     , directory
+    , either
     , hadvent
     , http-client
     , http-client-tls
@@ -229,6 +235,7 @@ executable 2019-12
     , containers
     , cryptohash-sha256
     , directory
+    , either
     , hadvent
     , http-client
     , http-client-tls
@@ -260,6 +267,7 @@ executable 2019-13
     , containers
     , cryptohash-sha256
     , directory
+    , either
     , hadvent
     , http-client
     , http-client-tls
@@ -291,6 +299,7 @@ executable 2019-14
     , containers
     , cryptohash-sha256
     , directory
+    , either
     , hadvent
     , http-client
     , http-client-tls
@@ -322,6 +331,7 @@ executable 2019-15
     , containers
     , cryptohash-sha256
     , directory
+    , either
     , hadvent
     , http-client
     , http-client-tls
@@ -353,6 +363,7 @@ executable 2019-16
     , containers
     , cryptohash-sha256
     , directory
+    , either
     , hadvent
     , http-client
     , http-client-tls
@@ -384,6 +395,7 @@ executable 2019-17
     , containers
     , cryptohash-sha256
     , directory
+    , either
     , hadvent
     , http-client
     , http-client-tls
@@ -415,6 +427,7 @@ executable 2019-18
     , containers
     , cryptohash-sha256
     , directory
+    , either
     , hadvent
     , http-client
     , http-client-tls
@@ -446,6 +459,7 @@ executable 2019-2
     , containers
     , cryptohash-sha256
     , directory
+    , either
     , hadvent
     , http-client
     , http-client-tls
@@ -477,6 +491,7 @@ executable 2019-3
     , containers
     , cryptohash-sha256
     , directory
+    , either
     , hadvent
     , http-client
     , http-client-tls
@@ -508,6 +523,7 @@ executable 2019-4
     , containers
     , cryptohash-sha256
     , directory
+    , either
     , hadvent
     , http-client
     , http-client-tls
@@ -539,6 +555,7 @@ executable 2019-5
     , containers
     , cryptohash-sha256
     , directory
+    , either
     , hadvent
     , http-client
     , http-client-tls
@@ -570,6 +587,7 @@ executable 2019-6
     , containers
     , cryptohash-sha256
     , directory
+    , either
     , hadvent
     , http-client
     , http-client-tls
@@ -601,6 +619,7 @@ executable 2019-7
     , containers
     , cryptohash-sha256
     , directory
+    , either
     , hadvent
     , http-client
     , http-client-tls
@@ -632,6 +651,7 @@ executable 2019-8
     , containers
     , cryptohash-sha256
     , directory
+    , either
     , hadvent
     , http-client
     , http-client-tls
@@ -663,6 +683,7 @@ executable 2019-9
     , containers
     , cryptohash-sha256
     , directory
+    , either
     , hadvent
     , http-client
     , http-client-tls
@@ -694,6 +715,7 @@ executable 2020-1
     , containers
     , cryptohash-sha256
     , directory
+    , either
     , hadvent
     , http-client
     , http-client-tls
@@ -725,6 +747,7 @@ executable 2020-2
     , containers
     , cryptohash-sha256
     , directory
+    , either
     , hadvent
     , http-client
     , http-client-tls
@@ -756,6 +779,39 @@ executable 2020-3
     , containers
     , cryptohash-sha256
     , directory
+    , either
+    , hadvent
+    , http-client
+    , http-client-tls
+    , http-conduit
+    , lattices
+    , listsafe
+    , mtl
+    , parsec
+    , pomaps
+    , split
+    , text
+  default-language: Haskell2010
+
+executable 2020-4
+  main-is: Main.hs
+  other-modules:
+      Paths_hadvent
+  hs-source-dirs:
+      2020/4
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      Data-Angle
+    , HTTP
+    , Hclip
+    , base >=4.7 && <5
+    , bytestring
+    , comonad
+    , containers
+    , cryptohash-sha256
+    , directory
+    , either
     , hadvent
     , http-client
     , http-client-tls
@@ -789,6 +845,7 @@ test-suite advent-test
     , containers
     , cryptohash-sha256
     , directory
+    , either
     , http-client
     , http-client-tls
     , http-conduit
