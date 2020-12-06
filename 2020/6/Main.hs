@@ -19,7 +19,7 @@ groupsParser = groupParser `sepBy` char '\n'
 
 groupParser :: Parser Group
 groupParser = do
-  questions <- many1 (oneOf ['a' .. 'z']) `sepEndBy` oneOf "\n"
+  questions <- many1 (oneOf ['a' .. 'z']) `sepEndBy` char '\n'
   return $ Group $ questions
 
 solution1 :: String -> Int
