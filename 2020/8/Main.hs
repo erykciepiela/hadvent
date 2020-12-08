@@ -8,9 +8,8 @@ import Data.Functor
 import Data.List as L
 import Control.Monad
 import Data.Set as S
-import Data.Map as M
-
-type Color = String
+-- import Data.Map as M
+import Data.Maybe
 
 data Instr = Instr {
   name :: String,
@@ -28,19 +27,35 @@ instrParser = do
     number <- read <$> many1 digit
     return $ Instr name (sign * number)
 
-foldInstrs :: [Instr] -> ([Int], Int) -> ([Int], Int)
-foldInstrs is (cursors, acc) = if length (nub cursors) /= length cursors then (cursors, acc) else case is !! head cursors of
-  (Instr "acc" n) -> foldInstrs is ((head cursors + 1): cursors, acc + n)
-  (Instr "jmp" n) -> foldInstrs is ((head cursors + n): cursors, acc)
-  (Instr "nop" _) -> foldInstrs is ((head cursors + 1): cursors, acc)
+interpret :: [Instr] -> ([Int], Int) -> ([Int], Int, Bool)
+interpret is (cursors, acc)
+  | length (nub cursors) /= length cursors = (cursors, acc, False)
+  | head cursors == length is = (cursors, acc, True)
+  | otherwise = case is !! head cursors of
+      (Instr "acc" n) -> interpret is ((head cursors + 1): cursors, acc + n)
+      (Instr "jmp" n) -> interpret is ((head cursors + n): cursors, acc)
+      (Instr "nop" _) -> interpret is ((head cursors + 1): cursors, acc)
 
 solution1 :: String -> Int
 solution1 input = let
   is = either (error "invalid parser") id $ parse instrsParser "?" input
-  -- in show instrs
-  in snd $ foldInstrs is ([0], 0)
+  (_, acc, False) = interpret is ([0], 0)
+  in acc
+
+variants :: [Instr] -> [[Instr]]
+variants [] = []
+variants (Instr "jmp" n:rest) = ((Instr "jmp" n:) <$> variants rest) <> ((Instr "nop" n:) <$> [rest])
+variants (Instr "nop" n:rest) = ((Instr "nop" n:) <$> variants rest) <> ((Instr "jmp" n:) <$> [rest])
+variants (i:rest) = (i:) <$> variants rest
+
+solution2 :: String -> Int
+solution2 input = let
+  is = either (error "invalid parser") id $ parse instrsParser "?" input
+  in head $ mapMaybe checkVariant (variants is)
+    where
+      checkVariant is = let (_, acc, r) = interpret is ([0], 0) in if r then Just acc else Nothing
 
 main :: IO ()
-main = advent 2020 8 [solution1] $ do
+main = advent 2020 8 [solution2] $ do
   return ()
 
