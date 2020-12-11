@@ -27,6 +27,7 @@ default-extensions:
 - StandaloneDeriving
 - TupleSections
 - DeriveFunctor
+- LambdaCase
 
 dependencies:
 - base >= 4.7 && < 5
@@ -49,6 +50,7 @@ dependencies:
 - lattices -any
 - pomaps -any
 - either -any
+- distributive
 
 library:
   source-dirs: src

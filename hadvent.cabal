@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ff997f71b450a6d60f78488ba99ec65a2a73e12ace708ae8fc5a847d32751f4b
+-- hash: 214b5780dfb42feb9e7e11e5d580cac3db0b81288120441e567bd97c2932d2ab
 
 name:           hadvent
 version:        0.1.0.0
@@ -28,12 +28,13 @@ source-repository head
 library
   exposed-modules:
       Advent
+      Grid
       Utils
   other-modules:
       Paths_hadvent
   hs-source-dirs:
       src
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   build-depends:
       Data-Angle
     , HTTP
@@ -44,6 +45,7 @@ library
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , http-client
     , http-client-tls
@@ -63,7 +65,7 @@ executable 2018-1
       Paths_hadvent
   hs-source-dirs:
       2018/1
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -75,6 +77,7 @@ executable 2018-1
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -95,7 +98,7 @@ executable 2018-2
       Paths_hadvent
   hs-source-dirs:
       2018/2
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -107,6 +110,7 @@ executable 2018-2
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -127,7 +131,7 @@ executable 2019-1
       Paths_hadvent
   hs-source-dirs:
       2019/1
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -139,6 +143,7 @@ executable 2019-1
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -159,7 +164,7 @@ executable 2019-10
       Paths_hadvent
   hs-source-dirs:
       2019/10
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -171,6 +176,7 @@ executable 2019-10
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -191,7 +197,7 @@ executable 2019-11
       Paths_hadvent
   hs-source-dirs:
       2019/11
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -203,6 +209,7 @@ executable 2019-11
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -223,7 +230,7 @@ executable 2019-12
       Paths_hadvent
   hs-source-dirs:
       2019/12
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -235,6 +242,7 @@ executable 2019-12
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -255,7 +263,7 @@ executable 2019-13
       Paths_hadvent
   hs-source-dirs:
       2019/13
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -267,6 +275,7 @@ executable 2019-13
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -287,7 +296,7 @@ executable 2019-14
       Paths_hadvent
   hs-source-dirs:
       2019/14
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -299,6 +308,7 @@ executable 2019-14
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -319,7 +329,7 @@ executable 2019-15
       Paths_hadvent
   hs-source-dirs:
       2019/15
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -331,6 +341,7 @@ executable 2019-15
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -351,7 +362,7 @@ executable 2019-16
       Paths_hadvent
   hs-source-dirs:
       2019/16
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -363,6 +374,7 @@ executable 2019-16
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -383,7 +395,7 @@ executable 2019-17
       Paths_hadvent
   hs-source-dirs:
       2019/17
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -395,6 +407,7 @@ executable 2019-17
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -415,7 +428,7 @@ executable 2019-18
       Paths_hadvent
   hs-source-dirs:
       2019/18
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -427,6 +440,7 @@ executable 2019-18
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -447,7 +461,7 @@ executable 2019-2
       Paths_hadvent
   hs-source-dirs:
       2019/2
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -459,6 +473,7 @@ executable 2019-2
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -479,7 +494,7 @@ executable 2019-3
       Paths_hadvent
   hs-source-dirs:
       2019/3
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -491,6 +506,7 @@ executable 2019-3
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -511,7 +527,7 @@ executable 2019-4
       Paths_hadvent
   hs-source-dirs:
       2019/4
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -523,6 +539,7 @@ executable 2019-4
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -543,7 +560,7 @@ executable 2019-5
       Paths_hadvent
   hs-source-dirs:
       2019/5
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -555,6 +572,7 @@ executable 2019-5
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -575,7 +593,7 @@ executable 2019-6
       Paths_hadvent
   hs-source-dirs:
       2019/6
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -587,6 +605,7 @@ executable 2019-6
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -607,7 +626,7 @@ executable 2019-7
       Paths_hadvent
   hs-source-dirs:
       2019/7
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -619,6 +638,7 @@ executable 2019-7
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -639,7 +659,7 @@ executable 2019-8
       Paths_hadvent
   hs-source-dirs:
       2019/8
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -651,6 +671,7 @@ executable 2019-8
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -671,7 +692,7 @@ executable 2019-9
       Paths_hadvent
   hs-source-dirs:
       2019/9
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -683,6 +704,7 @@ executable 2019-9
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -703,7 +725,7 @@ executable 2020-1
       Paths_hadvent
   hs-source-dirs:
       2020/1
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -715,6 +737,7 @@ executable 2020-1
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -735,7 +758,7 @@ executable 2020-10
       Paths_hadvent
   hs-source-dirs:
       2020/10
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -747,6 +770,7 @@ executable 2020-10
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -767,7 +791,7 @@ executable 2020-11
       Paths_hadvent
   hs-source-dirs:
       2020/11
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -779,6 +803,7 @@ executable 2020-11
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -799,7 +824,7 @@ executable 2020-2
       Paths_hadvent
   hs-source-dirs:
       2020/2
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -811,6 +836,7 @@ executable 2020-2
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -831,7 +857,7 @@ executable 2020-3
       Paths_hadvent
   hs-source-dirs:
       2020/3
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -843,6 +869,7 @@ executable 2020-3
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -863,7 +890,7 @@ executable 2020-4
       Paths_hadvent
   hs-source-dirs:
       2020/4
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -875,6 +902,7 @@ executable 2020-4
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -895,7 +923,7 @@ executable 2020-5
       Paths_hadvent
   hs-source-dirs:
       2020/5
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -907,6 +935,7 @@ executable 2020-5
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -927,7 +956,7 @@ executable 2020-6
       Paths_hadvent
   hs-source-dirs:
       2020/6
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -939,6 +968,7 @@ executable 2020-6
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -959,7 +989,7 @@ executable 2020-7
       Paths_hadvent
   hs-source-dirs:
       2020/7
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -971,6 +1001,7 @@ executable 2020-7
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -991,7 +1022,7 @@ executable 2020-8
       Paths_hadvent
   hs-source-dirs:
       2020/8
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -1003,6 +1034,7 @@ executable 2020-8
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -1023,7 +1055,7 @@ executable 2020-9
       Paths_hadvent
   hs-source-dirs:
       2020/9
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -1035,6 +1067,7 @@ executable 2020-9
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , hadvent
     , http-client
@@ -1056,7 +1089,7 @@ test-suite advent-test
       Paths_hadvent
   hs-source-dirs:
       test
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -1069,6 +1102,7 @@ test-suite advent-test
     , containers
     , cryptohash-sha256
     , directory
+    , distributive
     , either
     , http-client
     , http-client-tls
