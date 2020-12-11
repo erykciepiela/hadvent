@@ -6,13 +6,7 @@ import Data.Distributive
 -- import Data.Foldable as F
 import Data.Maybe
 
-
--- data Line a = Line {
---     lineBackward :: [a],
---     lineCursor :: a,
---     lineForward :: [a]
--- }
-
+-- Line
 data Line a = Line { lineCursor :: a, lineBackward :: [a], lineForward :: [a] } deriving Functor
 
 -- with smart constructor we guarantee lineBackward and lineForward infinite
@@ -39,6 +33,7 @@ instance Comonad Line where
   extract = lineCursor
   duplicate l = Line l (tail (iterate shiftBackward l)) (tail (iterate shiftForward l))
 
+-- Grid
 newtype Grid a = Grid (Line (Line a)) deriving Functor
 
 grid :: a -> [[a]] -> Grid a
@@ -60,113 +55,19 @@ shiftLeft (Grid l) = Grid (shiftBackward <$> l)
 shiftRight :: Grid a -> Grid a
 shiftRight (Grid l) = Grid (shiftForward <$> l)
 
-gridAt :: (Int, Int) -> Grid a -> a
-gridAt (x, y)
+pointAt :: (Int, Int) -> Grid a -> a
+pointAt (x, y)
   | x >= 0 && y >= 0 = extract . (!! x) . iterate shiftRight . (!! y) . iterate shiftDown
   | x >= 0 && y < 0 = extract . (!! x) . iterate shiftRight . (!! abs y) . iterate shiftUp
   | x < 0 && y < 0 = extract . (!! abs x) . iterate shiftLeft . (!! abs y) . iterate shiftUp
   | x < 0 && y >= 0 = extract . (!! abs x) . iterate shiftLeft . (!! y) . iterate shiftDown
 
-gridAt' :: (Int, Int) -> Grid a -> [[a]]
-gridAt' (x, y) (Grid l) = line' x <$> line' y l
+areaOver :: (Int, Int) -> Grid a -> [[a]]
+areaOver (x, y) (Grid l) = line' x <$> line' y l
 
-viewAt :: (Int, Int) -> Grid a -> [a]
-viewAt (x, y)
+lineTowards :: (Int, Int) -> Grid a -> [a]
+lineTowards (x, y)
   | x >= 0 && y >= 0 = fmap extract . tail . iterate ((!! x) . iterate shiftRight . (!! y) . iterate shiftDown)
   | x >= 0 && y < 0 = fmap extract .  tail . iterate ((!! x) . iterate shiftRight . (!! abs y) . iterate shiftUp)
   | x < 0 && y < 0 = fmap extract .   tail . iterate ((!! abs x) . iterate shiftLeft . (!! abs y) . iterate shiftUp)
   | x < 0 && y >= 0 = fmap extract .  tail . iterate ((!! abs x) . iterate shiftLeft . (!! y) . iterate shiftDown)
-
--- deriving instance (Show a) => Show (Line a)
--- deriving instance (Eq a) => Eq (Line a)
-
--- instance Semigroup a => Semigroup (Line a) where
---     l1 <> l2 = Line (L.reverse (L.zipWith (<>) (L.reverse $ lineBackward l1) (L.reverse $ lineBackward l2))) (lineCursor l1 <> lineCursor l2) (L.zipWith (<>) (lineForward l1) (lineForward l2))
-
--- line :: [a] -> Maybe (Line a)
--- line as = Line <$> pure [] <*> LSF.head as <*> LSF.tail as
-
--- moveBack :: Line a -> Maybe (Line a)
--- moveBack (Line l c r) = Line <$> LSF.tail l <*> LSF.head l <*> pure (c:r)
-
--- iterM :: (a -> Maybe a) -> a -> [a]
--- iterM f a = case f a of
---     Nothing -> []
---     Just a' -> a':iterM f a'
-
--- repeatM :: (a -> Maybe a) -> Int -> a -> Maybe a
--- repeatM f 0 a = Just a
--- repeatM f n a = case f a of
---     Nothing -> Nothing
---     Just a' -> repeatM f (n - 1) a'
-
--- moveForward :: Line a -> Maybe (Line a)
--- moveForward (Line l c r) = Line <$> pure (c:l) <*> LSF.head r <*> LSF.tail r
-
--- instance Foldable Line where
---     foldr abb b (Line l c r)= Prelude.foldr abb b (L.reverse l <> [c] <> r)
-
--- instance Traversable Line where
---  sequenceA (Line l c r) = Line <$> sequenceA l <*> c <*> sequenceA r
-
--- instance Functor Line where
---     fmap f (Line l c r) = Line (f <$> l) (f c) (f <$> r)
-
--- instance Applicative Line where
---     pure a = Line (L.repeat a) a (L.repeat a)
---     l1 <*> l2 = Line (L.reverse (L.zipWith ($) (L.reverse $ lineBackward l1) (L.reverse $ lineBackward l2))) (lineCursor l1 $ lineCursor l2) (L.zipWith ($) (lineForward l1) (lineForward l2))
-
--- instance Comonad Line where
---     extract = lineCursor
---     duplicate l = Line (iterM moveBack l) l (iterM moveForward l)
-
--- data Grid a = Grid {
---     gridLines :: Line (Line a)
--- }
-
--- gridFromList :: [[a]] -> Maybe (Grid a)
--- gridFromList ass = let lines = catMaybes (line <$> ass) in Grid <$> (Line <$> pure [] <*> LSF.head lines <*> LSF.tail lines)
-
--- grid :: Int -> Int -> Maybe (Grid (Int, Int))
--- grid w h = gridFromList [[(x, y) | x <- [0..(w-1)]] | y <- [0..(h-1)]]
-
--- infinigrid :: Maybe (Grid (Int, Int))
--- infinigrid = gridFromList [[(x, y) | x <- [0..]] | y <- [0..]]
-
--- moveUp :: Grid a -> Maybe (Grid a)
--- moveUp (Grid l) = Grid <$> moveBack l
-
--- moveDown :: Grid a -> Maybe (Grid a)
--- moveDown (Grid l) = Grid <$> moveForward l
-
--- moveLeft :: Grid a -> Maybe (Grid a)
--- moveLeft (Grid l) = Grid <$> sequenceA (moveBack <$> l)
-
--- moveRight :: Grid a -> Maybe (Grid a)
--- moveRight (Grid l) = Grid <$> sequenceA (moveForward <$> l)
-
--- translate :: (Int, Int) -> (Int, Int) -> (Int, Int)
--- translate (dx, dy) (x, y) = (x-dx, y-dy)
-
--- instance Foldable Grid where
---     foldr abb b g = F.foldr (\l b -> F.foldr abb b l) b (gridLines g)
-
--- instance Functor Grid where
---     fmap f (Grid g) = Grid $ fmap f <$> g
-
--- instance Applicative Grid where
---     pure a = Grid $ Line (L.repeat (pure a)) (pure a) (L.repeat (pure a))
---     g1 <*> g2 = Grid $ (<*>) <$> gridLines g1 <*> gridLines g2
-
--- instance Comonad Grid where
---     extract = extract . extract . gridLines
---     -- duplicate g = Grid $ duplicate (Grid <$> duplicate (gridLines g))
---     -- duplicate g = Grid <$> Grid (duplicate $ duplicate <$> gridLines g)
---     duplicate g = Grid (iterM moveBack l) (l (iterM moveForward l)
-
-
--- instance Semigroup a => Semigroup (Grid a) where
---     g1 <> g2 = Grid $ gridLines g1 <> gridLines g2
-
--- deriving instance (Show a) => Show (Grid a)
--- deriving instance (Eq a) => Eq (Grid a)

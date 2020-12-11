@@ -40,7 +40,7 @@ solution2 input = let
   in show $ countOccupiedSeats $ stabilize step g
 
 numberOfOccupiedSeatsAround :: Grid Content -> Int
-numberOfOccupiedSeatsAround g = L.length $ L.filter (== OccupiedSeat) $ (flip gridAt g)
+numberOfOccupiedSeatsAround g = L.length $ L.filter (== OccupiedSeat) $ (flip pointAt g)
   <$> [
         (-1, -1), (0, -1), (1, -1),
         (-1, 0),           (1, 0),
@@ -48,7 +48,7 @@ numberOfOccupiedSeatsAround g = L.length $ L.filter (== OccupiedSeat) $ (flip gr
       ]
 
 numberOfOccupiedSeatsAtSight :: Grid Content -> Int
-numberOfOccupiedSeatsAtSight g = L.length $ L.filter occupiedSeatAtSight $ (flip viewAt g)
+numberOfOccupiedSeatsAtSight g = L.length $ L.filter occupiedSeatAtSight $ (flip lineTowards g)
   <$> [
         (-1, -1), (0, -1), (1, -1),
         (-1, 0),           (1, 0),
@@ -60,10 +60,10 @@ numberOfOccupiedSeatsAtSight g = L.length $ L.filter occupiedSeatAtSight $ (flip
 stabilize :: (Grid Content -> Content) -> Grid Content -> Grid Content
 stabilize step g = let
     g' = extend step g
-  in if gridAt' (95, 99) g == gridAt' (95, 99) g' then g' else stabilize step g'
+  in if areaOver (95, 99) g == areaOver (95, 99) g' then g' else stabilize step g'
 
 countOccupiedSeats :: Grid Content -> Int
-countOccupiedSeats g = length $ L.filter (== OccupiedSeat) $ mconcat $ gridAt' (95, 99) g
+countOccupiedSeats g = length $ L.filter (== OccupiedSeat) $ mconcat $ areaOver (95, 99) g
 
 main :: IO ()
 main = advent 2020 11 [solution1] $ do
