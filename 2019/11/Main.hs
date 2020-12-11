@@ -35,8 +35,8 @@ instance Semigroup a => Semigroup (Line a) where
 line :: [a] -> Maybe (Line a)
 line as = Line <$> pure [] <*> LSF.head as <*> LSF.tail as
 
-line' :: [a] -> Line a
-line' as = Line [] (L.head as) (L.tail as)
+section :: [a] -> Line a
+section as = Line [] (L.head as) (L.tail as)
 
 reverseL :: Line a -> Line a
 reverseL (Line l c r) = Line r c l
@@ -134,7 +134,7 @@ newtype Grid a = Grid {
 }
 
 gridFromList :: [[a]] -> Grid a
-gridFromList ass = let lines = (line' <$> ass) in Grid (Line [] (L.head lines) (L.tail lines))
+gridFromList ass = let lines = (section <$> ass) in Grid (Line [] (L.head lines) (L.tail lines))
 
 grid :: Int -> Int -> (Grid (Int, Int))
 grid w h = gridFromList [[(x, y) | x <- [0..(w-1)]] | y <- [0..(h-1)]]
@@ -173,7 +173,7 @@ instance Functor Grid where
 
 instance Applicative Grid where
     pure a = Grid $ Line (L.repeat (pure a)) (pure a) (L.repeat (pure a))
-    g1 <*> g2 = Grid $ (<*>) <$> gridLines g1 <*> gridLines g2 
+    g1 <*> g2 = Grid $ (<*>) <$> gridLines g1 <*> gridLines g2
 
 instance Comonad Grid where
     extract = extract . extract . gridLines
@@ -253,7 +253,7 @@ interp i intcode = let (Intcode c rb l) = intcode in case l !! c of
     203 -> case i of
         [] -> Nothing
         (fi:ri) -> let nl = setElem l (rb + (l !! (c + 1))) fi in interp ri $ Intcode (c + 2) rb nl
-    -- 0 0 0 04 
+    -- 0 0 0 04
     4 -> let o = (l !! (l !! (c + 1))) in Just (Intcode (c + 2) rb l, o)
     -- 0 0 2 04
     204 -> let o = (l !! (rb + l !! (c + 1))) in Just (Intcode (c + 2) rb l, o)
@@ -332,14 +332,14 @@ walk (intcode, g) = let
                 d = case lr of 0 -> L; 1 -> R
                 g' = (modifyOG (if painted then id else (+ 1)) . moveOG U . turnOG d . dropOG (color, True)) g
                 in walk (intcode'', g')
-    
+
 parseInput :: String -> [Int]
 parseInput input = read . T.unpack <$> T.splitOn "," (T.strip (T.pack input))
 
 solution1 :: String -> String
 solution1 input = let
     prog = parseInput input
-    
+
     in show $ readOG $ walk (Intcode 0 0 prog, OGrid (pure (0, False)) U 0)
 
 solution2 :: String -> String

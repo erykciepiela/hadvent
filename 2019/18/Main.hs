@@ -22,7 +22,7 @@ import Data.Functor
 import Data.ByteString.Char8 as C
 import Data.Char as Ch
 -- import Text.Parsec
--- import Text.Parsec.Char 
+-- import Text.Parsec.Char
 -- import Text.Parsec.Combinator as P
 
 --
@@ -43,8 +43,8 @@ instance Semigroup a => Semigroup (Line a) where
 line :: [a] -> Maybe (Line a)
 line as = Line <$> pure [] <*> LSF.head as <*> LSF.tail as
 
-line' :: [a] -> Line a
-line' as = Line [] (L.head as) (L.tail as)
+section :: [a] -> Line a
+section as = Line [] (L.head as) (L.tail as)
 
 reverseL :: Line a -> Line a
 reverseL (Line l c r) = Line r c l
@@ -142,7 +142,7 @@ newtype Grid a = Grid {
 }
 
 gridFromList :: [[a]] -> Grid a
-gridFromList ass = let lines = (line' <$> ass) in Grid (Line [] (L.head lines) (L.tail lines))
+gridFromList ass = let lines = (section <$> ass) in Grid (Line [] (L.head lines) (L.tail lines))
 
 grid :: Int -> Int -> (Grid (Int, Int))
 grid w h = gridFromList [[(x, y) | x <- [0..(w-1)]] | y <- [0..(h-1)]]
@@ -169,7 +169,7 @@ instance Functor Grid where
 
 instance Applicative Grid where
     pure a = Grid $ Line (L.repeat (pure a)) (pure a) (L.repeat (pure a))
-    g1 <*> g2 = Grid $ (<*>) <$> gridLines g1 <*> gridLines g2 
+    g1 <*> g2 = Grid $ (<*>) <$> gridLines g1 <*> gridLines g2
 
 instance Comonad Grid where
     extract = extract . extract . gridLines
@@ -209,15 +209,15 @@ isDoor ch = ch `L.elem` ['A'..'Z']
 
 walksToNextKey :: Walk -> [Walk]
 walksToNextKey (Walk path@(cursor:_) keys l) = if L.length keys == 26 then trace (show l) [] else let
-    foo = (\dir -> let 
-        cursor' = moveG dir cursor 
+    foo = (\dir -> let
+        cursor' = moveG dir cursor
         in if (fst (extract cursor')) `L.elem` (fst. extract <$> path) then [] else case snd (extract cursor') of
             '#' -> [] --wall
             '.' -> walksToNextKey (Walk (cursor':path) keys l) -- space
             '@' -> walksToNextKey (Walk (cursor':path) keys l) -- space
             ch -> if ch `L.elem` keys
                 then walksToNextKey (Walk (cursor':path) keys l) -- space
-                else if isKey ch 
+                else if isKey ch
                     then [(Walk (cursor':path) (ch:keys) l)] -- key
                     else if Ch.toLower ch `L.elem` keys
                         then walksToNextKey (Walk (cursor':path) keys l) -- open door
@@ -225,7 +225,7 @@ walksToNextKey (Walk path@(cursor:_) keys l) = if L.length keys == 26 then trace
     walks = mconcat foo
     w' = L.nubBy (\a b -> (L.head (wKeys a)) == (L.head (wKeys b))) $ L.sortOn (L.length . wPath) walks
     in w' >>= walksToNextKey . commitWalk
-    
+
 solution1 :: String -> String
 solution1 input = let
     g = (,) <$> infinigrid <*> gridFromList (L.lines input)
@@ -242,7 +242,7 @@ solution1 input = let
 
 solution2 :: String -> String
 solution2 input = "?"
-    
+
 main :: IO ()
 main = advent 2019 18 [solution1] $ do
     return ()

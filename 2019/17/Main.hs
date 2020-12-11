@@ -22,7 +22,7 @@ import Data.Functor
 import Data.ByteString.Char8 as C
 import Data.Char
 -- import Text.Parsec
--- import Text.Parsec.Char 
+-- import Text.Parsec.Char
 -- import Text.Parsec.Combinator as P
 
 --
@@ -108,7 +108,7 @@ interp i (intcode, os) = let (Intcode c rb l) = intcode in case (l !! c) of
     203 -> case i of
         [] -> (Just (Intcode (c) rb l), os)
         (fi:ri) -> let nl = setElem l (rb + (l !! (c + 1))) fi in interp ri (Intcode (c + 2) rb nl, os)
-    -- 0 0 0 04 
+    -- 0 0 0 04
     4 -> let o = (l !! (l !! (c + 1))) in interp i (Intcode (c + 2) rb l, o:os)
     -- 0 0 2 04
     204 -> let o = (l !! (rb + l !! (c + 1))) in interp i  (Intcode (c + 2) rb l, o:os)
@@ -216,8 +216,8 @@ instance Semigroup a => Semigroup (Line a) where
 line :: [a] -> Maybe (Line a)
 line as = Line <$> pure [] <*> LSF.head as <*> LSF.tail as
 
-line' :: [a] -> Line a
-line' as = Line [] (L.head as) (L.tail as)
+section :: [a] -> Line a
+section as = Line [] (L.head as) (L.tail as)
 
 reverseL :: Line a -> Line a
 reverseL (Line l c r) = Line r c l
@@ -316,7 +316,7 @@ newtype Grid a = Grid {
 }
 
 gridFromList :: [[a]] -> Grid a
-gridFromList ass = let lines = (line' <$> ass) in Grid (Line [] (L.head lines) (L.tail lines))
+gridFromList ass = let lines = (section <$> ass) in Grid (Line [] (L.head lines) (L.tail lines))
 
 grid :: Int -> Int -> (Grid (Int, Int))
 grid w h = gridFromList [[(x, y) | x <- [0..(w-1)]] | y <- [0..(h-1)]]
@@ -361,12 +361,12 @@ instance Functor Grid where
 
 instance Applicative Grid where
     pure a = Grid $ Line (L.repeat (pure a)) (pure a) (L.repeat (pure a))
-    g1 <*> g2 = Grid $ (<*>) <$> gridLines g1 <*> gridLines g2 
+    g1 <*> g2 = Grid $ (<*>) <$> gridLines g1 <*> gridLines g2
 
 instance Comonad Grid where
     extract = extract . extract . gridLines
     duplicate g@(Grid ls) = Grid $ Line (up g) (c g) (down g)
-        where 
+        where
             c :: Grid a -> Line (Grid a)
             c g = Line (L.tail (L.iterate (moveG L) g)) g (L.tail (L.iterate (moveG R) g))
             up :: Grid a -> [Line (Grid a)]
@@ -386,7 +386,7 @@ repeatN f n a = a:(repeatN f (n - 1) (f a))
 
 
 gtoList :: Int -> Int -> Grid a -> [[a]]
-gtoList w h g = (\g -> extract <$> repeatN (moveG R) w g) <$> repeatN (moveG D) h g 
+gtoList w h g = (\g -> extract <$> repeatN (moveG R) w g) <$> repeatN (moveG D) h g
 
 printll :: [[Char]] -> String
 printll = L.intercalate "\n"
@@ -418,10 +418,10 @@ xxx o = let
     in show $ sum $ sum <$> x
 
 comp :: Grid (Char, (Int, Int)) -> Int
-comp g = let (ch, (x, y)) = extract g in if isScaffold ch 
-    && isScaffold (fst (extract (moveG U g))) 
-    && isScaffold (fst (extract (moveG D g))) 
-    && isScaffold (fst (extract (moveG L g))) 
+comp g = let (ch, (x, y)) = extract g in if isScaffold ch
+    && isScaffold (fst (extract (moveG U g)))
+    && isScaffold (fst (extract (moveG D g)))
+    && isScaffold (fst (extract (moveG L g)))
     && isScaffold (fst (extract (moveG R g))) then x*y else 0
     where
         isScaffold :: Char -> Bool
@@ -440,7 +440,7 @@ solution2 input = let
     in show $ L.head o
         where
             asc = ord
-    
+
 main :: IO ()
 main = advent 2019 17 [solution2] $ do
     xxx "..#..........\n..#..........\n#######...###\n#.#...#...#.#\n#############\n..#...#...#..\n..#####...^.." `shouldBe` "76"

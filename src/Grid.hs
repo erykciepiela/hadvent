@@ -13,9 +13,6 @@ data Line a = Line { lineCursor :: a, lineBackward :: [a], lineForward :: [a] } 
 line :: a -> [a] -> Line a
 line def as = Line (fromMaybe def (listToMaybe as)) (repeat def) (tail (as <> repeat def))
 
-line' :: Int -> Line a -> [a]
-line' n (Line c _ f) = take n (c:f)
-
 instance Distributive Line where
   -- distribute :: Functor f => f (Line a) -> Line (f a)
   distribute fl = Line (lineCursor <$> fl) (foo $ lineBackward <$> fl) (foo $ lineForward <$> fl)
@@ -28,6 +25,9 @@ shiftForward (Line c b f) = Line (head f) (c:b) (tail f)
 
 shiftBackward :: Line a -> Line a
 shiftBackward (Line c b f) = Line (head b) (tail b) (c:f)
+
+section :: Int -> Line a -> [a]
+section n (Line c _ f) = take n (c:f)
 
 instance Comonad Line where
   extract = lineCursor
@@ -63,7 +63,7 @@ pointAt (x, y)
   | x < 0 && y >= 0 = extract . (!! abs x) . iterate shiftLeft . (!! y) . iterate shiftDown
 
 areaOver :: (Int, Int) -> Grid a -> [[a]]
-areaOver (x, y) (Grid l) = line' x <$> line' y l
+areaOver (x, y) (Grid l) = section x <$> section y l
 
 lineTowards :: (Int, Int) -> Grid a -> [a]
 lineTowards (x, y)
