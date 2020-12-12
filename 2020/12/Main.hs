@@ -1,7 +1,6 @@
 module Main where
 
 import Advent
-import Grid
 
 import Text.Parsec as P
 import Text.Parsec.String
@@ -12,58 +11,69 @@ import Data.Set as S
 import Data.Maybe
 import Control.Comonad
 import Data.Foldable as F
+import Data.Monoid
 
-data Content = Floor | EmptySeat | OccupiedSeat deriving Eq
+data Direction = N | E | S | W deriving Show
 
-parseContent :: Char -> Content
-parseContent = \case
-  '.' -> Floor
-  'L' -> EmptySeat
-  '#' -> OccupiedSeat
+moveR :: Direction -> Direction
+moveR N = E
+moveR E = S
+moveR S = W
+moveR W = N
 
-solution1 :: String -> String
+moveL :: Direction -> Direction
+moveL N = W
+moveL W = S
+moveL S = E
+moveL E = N
+
+type Position = (Int, Int, Direction)
+
+type Move = Position -> Position
+
+parseMove :: Parser Move
+parseMove = choice [parseN, parseS, parseE, parseW, parseL, parseR, parseF]
+
+parseInt :: Parser Int
+parseInt = read <$> many1 digit
+
+parseN :: Parser Move
+parseN = char 'N' >> (\n (x, y, d) -> (x, y - n, d)) <$> parseInt
+
+parseS :: Parser Move
+parseS = char 'S' >> (\n (x, y, d) -> (x, y + n, d)) <$> parseInt
+
+parseE :: Parser Move
+parseE = char 'E' >> (\n (x, y, d) -> (x + n, y, d)) <$> parseInt
+
+parseW :: Parser Move
+parseW = char 'W' >> (\n (x, y, d) -> (x - n, y, d)) <$> parseInt
+
+parseL :: Parser Move
+parseL = char 'L' >> (\n (x, y, d) -> (x, y, iterate moveL d  !! (n `div` 90))) <$> parseInt
+
+parseR :: Parser Move
+parseR = char 'R' >> (\n (x, y, d) -> (x, y, iterate moveR d  !! (n `div` 90))) <$> parseInt
+
+parseF :: Parser Move
+parseF = char 'F' >> (\n p -> case p of
+  (x, y, N) -> (x, y - n, N)
+  (x, y, S) -> (x, y + n, S)
+  (x, y, E) -> (x + n, y, E)
+  (x, y, W) -> (x - n , y, W)) <$> parseInt
+
+
+parseMoves :: Parser [Move]
+parseMoves = parseMove `sepEndBy` char '\n'
+
+solution1 :: String -> Int
 solution1 input = let
-  g = parseContent <$> grid '.' (lines input)
-  step g = let s = extract g in case s of
-    EmptySeat -> if numberOfOccupiedSeatsAround g == 0 then OccupiedSeat else s
-    OccupiedSeat -> if numberOfOccupiedSeatsAround g >= 4 then EmptySeat else s
-    _ -> s
-  in show $ countOccupiedSeats $ stabilize step g
+  g :: [Move] = either (error "wring parser") id $ parse parseMoves "?" input
+  (x, y, _) = appEndo (mconcat (Endo <$> g)) (0, 0, E)
+  in abs x + abs y
 
-solution2 :: String -> String
-solution2 input = let
-  g = parseContent <$> grid '.' (lines input)
-  step g = let s = extract g in case s of
-    EmptySeat -> if numberOfOccupiedSeatsAtSight g == 0 then OccupiedSeat else s
-    OccupiedSeat -> if numberOfOccupiedSeatsAtSight g >= 5 then EmptySeat else s
-    _ -> s
-  in show $ countOccupiedSeats $ stabilize step g
-
-numberOfOccupiedSeatsAround :: Grid Content -> Int
-numberOfOccupiedSeatsAround g = L.length $ L.filter (== OccupiedSeat) $ (flip pointAt g)
-  <$> [
-        (-1, -1), (0, -1), (1, -1),
-        (-1, 0),           (1, 0),
-        (-1, 1),  (0, 1),  (1, 1)
-      ]
-
-numberOfOccupiedSeatsAtSight :: Grid Content -> Int
-numberOfOccupiedSeatsAtSight g = L.length $ L.filter occupiedSeatAtSight $ (flip lineTowards g)
-  <$> [
-        (-1, -1), (0, -1), (1, -1),
-        (-1, 0),           (1, 0),
-        (-1, 1),  (0, 1),  (1, 1)
-      ]
-    where
-      occupiedSeatAtSight = maybe False (== OccupiedSeat) . listToMaybe . dropWhile (== Floor) . L.take 100
-
-stabilize :: (Grid Content -> Content) -> Grid Content -> Grid Content
-stabilize step g = let
-    g' = extend step g
-  in if areaOver (95, 99) g == areaOver (95, 99) g' then g' else stabilize step g'
-
-countOccupiedSeats :: Grid Content -> Int
-countOccupiedSeats g = length $ L.filter (== OccupiedSeat) $ mconcat $ areaOver (95, 99) g
+solution2 :: String -> Int
+solution2 input = 1
 
 main :: IO ()
 main = advent 2020 12 [solution1] $ do
