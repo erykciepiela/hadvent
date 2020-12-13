@@ -17,7 +17,6 @@ import Text.Read
 type BusNo = Int
 type Time = Int
 
-
 parseInput :: String -> (Time, [BusNo])
 parseInput input = let
   ls = lines input
@@ -35,20 +34,19 @@ parseInput2 input = let
   ls = lines input
   in either (error "!") id $ parse ((readMaybe <$> many1 (noneOf ",")) `sepBy` char ',') "?" (ls !! 1)
 
-
-solution2 :: String -> String
+solution2 :: String -> Integer
 solution2 input = let
   mBusNos = parseInput2 input
-  in show mBusNos
+  busOffs = mapMaybe (\(mbn, off) -> mbn <&> (\bn -> (off, fromIntegral bn))) $ zip mBusNos [0..]
+  in fst $ F.foldl1 Main.findIndices busOffs
+
+findIndices :: (Integer, Integer) -> (Integer, Integer) -> (Integer, Integer)
+findIndices (start, period) (offset', period') = (start'', period'')
+  where
+    start'' = head [start' | n <- [0..], let start' = start + n * period, (start' + offset') `mod` period' == 0]
+    period'' = lcm period period'
 
 main :: IO ()
 main = advent 2020 13 [solution2] $ do
     return ()
 
--- (x -> a) -> (a -> (x -> b)) -> (x -> b)
--- (a, x) -> ((a, x) -> b) -> (b, x)
-
--- (x -> a) <-> (a, x)
-
--- w a -> (w a -> b) -> w b
--- m a -> (a -> m b) -> m b
