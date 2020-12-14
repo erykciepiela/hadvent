@@ -13,40 +13,67 @@ import Control.Comonad
 import Data.Foldable as F
 import Data.Monoid
 import Text.Read
+import Data.Bits
+import Data.Map as M
 
-type BusNo = Int
-type Time = Int
+type Addr = Int
+type Value = Integer
 
-parseInput :: String -> (Time, [BusNo])
-parseInput input = let
-  ls = lines input
-  in (read (ls !! 0), catMaybes $ either (error "!") id $ parse ((readMaybe <$> many1 (noneOf ",")) `sepBy` char ',') "?" (ls !! 1))
+createMask :: String -> Value -> Value
+createMask mask i = F.foldl foo i (zip mask [(length mask - 1), (length mask - 2) .. 0])
+  where
+    foo :: Value -> (Char, Int) -> Value
+    foo i ('1', n) = setBit i n
+    foo i ('0', n) = clearBit i n
+    foo i ('X', _) = i
 
-solution1 :: String -> String
+inputParser :: Parser (Map Addr Value)
+inputParser = do
+  assocs <- many1 $ do
+    string "mask = "
+    mask <- createMask <$> count 36 (oneOf "01X")
+    char '\n'
+    try (do
+      string "mem["
+      addr <- read <$> many1 digit
+      string "] = "
+      val <- read <$> many1 digit
+      return (addr, mask val)) `sepEndBy` char '\n'
+  return $ M.fromList $ mconcat assocs
+
+createMask' :: String -> Addr -> [Addr]
+createMask' mask a = F.foldl foo [a] (zip mask [(length mask - 1), (length mask - 2) .. 0])
+  where
+    foo :: [Addr] -> (Char, Int) -> [Addr]
+    foo as ('1', n) = flip setBit n <$> as
+    foo as ('0', _) = as
+    foo as ('X', n) = (flip setBit n <$> as) <> (flip clearBit n <$> as)
+
+inputParser' :: Parser (Map Addr Value)
+inputParser' = do
+  assocs <- many1 $ do
+    string "mask = "
+    mask <- createMask' <$> count 36 (oneOf "01X")
+    char '\n'
+    mconcat <$> try (do
+      string "mem["
+      addr <- read <$> many1 digit
+      string "] = "
+      val <- read <$> many1 digit
+      return (mask addr <&> (, val))) `sepEndBy` char '\n'
+  return $ M.fromList $ mconcat assocs
+
+solution1 :: String -> Integer
 solution1 input = let
-  (time, busNos) = parseInput input
-  departs = busNos <&> (\busNo -> (busNo, let m = time `mod` busNo in if m == 0 then 0 else busNo - m))
-  (firstDepartBus, waitTime) = head $ sortOn snd departs
-  in show $ firstDepartBus * waitTime
-
-parseInput2 :: String -> [Maybe BusNo]
-parseInput2 input = let
-  ls = lines input
-  in either (error "!") id $ parse ((readMaybe <$> many1 (noneOf ",")) `sepBy` char ',') "?" (ls !! 1)
+  mem = either (error "wrong parser") id $ parse inputParser "?" input
+  in sum $ M.elems mem
 
 solution2 :: String -> Integer
 solution2 input = let
-  mBusNos = parseInput2 input
-  busOffs = mapMaybe (\(mbn, off) -> mbn <&> (\bn -> (off, fromIntegral bn))) $ zip mBusNos [0..]
-  in fst $ F.foldl1 Main.findIndices busOffs
-
-findIndices :: (Integer, Integer) -> (Integer, Integer) -> (Integer, Integer)
-findIndices (start, period) (offset', period') = (start'', period'')
-  where
-    start'' = head [start' | n <- [0..], let start' = start + n * period, (start' + offset') `mod` period' == 0]
-    period'' = lcm period period'
+  mem = either (error "wrong parser") id $ parse inputParser' "?" input
+  in sum $ M.elems mem
 
 main :: IO ()
 main = advent 2020 14 [solution2] $ do
-    return ()
+  return ()
 
