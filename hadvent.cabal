@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 95c5c9cac7411bc3ae356a5c657c5353f7cdd3755eb7c250f283beeb27619f83
+-- hash: 3759527b534fd0ea59f38a517d9b6febbbce20b69c575bd40e7b16d698445fe5
 
 name:           hadvent
 version:        0.1.0.0
@@ -34,7 +34,7 @@ library
       Paths_hadvent
   hs-source-dirs:
       src
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   build-depends:
       Data-Angle
     , HTTP
@@ -65,7 +65,7 @@ executable 2018-1
       Paths_hadvent
   hs-source-dirs:
       2018/1
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -98,7 +98,7 @@ executable 2018-2
       Paths_hadvent
   hs-source-dirs:
       2018/2
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -131,7 +131,7 @@ executable 2019-1
       Paths_hadvent
   hs-source-dirs:
       2019/1
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -164,7 +164,7 @@ executable 2019-10
       Paths_hadvent
   hs-source-dirs:
       2019/10
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -197,7 +197,7 @@ executable 2019-11
       Paths_hadvent
   hs-source-dirs:
       2019/11
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -230,7 +230,7 @@ executable 2019-12
       Paths_hadvent
   hs-source-dirs:
       2019/12
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -263,7 +263,7 @@ executable 2019-13
       Paths_hadvent
   hs-source-dirs:
       2019/13
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -296,7 +296,7 @@ executable 2019-14
       Paths_hadvent
   hs-source-dirs:
       2019/14
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -329,7 +329,7 @@ executable 2019-15
       Paths_hadvent
   hs-source-dirs:
       2019/15
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -362,7 +362,7 @@ executable 2019-16
       Paths_hadvent
   hs-source-dirs:
       2019/16
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -395,7 +395,7 @@ executable 2019-17
       Paths_hadvent
   hs-source-dirs:
       2019/17
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -428,7 +428,7 @@ executable 2019-18
       Paths_hadvent
   hs-source-dirs:
       2019/18
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -461,7 +461,7 @@ executable 2019-2
       Paths_hadvent
   hs-source-dirs:
       2019/2
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -494,7 +494,7 @@ executable 2019-3
       Paths_hadvent
   hs-source-dirs:
       2019/3
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -527,7 +527,7 @@ executable 2019-4
       Paths_hadvent
   hs-source-dirs:
       2019/4
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -560,7 +560,7 @@ executable 2019-5
       Paths_hadvent
   hs-source-dirs:
       2019/5
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -593,7 +593,7 @@ executable 2019-6
       Paths_hadvent
   hs-source-dirs:
       2019/6
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -626,7 +626,7 @@ executable 2019-7
       Paths_hadvent
   hs-source-dirs:
       2019/7
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -659,7 +659,7 @@ executable 2019-8
       Paths_hadvent
   hs-source-dirs:
       2019/8
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -692,7 +692,7 @@ executable 2019-9
       Paths_hadvent
   hs-source-dirs:
       2019/9
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -725,7 +725,7 @@ executable 2020-1
       Paths_hadvent
   hs-source-dirs:
       2020/1
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -758,7 +758,7 @@ executable 2020-10
       Paths_hadvent
   hs-source-dirs:
       2020/10
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -791,7 +791,7 @@ executable 2020-11
       Paths_hadvent
   hs-source-dirs:
       2020/11
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -824,7 +824,7 @@ executable 2020-12
       Paths_hadvent
   hs-source-dirs:
       2020/12
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -857,7 +857,7 @@ executable 2020-13
       Paths_hadvent
   hs-source-dirs:
       2020/13
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -890,7 +890,7 @@ executable 2020-14
       Paths_hadvent
   hs-source-dirs:
       2020/14
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -923,7 +923,7 @@ executable 2020-15
       Paths_hadvent
   hs-source-dirs:
       2020/15
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -956,7 +956,7 @@ executable 2020-2
       Paths_hadvent
   hs-source-dirs:
       2020/2
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -989,7 +989,7 @@ executable 2020-3
       Paths_hadvent
   hs-source-dirs:
       2020/3
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -1022,7 +1022,7 @@ executable 2020-4
       Paths_hadvent
   hs-source-dirs:
       2020/4
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -1055,7 +1055,7 @@ executable 2020-5
       Paths_hadvent
   hs-source-dirs:
       2020/5
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -1088,7 +1088,7 @@ executable 2020-6
       Paths_hadvent
   hs-source-dirs:
       2020/6
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -1121,7 +1121,7 @@ executable 2020-7
       Paths_hadvent
   hs-source-dirs:
       2020/7
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -1154,7 +1154,7 @@ executable 2020-8
       Paths_hadvent
   hs-source-dirs:
       2020/8
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -1187,7 +1187,7 @@ executable 2020-9
       Paths_hadvent
   hs-source-dirs:
       2020/9
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle
@@ -1221,7 +1221,7 @@ test-suite advent-test
       Paths_hadvent
   hs-source-dirs:
       test
-  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase
+  default-extensions: OverloadedStrings ScopedTypeVariables DerivingVia StandaloneDeriving TupleSections DeriveFunctor LambdaCase BangPatterns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Data-Angle

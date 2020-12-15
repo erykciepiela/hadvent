@@ -16,64 +16,23 @@ import Text.Read
 import Data.Bits
 import Data.Map as M
 
-type Addr = Int
-type Value = Integer
+import Debug.Trace
 
-createMask :: String -> Value -> Value
-createMask mask i = F.foldl foo i (zip mask [(length mask - 1), (length mask - 2) .. 0])
-  where
-    foo :: Value -> (Char, Int) -> Value
-    foo i ('1', n) = setBit i n
-    foo i ('0', n) = clearBit i n
-    foo i ('X', _) = i
+baz :: Int -> (Int, Int, Map Int Int) -> (Int, Int, Map Int Int)
+baz limit (l, s, prevs) = if s == limit then (l, s, prevs) else case M.lookup l prevs of
+  Nothing -> baz limit (0, s + 1, M.insert l (s - 1) prevs)
+  Just i -> baz limit (s - i - 1, s + 1, M.insert l (s - 1) prevs)
 
-inputParser :: Parser (Map Addr Value)
-inputParser = do
-  assocs <- many1 $ do
-    string "mask = "
-    mask <- createMask <$> count 36 (oneOf "01X")
-    char '\n'
-    try (do
-      string "mem["
-      addr <- read <$> many1 digit
-      string "] = "
-      val <- read <$> many1 digit
-      return (addr, mask val)) `sepEndBy` char '\n'
-  return $ M.fromList $ mconcat assocs
-
-createMask' :: String -> Addr -> [Addr]
-createMask' mask a = F.foldl foo [a] (zip mask [(length mask - 1), (length mask - 2) .. 0])
-  where
-    foo :: [Addr] -> (Char, Int) -> [Addr]
-    foo as ('1', n) = flip setBit n <$> as
-    foo as ('0', _) = as
-    foo as ('X', n) = (flip setBit n <$> as) <> (flip clearBit n <$> as)
-
-inputParser' :: Parser (Map Addr Value)
-inputParser' = do
-  assocs <- many1 $ do
-    string "mask = "
-    mask <- createMask' <$> count 36 (oneOf "01X")
-    char '\n'
-    mconcat <$> try (do
-      string "mem["
-      addr <- read <$> many1 digit
-      string "] = "
-      val <- read <$> many1 digit
-      return (mask addr <&> (, val))) `sepEndBy` char '\n'
-  return $ M.fromList $ mconcat assocs
-
-solution1 :: String -> Integer
+solution1 :: String -> Int
 solution1 input = let
-  mem = either (error "wrong parser") id $ parse inputParser "?" input
-  in sum $ M.elems mem
+  ns :: [Int] = either (error "wrong parser") id $ parse ((read <$> many1 digit) `sepBy` char ',') "?" input
+  in (\(l, _, _) -> l) $ baz 2020 (last ns, length ns, M.fromList $ zip ns [0..(length ns) - 2])
 
-solution2 :: String -> Integer
+solution2 :: String -> Int
 solution2 input = let
-  mem = either (error "wrong parser") id $ parse inputParser' "?" input
-  in sum $ M.elems mem
+  ns :: [Int] = either (error "wrong parser") id $ parse ((read <$> many1 digit) `sepBy` char ',') "?" input
+  in (\(l, _, _) -> l) $ baz 30000000 (last ns, length ns, M.fromList $ zip ns [0..(length ns) - 2])
 
 main :: IO ()
-main = advent 2020 15 [solution2] $ do
+main = advent 2020 15 [solution1] $ do
   return ()
-
