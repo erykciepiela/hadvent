@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ecd8d3aea036da1dd12a43b1c4e6217c2c5ed487f38da41f415d0aa5fbb4b784
+-- hash: f2744723c53ea1024ddb20859a8f453e8a36a3d737a261c833dacf06fc567516
 
 name:           hadvent
 version:        0.1.0.0
@@ -28,6 +28,7 @@ source-repository head
 library
   exposed-modules:
       Advent
+      BipartiteMatch
       Grid
       Utils
   other-modules:

@@ -17,6 +17,7 @@ import Data.Bits
 import Data.Map as M
 
 import Debug.Trace
+import BipartiteMatch
 
 
 data Input = Input {
@@ -30,6 +31,19 @@ data Rule = Rule {
   ranges :: [(Int, Int)]
 } deriving Show
 
+data Ticket = Ticket {
+  ticketValues :: [Int]
+ } deriving Show
+
+inputParser :: Parser Input
+inputParser = do
+  rules <- ruleParser `sepEndBy` char '\n'
+  string "\nyour ticket:\n"
+  myTicket <- ticketParser
+  string "\n\nnearby tickets:\n"
+  nearbyTickets <- ticketParser `sepBy` char '\n'
+  return $ Input rules myTicket nearbyTickets
+
 ruleParser :: Parser Rule
 ruleParser = do
   fieldName <- many1 $ noneOf "\n:"
@@ -41,37 +55,34 @@ ruleParser = do
     return (from, to)) `sepBy` string " or "
   return $ Rule fieldName ranges
 
-data Ticket = Ticket {
-  ticketValues :: [Int]
- } deriving Show
-
 ticketParser :: Parser Ticket
 ticketParser = Ticket <$> (read <$> many1 digit) `sepBy` char ','
 
-inputParser :: Parser Input
-inputParser = do
-  rules <- ruleParser `sepEndBy` char '\n'
-  string "\nyour ticket:\n"
-  myTicket <- ticketParser
-  string "\n\nnearby tickets:\n"
-  nearbyTickets <- ticketParser `sepBy` char '\n'
-  return $ Input rules myTicket nearbyTickets
-
-
-solution1 :: String -> String
+solution1 :: String -> Int
 solution1 input = let
-  input' :: Input = either (error "wrong parser") id $ parse inputParser "?" input
+  input' = either (error "wrong parser") id $ parse inputParser "?" input
   nearbyTicketsValues = mconcat (ticketValues <$> nearbyTickets input')
   allRulesRanges = mconcat $ ranges <$> rules input'
-  -- in show nearbyTicketsValues <> "\n" <> show allRulesRanges
-  in show $ sum $ L.filter (outsideRanges allRulesRanges) nearbyTicketsValues
-  -- in show $ L.filter (outsideRanges allRulesRanges) nearbyTicketsValues
+  in sum $ L.filter (outsideAllRanges allRulesRanges) nearbyTicketsValues
 
-outsideRanges :: [(Int, Int)] -> Int -> Bool
-outsideRanges [] _ = True
-outsideRanges ((from, to):ranges) n = if (n >= from && n <= to) then False else outsideRanges ranges n
+outsideAllRanges :: [(Int, Int)] -> Int -> Bool
+outsideAllRanges [] _ = True
+outsideAllRanges ((from, to):ranges) n = (n < from || n > to) && outsideAllRanges ranges n
 
+insideAnyOfRanges :: [(Int, Int)] -> Int -> Bool
+insideAnyOfRanges [] _ = False
+insideAnyOfRanges ((from, to):ranges) n = (n >= from && n <= to) || insideAnyOfRanges ranges n
+
+solution2 :: String -> Int
+solution2 input = let
+  input' = either (error "wrong parser") id $ parse inputParser "?" input
+  allTickets = myTicket input' : nearbyTickets input'
+  allRules = rules input'
+  allValidTickets = L.filter (\t -> not $ any (outsideAllRanges (mconcat $ ranges <$> allRules)) (ticketValues t) ) allTickets
+  allMatches = S.fromList [(i, rn) | i <- [0..19], rn <- [0..19], all (insideAnyOfRanges (ranges (allRules !! rn))) ((!! i) . ticketValues <$> allValidTickets)]
+  maxMatch = matching allMatches
+  in product $ (\ix -> (ticketValues (myTicket input')) !! ix) <$> (snd <$> (L.take 6 $ M.toList $ maxMatch))
 
 main :: IO ()
-main = advent 2020 16 [solution1] $ do
+main = advent 2020 16 [solution2] $ do
   return ()
