@@ -2,7 +2,7 @@ module Main where
 
 import Advent
 
-import Text.Parsec as P
+-- import Text.Parsec as P
 import Text.Parsec.String
 import Data.Functor
 import Data.List as L
@@ -17,72 +17,44 @@ import Data.Bits
 import Data.Map as M
 
 import Debug.Trace
-import BipartiteMatch
 
+import Grid
 
-data Input = Input {
-  rules :: [Rule],
-  myTicket :: Ticket,
-  nearbyTickets :: [Ticket]
-} deriving Show
+-- data Cell = Inactive | Active deriving (Show, Eq)
 
-data Rule = Rule {
-  fieldName :: String,
-  ranges :: [(Int, Int)]
-} deriving Show
+-- parseCell :: Char -> Cell
+-- parseCell = \case
+--   '.' -> Inactive
+--   '#' -> Active
 
-data Ticket = Ticket {
-  ticketValues :: [Int]
- } deriving Show
-
-inputParser :: Parser Input
-inputParser = do
-  rules <- ruleParser `sepEndBy` char '\n'
-  string "\nyour ticket:\n"
-  myTicket <- ticketParser
-  string "\n\nnearby tickets:\n"
-  nearbyTickets <- ticketParser `sepBy` char '\n'
-  return $ Input rules myTicket nearbyTickets
-
-ruleParser :: Parser Rule
-ruleParser = do
-  fieldName <- many1 $ noneOf "\n:"
-  string ": "
-  ranges <- (do
-    from <- read <$> many1 digit
-    char '-'
-    to <- read <$> many1 digit
-    return (from, to)) `sepBy` string " or "
-  return $ Rule fieldName ranges
-
-ticketParser :: Parser Ticket
-ticketParser = Ticket <$> (read <$> many1 digit) `sepBy` char ','
-
-solution1 :: String -> Int
+solution1 :: String -> String
 solution1 input = let
-  input' = either (error "wrong parser") id $ parse inputParser "?" input
-  nearbyTicketsValues = mconcat (ticketValues <$> nearbyTickets input')
-  allRulesRanges = mconcat $ ranges <$> rules input'
-  in sum $ L.filter (outsideAllRanges allRulesRanges) nearbyTicketsValues
+  space0 = space '.' [lines input]
+  space6 = iterate (extend rules) space0 !! 6
+  space6mx = spaceOver (33, 33, 33) ((shiftSpaceZUp 6 . shiftSpaceXUp 6 .shiftSpaceYUp 6) space6)
+  foo = length$ L.filter (== '#') $ concat $ fmap concat space6mx
+  in show $ foo
 
-outsideAllRanges :: [(Int, Int)] -> Int -> Bool
-outsideAllRanges [] _ = True
-outsideAllRanges ((from, to):ranges) n = (n < from || n > to) && outsideAllRanges ranges n
+-- If a cube is active and exactly 2 or 3 of its neighbors are also active, the cube remains active. Otherwise, the cube becomes inactive.
+-- If a cube is inactive but exactly 3 of its neighbors are active, the cube becomes active. Otherwise, the cube remains inactive.
+rules :: Space Char -> Char
+rules space = let
+  csss = spaceOver (3, 3, 3) ((shiftSpaceZUp 1 . shiftSpaceYUp 1 . shiftSpaceXUp 1) space)
+  activeNeighborsNum = length $ L.filter (== '#') [
+    csss !! 0 !! 0 !! 0, csss !! 0 !! 0 !! 1, csss !! 0 !! 0 !! 2,
+    csss !! 0 !! 1 !! 0, csss !! 0 !! 1 !! 1, csss !! 0 !! 1 !! 2,
+    csss !! 0 !! 2 !! 0, csss !! 0 !! 2 !! 1, csss !! 0 !! 2 !! 2,
+    csss !! 1 !! 0 !! 0, csss !! 1 !! 0 !! 1, csss !! 1 !! 0 !! 2,
+    csss !! 1 !! 1 !! 0,                      csss !! 1 !! 1 !! 2,
+    csss !! 1 !! 2 !! 0, csss !! 1 !! 2 !! 1, csss !! 1 !! 2 !! 2,
+    csss !! 2 !! 0 !! 0, csss !! 2 !! 0 !! 1, csss !! 2 !! 0 !! 2,
+    csss !! 2 !! 1 !! 0, csss !! 2 !! 1 !! 1, csss !! 2 !! 1 !! 2,
+    csss !! 2 !! 2 !! 0, csss !! 2 !! 2 !! 1, csss !! 2 !! 2 !! 2]
+  in case extract space of
+    '#' -> if activeNeighborsNum == 2 || activeNeighborsNum == 3 then '#' else '.'
+    '.' -> if activeNeighborsNum == 3 then '#' else '.'
 
-insideAnyOfRanges :: [(Int, Int)] -> Int -> Bool
-insideAnyOfRanges [] _ = False
-insideAnyOfRanges ((from, to):ranges) n = (n >= from && n <= to) || insideAnyOfRanges ranges n
-
-solution2 :: String -> Int
-solution2 input = let
-  input' = either (error "wrong parser") id $ parse inputParser "?" input
-  allTickets = myTicket input' : nearbyTickets input'
-  allRules = rules input'
-  allValidTickets = L.filter (\t -> not $ any (outsideAllRanges (mconcat $ ranges <$> allRules)) (ticketValues t) ) allTickets
-  allMatches = S.fromList [(i, rn) | i <- [0..19], rn <- [0..19], all (insideAnyOfRanges (ranges (allRules !! rn))) ((!! i) . ticketValues <$> allValidTickets)]
-  maxMatch = matching allMatches
-  in product $ (\ix -> (ticketValues (myTicket input')) !! ix) <$> (snd <$> (L.take 6 $ M.toList $ maxMatch))
 
 main :: IO ()
-main = advent 2020 17 [solution2] $ do
+main = advent 2020 17 [solution1] $ do
   return ()

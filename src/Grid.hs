@@ -43,6 +43,13 @@ instance Comonad Grid where
   extract (Grid l) = (extract . extract) l
   duplicate (Grid l) = Grid . fmap (fmap Grid) $ (fmap distribute . duplicate . fmap duplicate) l
 
+instance Distributive Grid where
+  distribute fl = Grid $ distribute <$> distribute ((\(Grid lines) -> lines) <$> fl)
+    where
+      foo :: Functor f => f [a] -> [f a]
+      foo fa = (head <$> fa) : foo (tail <$> fa)
+
+
 shiftUp :: Grid a -> Grid a
 shiftUp (Grid l) = Grid (shiftBackward l)
 
@@ -71,3 +78,26 @@ lineTowards (x, y)
   | x >= 0 && y < 0 = fmap extract .  tail . iterate ((!! x) . iterate shiftRight . (!! abs y) . iterate shiftUp)
   | x < 0 && y < 0 = fmap extract .   tail . iterate ((!! abs x) . iterate shiftLeft . (!! abs y) . iterate shiftUp)
   | x < 0 && y >= 0 = fmap extract .  tail . iterate ((!! abs x) . iterate shiftLeft . (!! y) . iterate shiftDown)
+
+-- Space
+
+newtype Space a = Space (Line (Grid a)) deriving Functor
+
+space :: a -> [[[a]]] -> Space a
+space def ass = let grids = grid def <$> ass in Space $ line (grid def []) grids
+
+instance Comonad Space where
+  extract (Space l) = (extract . extract) l
+  duplicate (Space l) = Space . fmap (fmap Space) $ (fmap distribute . duplicate . fmap duplicate) l
+
+spaceOver :: (Int, Int, Int) -> Space a -> [[[a]]]
+spaceOver (x, y, z) (Space l) = areaOver (x, y) <$> section z l
+
+shiftSpaceZUp :: Int -> Space a -> Space a
+shiftSpaceZUp n (Space line) = Space (iterate shiftBackward line !! n)
+
+shiftSpaceYUp :: Int -> Space a -> Space a
+shiftSpaceYUp n (Space line) = Space $ (\l -> iterate shiftUp l !! n) <$> line
+
+shiftSpaceXUp :: Int -> Space a -> Space a
+shiftSpaceXUp n (Space line) = Space $ (\l -> iterate shiftLeft l !! n) <$> line
