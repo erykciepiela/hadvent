@@ -45,10 +45,6 @@ instance Comonad Grid where
 
 instance Distributive Grid where
   distribute fl = Grid $ distribute <$> distribute ((\(Grid lines) -> lines) <$> fl)
-    where
-      foo :: Functor f => f [a] -> [f a]
-      foo fa = (head <$> fa) : foo (tail <$> fa)
-
 
 shiftUp :: Grid a -> Grid a
 shiftUp (Grid l) = Grid (shiftBackward l)
@@ -90,6 +86,9 @@ instance Comonad Space where
   extract (Space l) = (extract . extract) l
   duplicate (Space l) = Space . fmap (fmap Space) $ (fmap distribute . duplicate . fmap duplicate) l
 
+instance Distributive Space where
+  distribute fl = Space $ distribute <$> distribute ((\(Space lines) -> lines) <$> fl)
+
 spaceOver :: (Int, Int, Int) -> Space a -> [[[a]]]
 spaceOver (x, y, z) (Space l) = areaOver (x, y) <$> section z l
 
@@ -101,3 +100,29 @@ shiftSpaceYUp n (Space line) = Space $ (\l -> iterate shiftUp l !! n) <$> line
 
 shiftSpaceXUp :: Int -> Space a -> Space a
 shiftSpaceXUp n (Space line) = Space $ (\l -> iterate shiftLeft l !! n) <$> line
+
+-- Space4
+
+newtype Space4 a = Space4 (Line (Space a)) deriving Functor
+
+space4 :: a -> [[[[a]]]] -> Space4 a
+space4 def ass = let spaces = space def <$> ass in Space4 $ line (space def []) spaces
+
+instance Comonad Space4 where
+  extract (Space4 l) = (extract . extract) l
+  duplicate (Space4 l) = Space4 . fmap (fmap Space4) $ (fmap distribute . duplicate . fmap duplicate) l
+
+space4Over :: (Int, Int, Int, Int) -> Space4 a -> [[[[a]]]]
+space4Over (x, y, z, w) (Space4 l) = spaceOver (x, y, z) <$> section w l
+
+shiftSpace4WUp :: Int -> Space4 a -> Space4 a
+shiftSpace4WUp n (Space4 line) = Space4 (iterate shiftBackward line !! n)
+
+shiftSpace4ZUp :: Int -> Space4 a -> Space4 a
+shiftSpace4ZUp n (Space4 line) = Space4 $ shiftSpaceZUp n <$> line
+
+shiftSpace4YUp :: Int -> Space4 a -> Space4 a
+shiftSpace4YUp n (Space4 line) = Space4 $ shiftSpaceYUp n <$> line
+
+shiftSpace4XUp :: Int -> Space4 a -> Space4 a
+shiftSpace4XUp n (Space4 line) = Space4 $ shiftSpaceXUp n <$> line
