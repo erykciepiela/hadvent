@@ -381,9 +381,18 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - hadvent
-  2020-17:
+  # 2020-17:
+  #   main:                Main.hs
+  #   source-dirs:         "2020/17"
+  #   ghc-options:
+  #   - -threaded
+  #   - -rtsopts
+  #   - -with-rtsopts=-N
+  #   dependencies:
+  #   - hadvent
+  2020-18:
     main:                Main.hs
-    source-dirs:         "2020/17"
+    source-dirs:         "2020/18"
     ghc-options:
     - -threaded
     - -rtsopts
