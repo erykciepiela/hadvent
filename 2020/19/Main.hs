@@ -14,7 +14,7 @@ import Data.Foldable as F
 import Data.Monoid
 import Text.Read
 import Data.Bits
-import Data.Map as M
+import qualified Data.Map as M
 
 import Text.Parsec as P
 import Text.Parsec.String
@@ -23,32 +23,49 @@ import Debug.Trace
 
 import Data.Either
 
-grammarParser :: Parser (Parser ())
-grammarParser = do
-    snd . head <$> (grammarParser' (M.empty) `sepBy` newline)
+inputParser :: Parser Int
+inputParser = do
+  ruleMap <- M.fromList <$> ruleParser `sepEndBy` newline
+  newline
+  expressions <- many1 (oneOf "ab") `sepEndBy` newline
+  eof
+  let expressionParser = grammarParser ruleMap 0
+  return $ length $ L.filter isRight (parse (expressionParser >> eof) "" <$> expressions)
+    where
+      ruleParser :: Parser (Int, String)
+      ruleParser = do
+        ruleNo <- num
+        string ": "
+        str <- many1 (noneOf "\n")
+        return (ruleNo, str)
 
-grammarParser' :: M.Map Int (Parser ()) -> Parser (Int, Parser ())
-grammarParser' otherParsers = do
-  ruleNo <- read <$> many1 digit
-  string ": "
-  (parser :: Parser ()) <- try (void . char <$> quotedChar) <|> do
-    (alts :: [[Int]]) <- try (num `sepBy` char ' ') `sepBy` string " | "
-    return $ P.choice (alts <&> (\ints -> mconcat $ ints <&> lookupLax otherParsers))
-  return (ruleNo, parser)
+grammarParser :: M.Map Int String -> Int -> Parser ()
+grammarParser ruleMap 0 = do
+  p42s <- many1 $ grammarParser ruleMap 42
+  p31s <- many1 $ grammarParser ruleMap 31
+  if length p42s > 1 && length p42s > length p31s then return () else fail "!"
+grammarParser ruleMap ruleNo = let
+  ruleStr = fromMaybe (error "rule not found") $ M.lookup ruleNo ruleMap
+  in either (\e -> error $ "wrong parser for rule " <> show ruleNo <> " " <> show e) id $ parse grammarParser' "" ruleStr
+    where
+      grammarParser' :: Parser (Parser ())
+      grammarParser' = do
+        p <- try parseQuotedChar <|> parseAlts
+        eof
+        return p
+        where
+          parseQuotedChar :: Parser (Parser ())
+          parseQuotedChar = void . char <$> between (char '"') (char '"') anyChar
+          parseAlts :: Parser (Parser ())
+          parseAlts = do
+            (alts :: [[Int]]) <- (num `sepEndBy` char ' ') `sepBy` string "| "
+            return $ do
+              P.choice (alts <&> (\alt -> try $ mconcat $ alt <&> grammarParser ruleMap))
+
+
 
 num :: Parser Int
 num = read <$> many1 digit
-
-quotedChar :: Parser Char
-quotedChar = between (char '"') (char '"') anyChar
-
-lookupLax :: Ord k => M.Map k v -> k -> v
-lookupLax map k = let (Just v) = M.lookup k map in v
-
-matches :: String -> String -> Bool
-matches exp grammar = let
-  expParser = either (error "wrong grammar parser") id $ parse grammarParser "" grammar
-  in isRight $ parse (expParser >> eof) "" exp
 
 testGrammar = "0: 4 1 5\n\
               \1: 2 3 | 3 2\n\
@@ -59,19 +76,9 @@ testGrammar = "0: 4 1 5\n\
 
 solution1 :: String -> Int
 solution1 input = let
-  ls = lines input
-  in 1
+  ls = either (error "wrong parser") id $ parse inputParser "" input
+  in ls
 
 main :: IO ()
 main = advent 2020 19 [solution1] $ do
-  isRight (parse grammarParser "" "0: 4 1 5") `shouldBe` True
-  isRight (parse grammarParser "" "1: \"a\"") `shouldBe` True
-  isRight (parse grammarParser "" "1: 2 3 | 3 2") `shouldBe` True
-  isRight (parse grammarParser "" testGrammar) `shouldBe` True
-  -- ("aaaabb" `matches` testGrammar) `shouldBe` True
-  -- ("aaabab" `matches` testGrammar) `shouldBe` True
-  -- ("abbabb" `matches` testGrammar) `shouldBe` True
-  -- ("abbbab" `matches` testGrammar) `shouldBe` True
-  -- ("aabaab" `matches` testGrammar) `shouldBe` True
-  -- ("aabbbbabaaab" `matches` testGrammar) `shouldBe` True
   return ()
