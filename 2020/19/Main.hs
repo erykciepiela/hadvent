@@ -21,53 +21,57 @@ import Text.Parsec.String
 
 import Debug.Trace
 
-expr :: Parser Int
-expr = factor `chainl1` (try plus <|> try star)
+import Data.Either
 
-plus :: Parser (Int -> Int -> Int)
-plus = (+) <$ string " + "
+grammarParser :: Parser (Parser ())
+grammarParser = do
+    snd . head <$> (grammarParser' (M.empty) `sepBy` newline)
 
-star :: Parser (Int -> Int -> Int)
-star = (*) <$ string " * "
+grammarParser' :: M.Map Int (Parser ()) -> Parser (Int, Parser ())
+grammarParser' otherParsers = do
+  ruleNo <- read <$> many1 digit
+  string ": "
+  (parser :: Parser ()) <- try (void . char <$> quotedChar) <|> do
+    (alts :: [[Int]]) <- try (num `sepBy` char ' ') `sepBy` string " | "
+    return $ P.choice (alts <&> (\ints -> mconcat $ ints <&> lookupLax otherParsers))
+  return (ruleNo, parser)
 
 num :: Parser Int
 num = read <$> many1 digit
 
-factor :: Parser Int
-factor = par <|> num
+quotedChar :: Parser Char
+quotedChar = between (char '"') (char '"') anyChar
 
-par :: Parser Int
-par = between (char '(') (char ')') expr
+lookupLax :: Ord k => M.Map k v -> k -> v
+lookupLax map k = let (Just v) = M.lookup k map in v
 
----
-expr2 :: Parser Int
-expr2 = mult `chainl1` try star
+matches :: String -> String -> Bool
+matches exp grammar = let
+  expParser = either (error "wrong grammar parser") id $ parse grammarParser "" grammar
+  in isRight $ parse (expParser >> eof) "" exp
 
-mult :: Parser Int
-mult = factor2 `chainl1` try plus
-
-factor2 :: Parser Int
-factor2 = par2 <|> num
-
-par2 :: Parser Int
-par2 = between (char '(') (char ')') expr2
+testGrammar = "0: 4 1 5\n\
+              \1: 2 3 | 3 2\n\
+              \2: 4 4 | 5 5\n\
+              \3: 4 5 | 5 4\n\
+              \4: \"a\"\n\
+              \5: \"b\""
 
 solution1 :: String -> Int
 solution1 input = let
-  parseLine line = either (error "wrong parser") id (parse (expr <* eof) "" line)
   ls = lines input
-  in sum $ parseLine <$> ls
-
-solution2 :: String -> Int
-solution2 input = let
-  parseLine line = either (error "wrong parser") id (parse (expr2 <* eof) "" line)
-  ls = lines input
-  in sum $ parseLine <$> ls
+  in 1
 
 main :: IO ()
-main = advent 2020 19 [solution2] $ do
-  either (error "wrong parser") id (parse (expr <* eof) "" "1 + 2 * 3") `shouldBe` 9
-  either (error "wrong parser") id (parse (expr <* eof) "" "1 + (2 * 3)") `shouldBe` 7
-  either (error "wrong parser") id (parse (expr <* eof) ""  "((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2") `shouldBe` 13632
-  either (error "wrong parser") id (parse (expr2 <* eof) "" "((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2") `shouldBe` 23340
+main = advent 2020 19 [solution1] $ do
+  isRight (parse grammarParser "" "0: 4 1 5") `shouldBe` True
+  isRight (parse grammarParser "" "1: \"a\"") `shouldBe` True
+  isRight (parse grammarParser "" "1: 2 3 | 3 2") `shouldBe` True
+  isRight (parse grammarParser "" testGrammar) `shouldBe` True
+  -- ("aaaabb" `matches` testGrammar) `shouldBe` True
+  -- ("aaabab" `matches` testGrammar) `shouldBe` True
+  -- ("abbabb" `matches` testGrammar) `shouldBe` True
+  -- ("abbbab" `matches` testGrammar) `shouldBe` True
+  -- ("aabaab" `matches` testGrammar) `shouldBe` True
+  -- ("aabbbbabaaab" `matches` testGrammar) `shouldBe` True
   return ()
