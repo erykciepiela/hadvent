@@ -62,21 +62,12 @@ grammarParser ruleMap ruleNo = let
             return $ do
               P.choice (alts <&> (\alt -> try $ mconcat $ alt <&> grammarParser ruleMap))
 
-
-
 num :: Parser Int
 num = read <$> many1 digit
 
-testGrammar = "0: 4 1 5\n\
-              \1: 2 3 | 3 2\n\
-              \2: 4 4 | 5 5\n\
-              \3: 4 5 | 5 4\n\
-              \4: \"a\"\n\
-              \5: \"b\""
-
 solution1 :: String -> Int
 solution1 input = let
-  ls = either (error "wrong parser") id $ parse inputParser "" input
+  ls = either (error "wrong input parser") id $ parse inputParser "" input
   in ls
 
 main :: IO ()
