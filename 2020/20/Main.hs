@@ -43,11 +43,11 @@ symbol = (False <$ char '.') <|> (True <$ char '#')
 solution1 :: String -> Int
 solution1 input = let
   tiles = either (error "wrong input parser") id $ parse inputParser "" input
-  cornerTiles = L.filter (matchCorner tiles) tiles
+  cornerTiles = L.filter (isOnCorner tiles) tiles
   in product $ tileId <$> cornerTiles
 
-matchCorner :: [Tile] -> Tile -> Bool
-matchCorner tiles tile = let
+isOnCorner :: [Tile] -> Tile -> Bool
+isOnCorner tiles tile = let
   ts = L.filter (\tile' -> tileId tile' /= tileId tile) tiles
   bs = tileBorder tile <&> (\side -> any (any (\side' -> side' == side || reverse side' == side) . tileBorder) ts)
   in length (L.filter (== False) bs) == 2
