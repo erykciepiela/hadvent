@@ -46,13 +46,25 @@ solution1 input = let
   allergenToIngredients = M.fromListWith intersect [(a, is) | f <- foods, let is = ingredients f, a <- allergens f]
   allergicIngredients = determineAllergicIngredients allergenToIngredients
   safeIngredientsOccurences = sum $ foods <&> length . L.filter (`notElem` allergicIngredients) . ingredients
-  in show $ safeIngredientsOccurences
+  in show safeIngredientsOccurences
     where
       determineAllergicIngredients :: M.Map String [String] -> [String]
       determineAllergicIngredients m = let
         (singletons, notSingletons) = M.partition ((== 1) . length) m
         in if F.null notSingletons then mconcat $ M.elems singletons else determineAllergicIngredients $ singletons <> (notSingletons <&> L.filter (`notElem` (mconcat $ M.elems singletons)))
 
+solution2 :: String -> String
+solution2 input = let
+  foods = either (\e -> error $ "wrong input parser: " <> show e) id $ parse inputParser "" input
+  allergenToIngredients = M.fromListWith intersect [(a, is) | f <- foods, let is = ingredients f, a <- allergens f]
+  allergicIngredientsMap = determineAllergicIngredientsMap allergenToIngredients
+  in show $ intercalate "," $ snd <$> sortOn fst allergicIngredientsMap
+    where
+      determineAllergicIngredientsMap :: M.Map String [String] -> [(String, String)]
+      determineAllergicIngredientsMap m = let
+        (singletons, notSingletons) = M.partition ((== 1) . length) m
+        in if F.null notSingletons then M.toList $ head <$> singletons else determineAllergicIngredientsMap $ singletons <> (notSingletons <&> L.filter (`notElem` (mconcat $ M.elems singletons)))
+
 main :: IO ()
-main = advent 2020 21 [solution1] $ do
+main = advent 2020 21 [solution2] $ do
   return ()
