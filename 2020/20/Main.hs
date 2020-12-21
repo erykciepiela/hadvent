@@ -54,3 +54,11 @@ solution1 input = let
 main :: IO ()
 main = advent 2020 20 [solution1] $ do
   return ()
+
+-- 12 x 12 tiles
+-- one tile 8 x 8
+-- monster os 20 x 3
+-- monster can occupy max 4 x max 2 tiles
+-- monster has 15 parts
+-- every # has 15 potential ways to be part of dragon in 4 directions in 4 flips - 720000 checks
+
