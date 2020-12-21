@@ -33,12 +33,12 @@ inputParser = food `sepEndBy` newline
   where
     food :: Parser Food
     food = do
-      ingredients <- text `sepEndBy` space
-      allergens <- between (string "(contains ") (string ")") (text `sepBy` string ", ")
+      ingredients <- name `sepEndBy` space
+      allergens <- between (string "(contains ") (string ")") (name `sepBy` string ", ")
       return $ Food ingredients allergens
         where
-          text :: Parser String
-          text = many1 letter
+          name :: Parser String
+          name = many1 letter
 
 solution1 :: String -> String
 solution1 input = let
