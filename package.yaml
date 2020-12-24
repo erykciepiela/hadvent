@@ -444,6 +444,15 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - hadvent
+  2020-24:
+    main:                Main.hs
+    source-dirs:         "2020/24"
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - hadvent
 
 tests:
   advent-test:
