@@ -25,66 +25,18 @@ import Data.Either
 
 import Data.Char
 
-data Dir = E | SE | SW | W | NW | NE deriving Eq
-
-data Tile = Tile {
-  e :: Int,
-  n :: Int
-} deriving (Show, Eq, Ord)
-
-neighTiles (Tile e n) = [
-  Tile (e-1) n,
-  Tile (e+1) n,
-  Tile (e + if even (n+1) then 1 else 0) (n+1),
-  Tile (e - if odd (n-1) then 1 else 0) (n-1),
-  Tile (e - 1 + if even (n+1) then 1 else 0) (n+1),
-  Tile (e + 1 - if odd (n-1) then 1 else 0) (n-1)
-  ]
-
-inputParser :: Parser [Tile]
-inputParser = tileParser `sepEndBy` newline
-
-tileParser :: Parser Tile
-tileParser = do
-  dirs <- many1 $
-    (SE <$ try (string "se")) <|>
-    (SW <$ try (string "sw")) <|>
-    (E <$ try (string "e")) <|>
-    (NE <$ try (string "ne")) <|>
-    (NW <$ try (string "nw")) <|>
-    (W <$ string "w")
-  let se = length (L.filter (== SE) dirs) - length (L.filter (== NW) dirs)
-  let ne = length (L.filter (== NE) dirs) - length (L.filter (== SW) dirs)
-  return $ Tile
-    (length (L.filter (== E) dirs) - length (L.filter (== W) dirs) + (ne + se) `div` 2)
-    (ne - se)
-
-foo :: Tile -> Tile -> Tile
-foo t1 t2 = Tile (e t1 + e t2 + (n t1 + n t2) `div` 2) (n t1 - n t2)
+iteration :: Int -> Int -> Int
+iteration subjectNumber a = (a * subjectNumber) `mod` 20201227
 
 solution1 :: String -> String
 solution1 input = let
-  tiles = either (\e -> error $ "wrong input parser: " <> show e) id $ parse inputParser "" input
-  a = M.unionsWith (+) ((`M.singleton` 1) <$> tiles)
-  in show $ length $ L.filter id $ odd <$> M.elems a
-
-solution2 :: String -> String
-solution2 input = let
-  tiles = either (\e -> error $ "wrong input parser: " <> show e) id $ parse inputParser "" input
-  a = M.unionsWith (+) ((`M.singleton` 1) <$> tiles)
-  back = M.fromList [(Tile e n, 0) | e <- [-121, -120 .. 121], n <- [-121, -120 .. 121]]
-  b = M.unionWith (+) back a
-  in show $ length $ L.filter odd $ M.elems $ iterate foo b !! 100
-  -- in show $ a
-    where
-      foo :: M.Map Tile Int -> M.Map Tile Int
-      foo m = M.mapWithKey (\tile v -> let
-        blackNeighs = L.length (L.filter odd (catMaybes ((`M.lookup` m) <$> neighTiles tile)))
-        in case (v, blackNeighs) of
-          (v, blackNeighs) | odd v && (blackNeighs == 0 || blackNeighs > 2) -> 0
-          (v, blackNeighs) | even v && blackNeighs == 2 -> 1
-          (v, _) -> v) m
+  [pubKey1 :: Int, pubKey2 :: Int] = read <$> lines input
+  loopSize1 = fst $ head $ L.dropWhile ((/=) pubKey1 . snd) $ zip [0..] (iterate (iteration 7) 1)
+  loopSize2 = fst $ head $ L.dropWhile ((/=) pubKey2 . snd) $ zip [0..] (iterate (iteration 7) 1)
+  encKey1 = iterate (iteration pubKey1) 1 !! loopSize2
+  encKey2 = iterate (iteration pubKey2) 1 !! loopSize1
+  in show encKey1 <> " " <> show encKey2
 
 main :: IO ()
-main = advent 2020 25 [solution2] $ do
+main = advent 2020 25 [solution1] $ do
   return ()
